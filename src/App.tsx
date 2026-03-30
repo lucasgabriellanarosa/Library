@@ -15,9 +15,19 @@ import Logout from './pages/Logout'
 import { AuthGuard } from './components/auth/AuthGuard'
 import AuthPage from './components/auth/AuthPage'
 
+// Auth
+import { useEffect } from 'react'
+import { useAuth } from './hooks/useAuth'
+
 
 function App() {
 
+    const { initializeAuth } = useAuth()
+  
+    useEffect(() => {
+      initializeAuth();
+    }, [])
+    
   return (
     <Routes>
       <Route index path='/' element={<HomePage />} />

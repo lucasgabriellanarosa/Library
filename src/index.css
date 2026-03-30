@@ -3,6 +3,11 @@
 
 
 @theme {
+    /* Fonts */
     --font-playfair: 'Playfair', serif;
     --font-inter: 'Inter', sans-serif;
+
+    /* Colors */
+    --color-darkPurple: #1A1A2E;
+
 }
