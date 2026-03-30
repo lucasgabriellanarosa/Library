@@ -6,9 +6,66 @@
 import { useNavigate } from "react-router"
 import logoImg from "../assets/logo.png"
 import { FaSearch } from "react-icons/fa";
-import { FaStar } from "react-icons/fa6";
+import BookCard from "../components/books/BookCard";
 
 function HomePage() {
+
+  const books = [
+    {
+      cover: "https://m.media-amazon.com/images/I/81ibfYk4qmL.jpg",
+      title: "Harry Potter e a Pedra Filosofal",
+      author: "J.K. Rowling",
+      rating: 3.8
+    },
+    {
+      cover: "https://m.media-amazon.com/images/I/91b0C2YNSrL.jpg",
+      title: "O Hobbit",
+      author: "J.R.R. Tolkien",
+      rating: 5.0
+    },
+    {
+      cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRjsVdApZL92qq46ekI3yptWW98d9_wXcOQKg&s",
+      title: "O Senhor dos Anéis",
+      author: "J.R.R. Tolkien",
+      rating: 4.8
+    },
+    {
+      cover: "https://m.media-amazon.com/images/I/61t0bwt1s3L._AC_UL320_.jpg",
+      title: "1984",
+      author: "George Orwell",
+      rating: 4.2
+    },
+    {
+      cover: "https://m.media-amazon.com/images/I/71Lwg0Bc3TL._AC_UL320_.jpg",
+      title: "O Grande Gatsby",
+      author: "F. Scott Fitzgerald",
+      rating: 4.0
+    },
+    {
+      cover: "https://m.media-amazon.com/images/I/41ls0DpJwOL._AC_SR240,220_.jpg",
+      title: "O Alienista",
+      author: "Machado de Assis",
+      rating: 4.3
+    },
+    {
+      cover: "https://m.media-amazon.com/images/I/51KSiJRhUnL._AC_SR480,440_.jpg",
+      title: "Cartas de um Diabo a seu Aprendiz",
+      author: "C.S. Lewis",
+      rating: 4.6
+    },
+    {
+      cover: "https://m.media-amazon.com/images/I/41QuEPYxcVL._AC_SR480,440_.jpg",
+      title: "Crimes e Castigo",
+      author: "Fiódor Dostoiévski",
+      rating: 4.7
+    },
+    {
+      cover: "https://m.media-amazon.com/images/I/51r2Y0dfwoL._SY445_SX342_ML2_.jpg",
+      title: "A Hora da Estrela",
+      author: "Clarice Lispector",
+      rating: 4.4
+    }
+  ];
 
   const navigate = useNavigate()
 
@@ -82,84 +139,17 @@ function HomePage() {
 
             <ul className="grid grid-cols-3 gap-2">
 
-              <li className="flex flex-col gap-0.5 border rounded-md bg-yellow-100 text-black p-1">
-                <img src="https://m.media-amazon.com/images/I/81ibfYk4qmL.jpg" alt="Harry Potter e a Pedra Filosofal" className="border" />
-                <h3 className="font-semibold tracking-tighter leading-tight line-clamp-2">Harry Potter e a Pedra Filosofal</h3>
-                <h4 className="text-xs font-light italic">J.K. Rowling</h4>
-                <ul className="text-xs text-yellow-600 flex gap-1">
-                  <li><FaStar /></li>
-                  <li><FaStar /></li>
-                  <li><FaStar /></li>
-                  <li><FaStar /></li>
-                  <li><FaStar /></li>
-                </ul>
-              </li>
-
-              <li className="flex flex-col gap-0.5 border rounded-md bg-yellow-100 text-black p-1">
-                <img src="https://m.media-amazon.com/images/I/81ibfYk4qmL.jpg" alt="Harry Potter e a Pedra Filosofal" />
-                <h3 className="font-semibold tracking-tighter leading-tight line-clamp-2">Harry Potter e a Pedra Filosofal</h3>
-                <h4 className="text-xs font-light italic">J.K. Rowling</h4>
-                <ul className="text-xs text-yellow-600 flex gap-1">
-                  <li><FaStar /></li>
-                  <li><FaStar /></li>
-                  <li><FaStar /></li>
-                  <li><FaStar /></li>
-                  <li><FaStar /></li>
-                </ul>
-              </li>
-
-              <li className="flex flex-col gap-0.5 border rounded-md bg-yellow-100 text-black p-1">
-                <img src="https://m.media-amazon.com/images/I/81ibfYk4qmL.jpg" alt="Harry Potter e a Pedra Filosofal" />
-                <h3 className="font-semibold tracking-tighter leading-tight line-clamp-2">Harry Potter e a Pedra Filosofal</h3>
-                <h4 className="text-xs font-light italic">J.K. Rowling</h4>
-                <ul className="text-xs text-yellow-600 flex gap-1">
-                  <li><FaStar /></li>
-                  <li><FaStar /></li>
-                  <li><FaStar /></li>
-                  <li><FaStar /></li>
-                  <li><FaStar /></li>
-                </ul>
-              </li>
-
-              <li className="flex flex-col gap-0.5 border rounded-md bg-yellow-100 text-black p-1">
-                <img src="https://m.media-amazon.com/images/I/81ibfYk4qmL.jpg" alt="Harry Potter e a Pedra Filosofal" />
-                <h3 className="font-semibold tracking-tighter leading-tight line-clamp-2">Harry Potter e a Pedra Filosofal</h3>
-                <h4 className="text-xs font-light italic">J.K. Rowling</h4>
-                <ul className="text-xs text-yellow-600 flex gap-1">
-                  <li><FaStar /></li>
-                  <li><FaStar /></li>
-                  <li><FaStar /></li>
-                  <li><FaStar /></li>
-                  <li><FaStar /></li>
-                </ul>
-              </li>
-
-              <li className="flex flex-col gap-0.5 border rounded-md bg-yellow-100 text-black p-1">
-                <img src="https://m.media-amazon.com/images/I/81ibfYk4qmL.jpg" alt="Harry Potter e a Pedra Filosofal" />
-                <h3 className="font-semibold tracking-tighter leading-tight line-clamp-2">Harry Potter e a Pedra Filosofal</h3>
-                <h4 className="text-xs font-light italic">J.K. Rowling</h4>
-                <ul className="text-xs text-yellow-600 flex gap-1">
-                  <li><FaStar /></li>
-                  <li><FaStar /></li>
-                  <li><FaStar /></li>
-                  <li><FaStar /></li>
-                  <li><FaStar /></li>
-                </ul>
-              </li>
-
-              <li className="flex flex-col gap-0.5 border rounded-md bg-yellow-100 text-black p-1">
-                <img src="https://m.media-amazon.com/images/I/81ibfYk4qmL.jpg" alt="Harry Potter e a Pedra Filosofal" />
-                <h3 className="font-semibold tracking-tighter leading-tight line-clamp-2">Harry Potter e a Pedra Filosofal</h3>
-                <h4 className="text-xs font-light italic">J.K. Rowling</h4>
-                <ul className="text-xs text-yellow-600 flex gap-1">
-                  <li><FaStar /></li>
-                  <li><FaStar /></li>
-                  <li><FaStar /></li>
-                  <li><FaStar /></li>
-                  <li><FaStar /></li>
-                </ul>
-              </li>
-
+              {
+                books.map((book, index) => (
+                  <BookCard
+                    cover={book.cover}
+                    title={book.title}
+                    author={book.author}
+                    rating={book.rating}
+                    key={index}
+                  />
+                ))
+              }
 
             </ul>
 
