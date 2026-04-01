@@ -16,13 +16,13 @@ function AuthPage() {
                     />
                 </div>
                 
-                <h1 className="text-xl font-black font-playfair tracking-wider text-center mt-6">Acesse Sua Biblioteca</h1>
+                <h1 className="text-xl font-black font-playfair tracking-wider text-center mt-6">Access Your Library</h1>
 
                 {/* Login/Register Form & Message */}
                 <Outlet />
 
                 <h3 className="w-full flex items-center gap-4 font-bold uppercase tracking-widest text-xs before:h-px before:flex-1 before:bg-amber-900/30 after:h-px after:flex-1 after:bg-amber-900/30">
-                    Ou use sua conta
+                    Or use your account
                 </h3>
 
                 <GoogleBtn />

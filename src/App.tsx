@@ -44,8 +44,6 @@ function App() {
 
       <Route path='/logout' element={<Logout />} />
 
-
-
       <Route element={<AuthGuard />}>
         <Route path='/library' element={<LibraryPage />} />
       </Route>

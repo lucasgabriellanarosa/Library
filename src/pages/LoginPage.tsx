@@ -27,15 +27,15 @@ function LoginPage() {
     <>
       <AuthForm submitForm={handleLogin}>
 
-        <AuthInput icon={<FaRegUser />} placeholder="Nome de usuário ou E-mail" type="text" stateValue={username} setStateValue={setUsername} />
+        <AuthInput icon={<FaRegUser />} placeholder="Username or Email" type="text" stateValue={username} setStateValue={setUsername} />
 
-        <AuthInput icon={<FaLock />} placeholder="Senha" type="password" stateValue={password} setStateValue={setPassword} />
+        <AuthInput icon={<FaLock />} placeholder="Password" type="password" stateValue={password} setStateValue={setPassword} />
 
-        <AuthBtn>Entrar</AuthBtn>
+        <AuthBtn>Sign In</AuthBtn>
 
       </AuthForm>
 
-      <AuthToggle question="Não tem uma conta?" link="/register" action="Cadastre-se" />
+      <AuthToggle question="Don't have an account?" link="/register" action="Register" />
 
     </>
   )

@@ -17,7 +17,7 @@ function SearchBooksForm() {
         if (cleanQuery.length >= 3) {
             navigate(`/search?q=${encodeURIComponent(cleanQuery)}`);
         } else {
-            alert('Por favor, digite pelo menos 3 caracteres para pesquisar.');
+            alert('Please enter at least 3 characters to search.');
         }
 
     };
@@ -27,7 +27,7 @@ function SearchBooksForm() {
         >
             <input
                 type="text"
-                placeholder="Procure por um livro"
+                placeholder="Search for books..."
                 className="w-full outline-0 placeholder-gray-700"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}

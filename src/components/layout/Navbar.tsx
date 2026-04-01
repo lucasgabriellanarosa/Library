@@ -12,8 +12,8 @@ function Navbar({ children }: { children?: React.ReactNode }) {
                 </Link>
 
                 <div className="text-xs flex flex-row gap-2">
-                    <button onClick={() => navigate('/register')}>Cadastrar-se</button>
-                    <button onClick={() => navigate('/login')} className="border rounded-md px-2 py-1">Entrar</button>
+                    <button onClick={() => navigate('/register')}>Register</button>
+                    <button onClick={() => navigate('/login')} className="border rounded-md px-2 py-1">Login</button>
                 </div>
 
             </div>

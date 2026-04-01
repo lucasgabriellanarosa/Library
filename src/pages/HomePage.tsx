@@ -93,15 +93,15 @@ function HomePage() {
 
           <div className="tracking-wide">
 
-            <p className="uppercase text-yellow-600 font-extralight">Leia. Avalie. Compartilhe.</p>
-            <h1 className="text-lg">Organize sua vida literária</h1>
+            <p className="uppercase text-yellow-600 font-extralight">Read. Rate. Share.</p>
+            <h1 className="text-lg">Organize your literary life</h1>
 
           </div>
 
           <SearchBooksForm />
 
           <div className="w-full flex flex-col gap-2">
-            <h2 className="tracking-wide font-semibold">Livros Populares</h2>
+            <h2 className="tracking-wide font-semibold">Popular Books</h2>
 
             <ul className="grid grid-cols-3 gap-2">
 

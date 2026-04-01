@@ -22,7 +22,7 @@ function RegisterPage() {
     console.log("Register email: " + email + " with password: " + password + " and confirm password: " + confirmPassword)
 
     if (password !== confirmPassword) {
-      alert("As senhas não coincidem!")
+      alert("The passwords do not match!")
       return
     } 
 
@@ -34,16 +34,16 @@ function RegisterPage() {
     <>
       <AuthForm submitForm={handleRegister}>
 
-        <AuthInput icon={<FaRegUser />} placeholder="Nome de usuário ou E-mail" type="text" stateValue={email} setStateValue={setEmail} />
+        <AuthInput icon={<FaRegUser />} placeholder="Username or Email" type="text" stateValue={email} setStateValue={setEmail} />
 
-        <AuthInput icon={<FaLock />} placeholder="Senha" type="password" stateValue={password} setStateValue={setPassword} />
-        <AuthInput icon={<FaLock />} placeholder="Confirmar Senha" type="password" stateValue={confirmPassword} setStateValue={setConfirmPassword} />
+        <AuthInput icon={<FaLock />} placeholder="Password" type="password" stateValue={password} setStateValue={setPassword} />
+        <AuthInput icon={<FaLock />} placeholder="Confirm Password" type="password" stateValue={confirmPassword} setStateValue={setConfirmPassword} />
     
-        <AuthBtn>Cadastre-se</AuthBtn>
+        <AuthBtn>Register</AuthBtn>
 
       </AuthForm>
 
-      <AuthToggle question="Já tem uma conta?" link="/login" action="Entrar" />
+      <AuthToggle question="Already have an account?" link="/login" action="Sign In" />
 
     </>
   )

@@ -40,20 +40,20 @@ function SearchPage() {
               loading={loading}
               size={50}
             />
-            <p className="text-base font-semibold">Buscando livros...</p>
+            <p className="font-semibold">Searching for "{query}"...</p>
           </div>
           :
           <>
-            <h1 className="font-light italic text-xs">Resultados para "{query}"...</h1>
+            <h1 className="font-light italic text-xs">Results for "{query}"...</h1>
 
             <ul className="grid grid-cols-2 gap-3">
               {
                 books.map((book, index) => (
                   <BookCard
                     key={index}
-                    cover={book.editions?.docs[0]?.cover_i ? `https://covers.openlibrary.org/b/id/${book.editions.docs[0].cover_i}-M.jpg` : null}
-                    title={book.editions?.docs[0]?.title_suggest || book.editions?.docs[0]?.title || book.title || 'Título Desconecido'}
-                    author={book.author_name ? book.author_name.join(', ') : 'Desconhecido'}
+                    cover={book.cover_i ? `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg` : null}
+                    title={book.title || 'Unknown Title'}
+                    author={book.author_name ? book.author_name.join(', ') : 'Unknown Author'}
                     rating={book.ratings_average || 0}
                   />
                 ))

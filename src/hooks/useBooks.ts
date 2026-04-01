@@ -10,11 +10,9 @@ export function useBooks() {
         try {
             const response = await openLibraryApi.get('', {
                 params: {
-                    q: `${query} language:por`,
-                    lang: 'pt',
-                    limit: 100,
-                    fields: 'title,author_name,cover_i,key,ratings_average,author_key,editions',
-                    sort: 'rating',
+                    q: `title:${query}`,
+                    limit: 10,
+                    fields: 'title,author_name,cover_i,key,ratings_average,author_key',
                 }
             });
             return response.data.docs;
