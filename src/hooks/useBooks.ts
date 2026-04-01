@@ -1,15 +1,20 @@
+import { useState } from "react";
 import { openLibraryApi } from "../lib/axiosClient";
 
 export function useBooks() {
 
+    const [loading, setLoading] = useState(false);
+
     async function searchBooks(query: string) {
+        setLoading(true);
         try {
             const response = await openLibraryApi.get('', {
                 params: {
                     q: `${query} language:por`,
                     lang: 'pt',
-                    limit: 10,
-                    fields: 'title,title_suggest,author_name,cover_i,key,first_publish_year,ratings_average,subject,author_key,editions',
+                    limit: 100,
+                    fields: 'title,author_name,cover_i,key,ratings_average,author_key,editions',
+                    sort: 'rating',
                 }
             });
             return response.data.docs;
@@ -17,11 +22,14 @@ export function useBooks() {
             console.error("Erro na requisição:", error.response?.status);
             console.error("Conteúdo retornado:", error.response?.data);
             return [];
+        }finally{
+            setLoading(false);
         }
     }
 
     return {
-        searchBooks
+        searchBooks,
+        loading
     }
 
 }

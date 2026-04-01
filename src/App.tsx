@@ -1,5 +1,4 @@
 import { Route, Routes } from 'react-router'
-import './App.css'
 
 // Pages 
 import HomePage from './pages/HomePage'
@@ -18,6 +17,7 @@ import AuthPage from './components/auth/AuthPage'
 // Auth
 import { useEffect } from 'react'
 import { useAuth } from './hooks/useAuth'
+import PageLayout from './components/layout/PageLayout'
 
 
 function App() {
@@ -31,8 +31,11 @@ function App() {
   return (
     <Routes>
       <Route index path='/' element={<HomePage />} />
-      <Route path='/search' element={<SearchPage />} />
-      <Route path='/book/:id' element={<BookPage />} />
+
+      <Route element={<PageLayout />}>
+        <Route path='/search' element={<SearchPage />} />
+        <Route path='/book/:id' element={<BookPage />} />
+      </Route>
 
       <Route element={<AuthPage />}>
         <Route path='/login' element={<LoginPage />} />

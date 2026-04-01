@@ -13,12 +13,7 @@ export interface BookType {
     numFound: number;
     docs: OpenLibraryEdition[];
   };
-  first_publish_year?: number;
   key: string;
   ratings_average?: number;
-  subject?: string[];
   title: string;
-  title_suggest: string;
-  
-
 }
