@@ -8,7 +8,7 @@ export function useBooks() {
     async function searchBooks(query: string) {
         setLoading(true);
         try {
-            const response = await openLibraryApi.get('', {
+            const response = await openLibraryApi.get('/search.json', {
                 params: {
                     q: `title:${query}`,
                     limit: 10,
@@ -20,13 +20,33 @@ export function useBooks() {
             console.error("Erro na requisição:", error.response?.status);
             console.error("Conteúdo retornado:", error.response?.data);
             return [];
-        }finally{
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    async function searchPopularBooks() {
+        setLoading(true);
+        try {
+            const response = await openLibraryApi.get('trending/daily.json', {
+                params: {
+                    limit: 9,
+                    fields: 'title,author_name,cover_i,key,ratings_average,author_key',
+                }
+            });
+            return response.data.works;
+        } catch (error: any) {
+            console.error("Erro na requisição:", error.response?.status);
+            console.error("Conteúdo retornado:", error.response?.data);
+            return [];
+        } finally {
             setLoading(false);
         }
     }
 
     return {
         searchBooks,
+        searchPopularBooks,
         loading
     }
 
