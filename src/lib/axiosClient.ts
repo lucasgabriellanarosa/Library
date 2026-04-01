@@ -1,13 +1,12 @@
 import axios from 'axios';
 
-export const googleBooksApi = axios.create({
-  // baseURL: 'https://www.googleapis.com/books/v1',
+export const openLibraryApi = axios.create({
+  baseURL: 'https://openlibrary.org/search.json?',
 });
 
-googleBooksApi.interceptors.request.use((config) => {
+openLibraryApi.interceptors.request.use((config) => {
   config.params = {
     ...config.params,
-    key: import.meta.env.VITE_GOOGLE_BOOKS_KEY,
   };
   return config;
 });

@@ -1,32 +1,27 @@
-import { googleBooksApi } from "../lib/axiosClient"
+import { openLibraryApi } from "../lib/axiosClient";
 
 export function useBooks() {
 
-    async function searchBooks() {
+    async function searchBooks(query: string) {
         try {
-            // Usamos o 'await' para esperar a Promise resolver
-            // E como a baseURL já é '.../v1', passamos só o endpoint
-            const response = await googleBooksApi.get('/volumes', {
+            const response = await openLibraryApi.get('', {
                 params: {
-                    q: 'lord of the rings'
+                    q: `${query} language:por`,
+                    lang: 'pt',
+                    limit: 10,
+                    fields: 'title,title_suggest,author_name,cover_i,key,first_publish_year,ratings_average,subject,author_key,editions',
                 }
             });
-
-            // O Axios coloca os dados da API dentro da propriedade 'data'
-            console.log("Dados dos livros:", response.data);
-            return response.data;
-        } catch (error) {
-            console.error("Erro ao buscar livros:", error);
+            return response.data.docs;
+        } catch (error: any) {
+            console.error("Erro na requisição:", error.response?.status);
+            console.error("Conteúdo retornado:", error.response?.data);
+            return [];
         }
     }
 
-    function getBookById() {
-        console.log("Book by id")
-    }
-
     return {
-        searchBooks,
-        getBookById
+        searchBooks
     }
 
 }

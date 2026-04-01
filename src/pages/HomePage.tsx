@@ -1,12 +1,8 @@
-// import { useEffect, useState } from "react"
-// import { useBooks } from "../hooks/useBooks"
-
-// import { useAuthStore } from "../stores/useAuthStore"
-
 import { useNavigate } from "react-router"
 import logoImg from "../assets/logo.png"
 import { FaSearch } from "react-icons/fa";
 import BookCard from "../components/books/BookCard";
+import { useState } from "react";
 
 function HomePage() {
 
@@ -69,20 +65,6 @@ function HomePage() {
 
   const navigate = useNavigate()
 
-  // const { searchBooks } = useBooks()
-
-  // const [books, SetBooks] = useState([])
-
-  // useEffect(() => {
-  //   const fetchInitialBooks = async () => {
-  //     const data = await searchBooks();
-  //     SetBooks(data.items || []);
-  //   }
-  //   fetchInitialBooks();
-  // }, [])
-
-  // const {user} = useAuthStore()
-
   // Background variables for the columns and overlay
   const columnsBg = [
     'linear-gradient(to right, #2d1633 33.33%, #2d1633 33.33%)',
@@ -91,6 +73,24 @@ function HomePage() {
   ].join(', ');
 
   const overlayGradient = 'linear-gradient(to bottom, rgba(30, 27, 75, 0.2) 0%, rgba(30, 27, 75, 0.8) 50%, #1e1b4b 100%)';
+
+  // Search Books function 
+  const [query, setQuery] = useState('');
+
+  const handleSearchBooks = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const cleanQuery = query.trim();
+
+    // Verifica se tem pelo menos 3 caracteres
+    if (cleanQuery.length >= 3) {
+      navigate(`/search?q=${encodeURIComponent(cleanQuery)}`);
+    } else {
+      // Você pode usar um alert ou um estado de erro no input
+      alert('Por favor, digite pelo menos 3 caracteres para pesquisar.');
+    }
+
+  };
 
   return (
     <div className="font-inter min-h-dvh flex flex-col text-yellow-50 text-sm">
@@ -127,11 +127,19 @@ function HomePage() {
 
           </div>
 
-          <form className="flex items-center gap-2 bg-white rounded-lg px-4 py-2 w-full max-w-md text-gray-950 text-xs font-inter">
-            <input type="text" placeholder="Procure por um livro" className="w-full outline-0 placeholder-gray-700" />
-            <span>
+          <form className="flex items-center gap-2 bg-white rounded-lg px-4 py-2 w-full max-w-md text-gray-950 text-xs font-inter"
+            onSubmit={(e) => handleSearchBooks(e)}
+          >
+            <input
+              type="text"
+              placeholder="Procure por um livro"
+              className="w-full outline-0 placeholder-gray-700"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+            />
+            <button type="submit">
               <FaSearch />
-            </span>
+            </button>
           </form>
 
           <div className="w-full flex flex-col gap-2">
