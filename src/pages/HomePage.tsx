@@ -1,85 +1,86 @@
-import { useEffect, useState } from "react";
 import BookCard from "../components/books/BookCard";
 import Navbar from "../components/layout/Navbar";
 import SearchBooksForm from "../features/ui/SearchBooksForm";
-import { useBooks } from "../hooks/useBooks";
 import type { BookType } from "../@types/BookType";
 
 function HomePage() {
 
-  // const books = [
-  //   {
-  //     cover: "https://m.media-amazon.com/images/I/81ibfYk4qmL.jpg",
-  //     title: "Harry Potter e a Pedra Filosofal",
-  //     author: "J.K. Rowling",
-  //     rating: 3.8
-  //   },
-  //   {
-  //     cover: "https://m.media-amazon.com/images/I/91b0C2YNSrL.jpg",
-  //     title: "O Hobbit",
-  //     author: "J.R.R. Tolkien",
-  //     rating: 5.0
-  //   },
-  //   {
-  //     cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRjsVdApZL92qq46ekI3yptWW98d9_wXcOQKg&s",
-  //     title: "O Senhor dos Anéis",
-  //     author: "J.R.R. Tolkien",
-  //     rating: 4.8
-  //   },
-  //   {
-  //     cover: "https://m.media-amazon.com/images/I/61t0bwt1s3L._AC_UL320_.jpg",
-  //     title: "1984",
-  //     author: "George Orwell",
-  //     rating: 4.2
-  //   },
-  //   {
-  //     cover: "https://m.media-amazon.com/images/I/71Lwg0Bc3TL._AC_UL320_.jpg",
-  //     title: "O Grande Gatsby",
-  //     author: "F. Scott Fitzgerald",
-  //     rating: 4.0
-  //   },
-  //   {
-  //     cover: "https://m.media-amazon.com/images/I/41ls0DpJwOL._AC_SR240,220_.jpg",
-  //     title: "O Alienista",
-  //     author: "Machado de Assis",
-  //     rating: 4.3
-  //   },
-  //   {
-  //     cover: "https://m.media-amazon.com/images/I/51KSiJRhUnL._AC_SR480,440_.jpg",
-  //     title: "Cartas de um Diabo a seu Aprendiz",
-  //     author: "C.S. Lewis",
-  //     rating: 4.6
-  //   },
-  //   {
-  //     cover: "https://m.media-amazon.com/images/I/41QuEPYxcVL._AC_SR480,440_.jpg",
-  //     title: "Crimes e Castigo",
-  //     author: "Fiódor Dostoiévski",
-  //     rating: 4.7
-  //   },
-  //   {
-  //     cover: "https://m.media-amazon.com/images/I/51r2Y0dfwoL._SY445_SX342_ML2_.jpg",
-  //     title: "A Hora da Estrela",
-  //     author: "Clarice Lispector",
-  //     rating: 4.4
-  //   }
-  // ];
+  const POPULAR_BOOKS_MOCK: BookType[] = [
+    {
+      key: "/works/OL17930368W",
+      title: "Atomic Habits",
+      author_name: ["James Clear"],
+      cover_i: 12539702,
+      ratings_average: 3.97,
+      author_key: ["OL7422948A"]
+    },
+    {
+      key: "/works/OL82563W",
+      title: "Harry Potter and the Philosopher's Stone",
+      author_name: ["J.K. Rowling"],
+      cover_i: 15155833,
+      ratings_average: 4.48,
+      author_key: ["OL23919A"]
+    },
+    {
+      key: "/works/OL1968368W",
+      title: "The 48 Laws of Power",
+      author_name: ["Robert Greene"],
+      cover_i: 6424160,
+      ratings_average: 4.15,
+      author_key: ["OL21519A"]
+    },
+    {
+      key: "/works/OL25515697W",
+      title: "Twisted Games",
+      author_name: ["Ana Huang"],
+      cover_i: 12821465,
+      ratings_average: 4.02,
+      author_key: ["OL7515087A"]
+    },
+    {
+      key: "/works/OL5781992W",
+      title: "The Kite Runner",
+      author_name: ["Khaled Hosseini"],
+      cover_i: 14846827,
+      ratings_average: 4.31,
+      author_key: ["OL1393669A"]
+    },
+    {
+      key: "/works/OL2010879W",
+      title: "Rich Dad, Poor Dad",
+      author_name: ["Robert T. Kiyosaki"],
+      cover_i: 8315603,
+      ratings_average: 4.11,
+      author_key: ["OL26244A"]
+    },
+    {
+      key: "/works/OL21745884W",
+      title: "Project Hail Mary",
+      author_name: ["Andy Weir"],
+      cover_i: 11200092,
+      ratings_average: 4.67,
+      author_key: ["OL3458023A"]
+    },
+    {
+      key: "/works/OL18020194W",
+      title: "It Ends With Us",
+      author_name: ["Colleen Hoover"],
+      cover_i: 10473609,
+      ratings_average: 4.38,
+      author_key: ["OL6906233A"]
+    },
+    {
+      key: "/works/OL893415W",
+      title: "Dune",
+      author_name: ["Frank Herbert"],
+      cover_i: 11481354,
+      ratings_average: 4.30,
+      author_key: ["OL79034A"]
+    }
+  ];
 
-  // Background variables for the columns and overlay
-
-  const [popularBooks, setPopularBooks] = useState<BookType[]>([]);
-  const { searchPopularBooks, loading } = useBooks();
-
-  useEffect(() => {
-    const fetchPopularBooks = async () => {
-      const books = await searchPopularBooks();
-      setPopularBooks(books);
-      console.log(books)
-    };
-
-    fetchPopularBooks();
-  }, []);
-
-
+  const popularBooks: BookType[] = POPULAR_BOOKS_MOCK;
 
   const columnsBg = [
     'linear-gradient(to right, #2d1633 33.33%, #2d1633 33.33%)',
@@ -108,8 +109,6 @@ function HomePage() {
           style={{ backgroundImage: overlayGradient }}
         />
 
-        {
-          !loading &&
           <main className="z-10 w-full flex flex-col items-center justify-center font-playfair gap-20 mt-40 py-8 text-yellow-50 text-sm">
 
             <div className="tracking-wide">
@@ -143,9 +142,6 @@ function HomePage() {
             </div>
 
           </main>
-
-        }
-
 
       </div>
 
