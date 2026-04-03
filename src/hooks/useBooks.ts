@@ -30,21 +30,6 @@ export function useBooks() {
         }
     }
 
-    async function getWorkDetails(workKey: string) {
-        setLoading(true);
-        try {
-            // Se o workKey já vier com /works/, removemos para não duplicar
-            const cleanKey = workKey.replace('/works/', '');
-            const data = await callProxy(`/works/${cleanKey}.json`);
-            return data;
-        } catch (error) {
-            console.error("Erro nos detalhes:", error);
-            return null;
-        } finally {
-            setLoading(false);
-        }
-    }
-
     async function getWorkByISBN(isbn: string) {
         setLoading(true);
         try {
@@ -58,10 +43,33 @@ export function useBooks() {
         }
     }
 
+    async function getBookWithAuthors(workKey: string) {
+    setLoading(true);
+    try {
+        const cleanKey = workKey.replace('/works/', '');
+        // Buscamos pela chave da obra no endpoint de search
+        const data = await callProxy('/search.json', {
+            q: `key:/works/${cleanKey}`,
+            fields: 'title,author_name,ratings_average,cover_i,first_publish_year,number_of_pages_median',
+            limit: 1
+        });
+
+        if (data.docs && data.docs.length > 0) {
+            return data.docs[0];
+        }
+        return null;
+    } catch (error) {
+        console.error(error);
+        return null;
+    } finally {
+        setLoading(false);
+    }
+}
+
     return {
         searchBooks,
-        getWorkDetails,
         getWorkByISBN,
+        getBookWithAuthors,
         loading
     }
 }

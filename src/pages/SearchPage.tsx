@@ -30,7 +30,7 @@ function SearchPage() {
   }, [query])
 
   return (
-    <main className="px-4 flex flex-col gap-4">
+    <main className="px-4 pt-32 flex flex-col gap-4">
 
       {
         loading ?
