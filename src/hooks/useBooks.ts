@@ -1,25 +1,29 @@
 import { useState } from "react";
-import { openLibraryApi } from "../lib/axiosClient";
+import { supabase } from "../lib/supabaseClient";
 
 export function useBooks() {
-
     const [loading, setLoading] = useState(false);
 
-    // Get books based on a search query
+    // Proxy with Supabase Functions to avoid CORS issues and send User-Agent
+    async function callProxy(endpoint: string, params?: any) {
+        const { data, error } = await supabase.functions.invoke('api-proxy', {
+            body: { endpoint, params }
+        });
+        if (error) throw error;
+        return data;
+    }
+
     async function searchBooks(query: string) {
         setLoading(true);
         try {
-            const response = await openLibraryApi.get('/search.json', {
-                params: {
-                    q: `title:${query}`,
-                    limit: 10,
-                    fields: 'title,author_name,cover_i,key,ratings_average,author_key',
-                }
+            const data = await callProxy('/search.json', {
+                q: `title:${query}`,
+                limit: 10,
+                fields: 'title,author_name,cover_i,key,ratings_average,author_key',
             });
-            return response.data.docs;
-        } catch (error: any) {
-            console.error("Erro na requisição:", error.response?.status);
-            console.error("Conteúdo retornado:", error.response?.data);
+            return data.docs;
+        } catch (error) {
+            console.error("Erro na busca:", error);
             return [];
         } finally {
             setLoading(false);
@@ -27,19 +31,14 @@ export function useBooks() {
     }
 
     async function getWorkDetails(workKey: string) {
-
         setLoading(true);
         try {
-            const response = await openLibraryApi.get(`/works/${workKey}.json`, {
-                params: {
-                    limit: 1,
-                    fields: 'title,description,subjects,authors,covers,created,first_publish_date',
-                }
-            });
-            return response.data;
-        } catch (error: any) {
-            console.error("Erro na requisição:", error.response?.status);
-            console.error("Conteúdo retornado:", error.response?.data);
+            // Se o workKey já vier com /works/, removemos para não duplicar
+            const cleanKey = workKey.replace('/works/', '');
+            const data = await callProxy(`/works/${cleanKey}.json`);
+            return data;
+        } catch (error) {
+            console.error("Erro nos detalhes:", error);
             return null;
         } finally {
             setLoading(false);
@@ -47,11 +46,12 @@ export function useBooks() {
     }
 
     async function getWorkByISBN(isbn: string) {
+        setLoading(true);
         try {
-            const response = await openLibraryApi.get(`/isbn/${isbn}.json`);
-            return response.data;
+            const data = await callProxy(`/isbn/${isbn}.json`);
+            return data;
         } catch (error) {
-            console.error("Erro ao buscar edições:", error);
+            console.error("Erro ao buscar ISBN:", error);
             return null;
         } finally {
             setLoading(false);
@@ -64,5 +64,4 @@ export function useBooks() {
         getWorkByISBN,
         loading
     }
-
 }

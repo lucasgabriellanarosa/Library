@@ -21,6 +21,8 @@ function BookPage() {
 
   useEffect(() => {
 
+    setBookData(null); // Limpa os dados anteriores ao carregar um novo livro
+
     if (isbn) {
       getWorkByISBN(isbn).then(work => {
         console.log("Dados da edição via ISBN:", work);

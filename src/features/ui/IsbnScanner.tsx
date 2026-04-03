@@ -34,7 +34,7 @@ export function IsbnScanner({ onScanSuccess, onClose }: IsbnScannerProps) {
             locate: true,
             // AQUI O SEGREDO: Filtros de imagem para realçar as barras
             numOfWorkers: navigator.hardwareConcurrency || 4, // Usa mais núcleos do processador
-            frequency: 10, // Tenta ler 10 vezes por segundo
+            frequency: 1, // Tenta ler 1 vezes por segundo
         }, (err) => {
             if (err) return console.error(err);
             Quagga.start();
