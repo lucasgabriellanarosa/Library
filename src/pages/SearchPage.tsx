@@ -55,6 +55,7 @@ function SearchPage() {
                     title={book.title || 'Unknown Title'}
                     author={book.author_name ? book.author_name.join(', ') : 'Unknown Author'}
                     rating={book.ratings_average || 0}
+                    bookKey={book.key}
                   />
                 ))
               }

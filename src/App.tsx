@@ -34,7 +34,7 @@ function App() {
 
       <Route element={<PageLayout />}>
         <Route path='/search' element={<SearchPage />} />
-        <Route path='/book/:id' element={<BookPage />} />
+        <Route path='/book/:workId/:isbn?' element={<BookPage />} />
       </Route>
 
       <Route element={<AuthPage />}>

@@ -133,6 +133,7 @@ function HomePage() {
                       author={book.author_name?.[0] || 'Unknown Author'}
                       rating={book.ratings_average}
                       key={index}
+                      bookKey={book.key}
                     />
                   ))
                 }
