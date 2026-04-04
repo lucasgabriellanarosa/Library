@@ -46,7 +46,7 @@ function BookCard({ cover, title, author, rating = 0, bookKey }: BookCardProps) 
                             const starType: starType = isFull ? "full" : isHalf ? "half" : "empty";
 
                             return (
-                                <li key={s}>
+                                <li key={s} className="text-xs">
                                     <BookStar type={starType} />
                                 </li>
                             );

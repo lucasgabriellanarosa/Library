@@ -47,10 +47,9 @@ export function useBooks() {
     setLoading(true);
     try {
         const cleanKey = workKey.replace('/works/', '');
-        // Buscamos pela chave da obra no endpoint de search
         const data = await callProxy('/search.json', {
             q: `key:/works/${cleanKey}`,
-            fields: 'title,author_name,ratings_average,cover_i,first_publish_year,number_of_pages_median',
+            fields: 'title,author_name,ratings_average,cover_i,first_publish_year,number_of_pages_median,subject',
             limit: 1
         });
 
@@ -64,12 +63,32 @@ export function useBooks() {
     } finally {
         setLoading(false);
     }
-}
+    }
+
+    async function getWorkDescription(workKey: string) {
+        try {
+            const id = workKey.replace('/works/', '').replace(/\//g, '');
+            
+            const data = await callProxy(`/works/${id}.json`);
+            
+            if (!data) return "Description not available.";
+
+            if (typeof data.description === 'string') {
+                return data.description;
+            }
+            return data.description?.value || "No description provided for this work.";
+            
+        } catch (error) {
+            console.error("Erro ao buscar descrição:", error);
+            return "Failed to load description.";
+        }
+    }
 
     return {
         searchBooks,
         getWorkByISBN,
         getBookWithAuthors,
+        getWorkDescription,
         loading
     }
 }
