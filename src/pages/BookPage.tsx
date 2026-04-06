@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react"
 import { useBooks } from "../hooks/useBooks"
 import { useParams } from "react-router";
-import type { StarType } from "../components/books/BookStar";
-import BookStar from "../components/books/BookStar";
 import { FaBookOpen, FaCalendar, FaList, FaRegBookmark } from "react-icons/fa6";
 import { FaCheckCircle } from "react-icons/fa";
 import LoadingSpinner from "../components/ui/LoadingSpinner";
+import StarsList from "../features/books/StarsList";
 
 interface BookData {
   cover?: number;
@@ -74,8 +73,6 @@ function BookPage() {
 
   }, [workId, isbn]);
 
-  const stars = [1, 2, 3, 4, 5];
-
   // Categories
   const VALID_CATEGORIES = new Set([
     "Fantasy", "Fiction", "Adventure", "Magic", "Juvenile fiction",
@@ -139,18 +136,8 @@ function BookPage() {
                 <h1 className="font-semibold text-base text-center mt-2">{bookData.title}</h1>
                 <h2 className="italic text-sm text-gray-600">{bookData.author}</h2>
 
-                <ul className="flex gap-1 mt-2">
-                  {stars.map((s) => {
-                    const isFull = bookData.rating >= s - 0.3;
-                    const isHalf = !isFull && bookData.rating >= s - 0.7;
-                    const starType: StarType = isFull ? "full" : isHalf ? "half" : "empty";
-                    return (
-                      <li key={s} className="text-sm">
-                        <BookStar type={starType} />
-                      </li>
-                    );
-                  })}
-                </ul>
+                <StarsList rating={bookData.rating} />
+
               </div>
 
               <div className="flex flex-col justify-center items-center gap-4 bg-amber-50 rounded-b-md shadow-[0_-2px_15px_rgba(139,92,20,0.1)] w-full py-4 px-4">
