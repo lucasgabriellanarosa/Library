@@ -1,31 +1,27 @@
 import { useEffect, useState } from "react"
 import { useBooks } from "../hooks/useBooks"
-import { useParams } from "react-router";
+import { Link, useParams } from "react-router";
 import { FaBookOpen, FaCalendar, FaList, FaRegBookmark } from "react-icons/fa6";
 import { FaCheckCircle } from "react-icons/fa";
 import LoadingSpinner from "../components/ui/LoadingSpinner";
 import StarsList from "../features/books/StarsList";
+import type { BookDataType } from "../@types/BookData";
 
-interface BookData {
-  cover?: number;
-  title?: string;
-  description?: string;
-  author: string;
-  pages: number;
-  year: number;
-  rating: number;
-  categories: string[];
+interface similarBooksType{
+  key: string,
+  cover_i: number,
+  author_name: string,
+  title: string
 }
 
 function BookPage() {
 
-  const { getBookWithAuthors, getWorkByISBN, getWorkDescription, loading } = useBooks();
+  const { getBookWithAuthors, getWorkByISBN, getWorkDescription, getSimilarBooks, loading } = useBooks();
 
-  // Pega os parâmetros da URL
   const { workId, isbn } = useParams();
 
   // States
-  const [bookData, setBookData] = useState<BookData | null>(null);
+  const [bookData, setBookData] = useState<BookDataType | null>(null);
   const [isExpanded, setIsExpanded] = useState(false);
 
   useEffect(() => {
@@ -73,6 +69,24 @@ function BookPage() {
 
   }, [workId, isbn]);
 
+  const [similarBooks, setSimilarBooks] = useState<similarBooksType[]>([])
+
+  useEffect(() => {
+    if (!bookData) return;
+    const loadSimilarBooks = async () => {
+      getSimilarBooks(bookData).then(data => {
+        if (data.docs) {
+          const filtered = data.docs
+            .filter((b: any) => !b.key.includes(workId || ''))
+            .slice(0, 10);
+          setSimilarBooks(filtered);
+        }
+      })
+    };
+
+    loadSimilarBooks();
+  }, [bookData, workId]);
+
   // Categories
   const VALID_CATEGORIES = new Set([
     "Fantasy", "Fiction", "Adventure", "Magic", "Juvenile fiction",
@@ -97,6 +111,7 @@ function BookPage() {
     "Thriller": "bg-orange-100 text-orange-700 border-orange-200",
   };
 
+  // Get the valid categories
   const processCategories = (subjects: string[]) => {
     if (!subjects) return [];
 
@@ -196,6 +211,37 @@ function BookPage() {
             >
               {isExpanded ? '- Show less' : '+ Read more'}
             </button>
+          </div>
+
+          {/* Seção de Similares */}
+          <div className="w-full mt-10 pl-[10%]">
+            <h3 className="text-base font-semibold mb-4">Similar Books</h3>
+
+              <div className="flex overflow-x-auto gap-4 pb-6 scrollbar-hide pr-10">
+                {similarBooks.map((book) => (
+                  <Link
+                    to={`/book/${book.key.replace('/works/', '')}`}
+                    key={book.key}
+                    className="shrink-0 w-24 group"
+                  >
+                    <div className="relative shadow-md group-hover:shadow-xl transition-shadow">
+                      <img
+                        src={book.cover_i
+                          ? `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg`
+                          : 'https://via.placeholder.com/150x225?text=No+Cover'}
+                        alt={book.title}
+                        className="w-full h-36 object-cover rounded-sm"
+                      />
+                    </div>
+                    <p className="mt-2 text-[10px] font-bold line-clamp-2 leading-tight text-gray-800 group-hover:text-blue-600">
+                      {book.title}
+                    </p>
+                    <p className="text-[9px] text-gray-500 truncate">
+                      {book.author_name?.[0]}
+                    </p>
+                  </Link>
+                ))}
+              </div>
           </div>
 
 
