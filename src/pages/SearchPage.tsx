@@ -2,10 +2,10 @@ import { useSearchParams } from "react-router"
 import { useBooks } from "../hooks/useBooks";
 import { useEffect, useState } from "react";
 import BookCard from "../components/books/BookCard";
-import { HashLoader } from "react-spinners";
 
 // Types
 import type { BookType } from "../@types/BookType";
+import LoadingSpinner from "../components/ui/LoadingSpinner";
 
 function SearchPage() {
 
@@ -34,14 +34,7 @@ function SearchPage() {
 
       {
         loading ?
-          <div className="flex flex-col gap-6 items-center justify-center min-h-[60vh]">
-            <HashLoader
-              color="#D97706"
-              loading={loading}
-              size={50}
-            />
-            <p className="font-semibold">Searching for "{query}"...</p>
-          </div>
+            <LoadingSpinner loading={loading} text={`Searching for "${query}"...`} />
           :
           <>
             <h1 className="font-light italic text-xs">Results for "{query}"...</h1>

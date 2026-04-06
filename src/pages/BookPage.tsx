@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react"
 import { useBooks } from "../hooks/useBooks"
 import { useParams } from "react-router";
-import { HashLoader } from "react-spinners";
 import type { StarType } from "../components/books/BookStar";
 import BookStar from "../components/books/BookStar";
 import { FaBookOpen, FaCalendar, FaList, FaRegBookmark } from "react-icons/fa6";
 import { FaCheckCircle } from "react-icons/fa";
+import LoadingSpinner from "../components/ui/LoadingSpinner";
 
 interface BookData {
   cover?: number;
@@ -74,12 +74,6 @@ function BookPage() {
 
   }, [workId, isbn]);
 
-  if (loading) return (
-    <div className="min-h-[60vh] flex items-center justify-center">
-      <HashLoader color="#D97706" size={50} />
-    </div>
-  );
-
   const stars = [1, 2, 3, 4, 5];
 
   // Categories
@@ -114,6 +108,9 @@ function BookPage() {
       .slice(0, 5);
   };
 
+  if (loading) return (
+    <LoadingSpinner loading={loading} />
+  );
 
   return (
     <div className="text-xs flex flex-col w-full gap-2 justify-center items-center">

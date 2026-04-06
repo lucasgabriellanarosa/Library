@@ -18,16 +18,17 @@ import AuthPage from './components/auth/AuthPage'
 import { useEffect } from 'react'
 import { useAuth } from './hooks/useAuth'
 import PageLayout from './components/layout/PageLayout'
+import ProfilePage from './pages/ProfilePage'
 
 
 function App() {
 
-    const { initializeAuth } = useAuth()
-  
-    useEffect(() => {
-      initializeAuth();
-    }, [])
-    
+  const { initializeAuth } = useAuth()
+
+  useEffect(() => {
+    initializeAuth();
+  }, [])
+
   return (
     <Routes>
       <Route index path='/' element={<HomePage />} />
@@ -35,6 +36,13 @@ function App() {
       <Route element={<PageLayout />}>
         <Route path='/search' element={<SearchPage />} />
         <Route path='/book/:workId/:isbn?' element={<BookPage />} />
+
+
+        <Route element={<AuthGuard />}>
+          <Route path='/library' element={<LibraryPage />} />
+          <Route path='/profile' element={<ProfilePage />} />
+        </Route>
+
       </Route>
 
       <Route element={<AuthPage />}>
@@ -43,10 +51,6 @@ function App() {
       </Route>
 
       <Route path='/logout' element={<Logout />} />
-
-      <Route element={<AuthGuard />}>
-        <Route path='/library' element={<LibraryPage />} />
-      </Route>
 
       {/* 404 - Not Found */}
       <Route path='*' element={<NotFound />} />
