@@ -6,8 +6,9 @@ import { FaCheckCircle } from "react-icons/fa";
 import LoadingSpinner from "../components/ui/LoadingSpinner";
 import StarsList from "../features/books/StarsList";
 import type { BookDataType } from "../@types/BookData";
+import { BookAIWhisper } from "../features/books/BookAIWhisper";
 
-interface similarBooksType{
+interface similarBooksType {
   key: string,
   cover_i: number,
   author_name: string,
@@ -217,37 +218,42 @@ function BookPage() {
           <div className="w-full mt-10 pl-[10%]">
             <h3 className="text-base font-semibold mb-4">Similar Books</h3>
 
-              <div className="flex overflow-x-auto gap-4 pb-6 scrollbar-hide pr-10">
-                {similarBooks.map((book) => (
-                  <Link
-                    to={`/book/${book.key.replace('/works/', '')}`}
-                    key={book.key}
-                    className="shrink-0 w-24 group"
-                  >
-                    <div className="relative shadow-md group-hover:shadow-xl transition-shadow">
-                      <img
-                        src={book.cover_i
-                          ? `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg`
-                          : 'https://via.placeholder.com/150x225?text=No+Cover'}
-                        alt={book.title}
-                        className="w-full h-36 object-cover rounded-sm"
-                      />
-                    </div>
-                    <p className="mt-2 text-[10px] font-bold line-clamp-2 leading-tight text-gray-800 group-hover:text-blue-600">
-                      {book.title}
-                    </p>
-                    <p className="text-[9px] text-gray-500 truncate">
-                      {book.author_name?.[0]}
-                    </p>
-                  </Link>
-                ))}
-              </div>
+            <div className="flex overflow-x-auto gap-4 pb-6 scrollbar-hide pr-10">
+              {similarBooks.map((book) => (
+                <Link
+                  to={`/book/${book.key.replace('/works/', '')}`}
+                  key={book.key}
+                  className="shrink-0 w-24 group"
+                >
+                  <div className="relative shadow-md group-hover:shadow-xl transition-shadow">
+                    <img
+                      src={book.cover_i
+                        ? `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg`
+                        : 'https://via.placeholder.com/150x225?text=No+Cover'}
+                      alt={book.title}
+                      className="w-full h-36 object-cover rounded-sm"
+                    />
+                  </div>
+                  <p className="mt-2 text-[10px] font-bold line-clamp-2 leading-tight text-gray-800 group-hover:text-blue-600">
+                    {book.title}
+                  </p>
+                  <p className="text-[9px] text-gray-500 truncate">
+                    {book.author_name?.[0]}
+                  </p>
+                </Link>
+              ))}
+            </div>
           </div>
 
+          <BookAIWhisper
+            bookTitle={bookData.title || ""}
+            bookAuthor={bookData.author || ""}
+          />
 
         </div>
-      )}
-    </div>
+  )
+}
+    </div >
   );
 }
 
