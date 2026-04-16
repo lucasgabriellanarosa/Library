@@ -69,7 +69,7 @@ export const BookAIWhisper = ({ bookTitle, bookAuthor }: Props) => {
                             <div className="text-center mt-10">
                                 <FaRobot className="mx-auto text-3xl text-amber-200 mb-2" />
                                 <p className="text-[10px] text-gray-500 px-4">
-                                    Olá! Sou seu guia literário. Pergunte algo sobre <b>{bookTitle}</b>!
+                                   Hello! I'm your literary guide. Ask me something about <b>{bookTitle}</b>!
                                 </p>
                             </div>
                         ) : (
@@ -104,7 +104,7 @@ export const BookAIWhisper = ({ bookTitle, bookAuthor }: Props) => {
                             value={message}
                             onChange={(e) => setMessage(e.target.value)}
                             onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
-                            placeholder="Pergunte sobre o livro..."
+                            placeholder="Ask about the book..."
                             disabled={isTyping}
                             className="flex-1 bg-gray-50 border-none focus:ring-1 focus:ring-amber-500 rounded-full px-4 py-2 text-[11px] disabled:opacity-50"
                         />

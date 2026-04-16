@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react"
 import { useBooks } from "../hooks/useBooks"
 import { Link, useParams } from "react-router";
-import { FaBookOpen, FaCalendar, FaList, FaRegBookmark } from "react-icons/fa6";
-import { FaCheckCircle } from "react-icons/fa";
+import { FaBookOpen, FaCalendar, FaList } from "react-icons/fa6";
 import LoadingSpinner from "../components/ui/LoadingSpinner";
 import StarsList from "../features/books/StarsList";
 import type { BookDataType } from "../@types/BookData";
 import { BookAIWhisper } from "../features/books/BookAIWhisper";
+import { supabase } from "../lib/supabaseClient";
+import { useAuthStore } from "../stores/useAuthStore";
+import { useUserLists } from "../hooks/useUserLists";
+import { StatusButton } from "../features/books/StatusButton";
 
 interface similarBooksType {
   key: string,
@@ -17,13 +20,17 @@ interface similarBooksType {
 
 function BookPage() {
 
+  // Hooks
   const { getBookWithAuthors, getWorkByISBN, getWorkDescription, getSimilarBooks, loading } = useBooks();
+  const { user } = useAuthStore()
+  const { getSpecificLists, toogleBookStatus, loading: isUpdating } = useUserLists();
 
   const { workId, isbn } = useParams();
 
   // States
   const [bookData, setBookData] = useState<BookDataType | null>(null);
   const [isExpanded, setIsExpanded] = useState(false);
+  const [similarBooks, setSimilarBooks] = useState<similarBooksType[]>([])
 
   useEffect(() => {
 
@@ -69,8 +76,6 @@ function BookPage() {
     loadBookData()
 
   }, [workId, isbn]);
-
-  const [similarBooks, setSimilarBooks] = useState<similarBooksType[]>([])
 
   useEffect(() => {
     if (!bookData) return;
@@ -119,6 +124,50 @@ function BookPage() {
     return subjects
       .filter(s => VALID_CATEGORIES.has(s))
       .slice(0, 5);
+  };
+
+  const [bookStatus, setBookStatus] = useState<'Read' | 'To Read' | null>(null);
+
+  useEffect(() => {
+    const checkBookStatus = async () => {
+      if (!user || !workId) return;
+
+      const userLists = await getSpecificLists(['Read', 'To Read']);
+      if (!userLists || userLists.length === 0) return;
+
+      const listIds = userLists.map(l => l.id);
+
+      // Check if the book is set to Read or To Read (or null) and set it to the bookStatus state
+      const { data } = await supabase
+        .from('list_books')
+        .select('list_id')
+        .eq('work_key', `/works/${workId}`)
+        .in('list_id', listIds);
+
+      if (data && data.length > 0) {
+        const matchedList = userLists.find(l => l.id === data[0].list_id);
+        if (matchedList) {
+          setBookStatus(matchedList.name as 'Read' | 'To Read');
+        }
+      } else {
+        setBookStatus(null);
+      }
+    };
+
+    checkBookStatus();
+  }, [workId, user]);
+
+  const handleUpdateList = async (targetListName: 'Read' | 'To Read') => {
+    if (!user) return alert("Logue para salvar!");
+
+    const newStatus = await toogleBookStatus({
+      targetListName,
+      workId: workId!,
+      bookData,
+      currentStatus: bookStatus
+    });
+
+    setBookStatus(newStatus ?? null);
   };
 
   if (loading) return (
@@ -183,13 +232,14 @@ function BookPage() {
           <div className="w-4/5 flex flex-col gap-3">
 
             <div className="flex flex-row gap-3">
-              <button className="w-full py-2 bg-emerald-100 text-emerald-700 font-bold rounded-md border border-emerald-200 shadow-sm active:scale-95 transition-all flex items-center justify-center gap-2">
-                <FaCheckCircle /> Mark as Read
-              </button>
 
-              <button className="w-full py-2 bg-[#E9DCC0] text-[#8B5C14] font-bold rounded-md border border-[#D9C8A9] shadow-sm active:scale-95 transition-all flex items-center justify-center gap-2">
-                <FaRegBookmark /> Read Later
-              </button>
+              <StatusButton
+                bookStatus={bookStatus}
+                isUpdating={isUpdating}
+                activeAction={'Read'}
+                onUpdate={handleUpdateList}
+              />
+
             </div>
 
             <button className="w-full py-2 bg-[#E9DCC0] text-[#8B5C14] font-bold rounded-md border border-[#D9C8A9] shadow-sm active:scale-95 transition-all flex items-center justify-center gap-2">
@@ -199,7 +249,7 @@ function BookPage() {
           </div>
 
           {/* Description */}
-          <div className="w-4/5 flex flex-col gap-2 mt-6">
+          <div className="w-4/5 flex flex-col gap-2">
             <h3 className="text-base font-semibold">Description</h3>
 
             <p className={`text-justify text-gray-700 transition-all duration-300 ${!isExpanded ? 'line-clamp-6' : ''}`}>
@@ -214,11 +264,11 @@ function BookPage() {
             </button>
           </div>
 
-          {/* Seção de Similares */}
-          <div className="w-full mt-10 pl-[10%]">
+          {/* Similar Books */}
+          <div className="w-4/5">
             <h3 className="text-base font-semibold mb-4">Similar Books</h3>
 
-            <div className="flex overflow-x-auto gap-4 pb-6 scrollbar-hide pr-10">
+            <div className="flex overflow-x-auto gap-2">
               {similarBooks.map((book) => (
                 <Link
                   to={`/book/${book.key.replace('/works/', '')}`}
@@ -251,8 +301,8 @@ function BookPage() {
           />
 
         </div>
-  )
-}
+      )
+      }
     </div >
   );
 }

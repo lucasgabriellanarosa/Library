@@ -10,8 +10,6 @@ function Navbar({ children }: { children?: React.ReactNode }) {
     const avatarUrl = user?.identities?.[0]?.identity_data?.avatar_url
         || `https://ui-avatars.com/api/?name=${user?.email}&background=random`;
 
-    <img src={avatarUrl} className="w-8 rounded-full shadow-sm" />
-
     return (
         <nav className="flex flex-col px-4 bg-darkPurple text-yellow-50 fixed w-full z-20 font-inter text-xs">
             <div className="flex flex-row items-center justify-between w-full">
@@ -28,7 +26,7 @@ function Navbar({ children }: { children?: React.ReactNode }) {
                                 </Link>
 
                                 <Link to="/profile">
-                                    <img src={avatarUrl} className="w-8 rounded-full" />
+                                    <img src={avatarUrl} alt="User Profile" className="w-8 rounded-full" />
                                 </Link>
 
                             </>
