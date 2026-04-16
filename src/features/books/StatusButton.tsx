@@ -1,5 +1,3 @@
-// src/features/books/components/ReadingStatusButtons.tsx
-
 import { FaCheckCircle, FaRegBookmark, FaBookmark, FaRegCheckCircle } from "react-icons/fa";
 
 interface Props {

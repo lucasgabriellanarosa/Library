@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { useBooks } from "../hooks/useBooks"
-import { Link, useParams } from "react-router";
+import { Link, useNavigate, useParams } from "react-router";
 import { FaBookOpen, FaCalendar, FaList } from "react-icons/fa6";
 import LoadingSpinner from "../components/ui/LoadingSpinner";
 import StarsList from "../features/books/StarsList";
@@ -19,6 +19,9 @@ interface similarBooksType {
 }
 
 function BookPage() {
+
+  // Navigate
+  const navigate = useNavigate()
 
   // Hooks
   const { getBookWithAuthors, getWorkByISBN, getWorkDescription, getSimilarBooks, loading } = useBooks();
@@ -127,6 +130,7 @@ function BookPage() {
   };
 
   const [bookStatus, setBookStatus] = useState<'Read' | 'To Read' | null>(null);
+  const [activeAction, setActiveAction] = useState<'Read' | 'To Read' | null>(null);
 
   useEffect(() => {
     const checkBookStatus = async () => {
@@ -158,7 +162,13 @@ function BookPage() {
   }, [workId, user]);
 
   const handleUpdateList = async (targetListName: 'Read' | 'To Read') => {
-    if (!user) return alert("Logue para salvar!");
+
+    if (!user) {
+      navigate('/login')
+      return alert("You need to be logged in to save it!");
+    }
+
+    setActiveAction(targetListName);
 
     const newStatus = await toogleBookStatus({
       targetListName,
@@ -236,7 +246,7 @@ function BookPage() {
               <StatusButton
                 bookStatus={bookStatus}
                 isUpdating={isUpdating}
-                activeAction={'Read'}
+                activeAction={activeAction}
                 onUpdate={handleUpdateList}
               />
 
