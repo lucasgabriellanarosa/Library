@@ -89,7 +89,7 @@ const LibraryPage = () => {
                   <Link to={`/book/${encodeURIComponent(book.work_key.replace('/works/', ''))}`}className="relative block">
                     <div className="aspect-2/3 overflow-hidden rounded-xl bg-zinc-900 border border-zinc-800 transition-all duration-300 group-hover:border-amber-500/50 group-hover:shadow-2xl group-hover:shadow-amber-500/10">
                       <img
-                        src={`https://covers.openlibrary.org/b/id/${book.cover_id}-L.jpg`}
+                        src={`https://wsrv.nl/?url=https://covers.openlibrary.org/b/id/${book.cover_id}-L.jpg&output=webp`}
                         alt={book.title}
                         className="w-full h-full object-cover transition duration-500 group-hover:scale-110"
                         loading="lazy"

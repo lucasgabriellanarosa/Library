@@ -2,6 +2,8 @@ import { useSearchParams } from "react-router"
 import { useBooks } from "../hooks/useBooks";
 import { useEffect, useState } from "react";
 import BookCard from "../components/books/BookCard";
+import { motion } from "framer-motion";
+import { bookContainerVariants } from "../utils/animations/bookAnimations";
 
 // Types
 import type { BookType } from "../@types/BookType";
@@ -34,12 +36,16 @@ function SearchPage() {
 
       {
         loading ?
-            <LoadingSpinner loading={loading} text={`Searching for "${query}"...`} />
+          <LoadingSpinner loading={loading} text={`Searching for "${query}"...`} />
           :
           <>
             <h1 className="font-light italic text-xs">Results for "{query}"...</h1>
 
-            <ul className="grid grid-cols-2 gap-3">
+            <motion.ul className="grid grid-cols-2 gap-3"
+              variants={bookContainerVariants}
+              initial="hidden"
+              animate="visible"
+            >
               {
                 books.map((book, index) => (
                   <BookCard
@@ -52,7 +58,7 @@ function SearchPage() {
                   />
                 ))
               }
-            </ul>
+            </motion.ul>
           </>
       }
 

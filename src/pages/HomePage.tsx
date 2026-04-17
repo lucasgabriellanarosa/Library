@@ -2,6 +2,8 @@ import BookCard from "../components/books/BookCard";
 import Navbar from "../components/layout/Navbar";
 import SearchBooksForm from "../features/ui/SearchBooksForm";
 import type { BookType } from "../@types/BookType";
+import { motion } from "framer-motion";
+import { bookContainerVariants } from "../utils/animations/bookAnimations";
 
 function HomePage() {
 
@@ -109,40 +111,44 @@ function HomePage() {
           style={{ backgroundImage: overlayGradient }}
         />
 
-          <main className="z-10 w-full flex flex-col items-center justify-center font-playfair gap-20 mt-40 py-8 text-yellow-50 text-sm">
+        <main className="z-10 w-full flex flex-col items-center justify-center font-playfair gap-20 mt-40 py-8 text-yellow-50 text-sm">
 
-            <div className="tracking-wide">
+          <div className="tracking-wide">
 
-              <p className="uppercase text-yellow-600 font-extralight">Read. Rate. Share.</p>
-              <h1 className="text-lg">Organize your literary life</h1>
+            <p className="uppercase text-yellow-600 font-extralight">Read. Rate. Share.</p>
+            <h1 className="text-lg">Organize your literary life</h1>
 
-            </div>
+          </div>
 
-            <SearchBooksForm />
+          <SearchBooksForm />
 
-            <div className="w-full flex flex-col gap-2">
-              <h2 className="tracking-wide font-semibold">Popular Books</h2>
+          <div className="w-full flex flex-col gap-2">
+            <h2 className="tracking-wide font-semibold">Popular Books</h2>
 
-              <ul className="grid grid-cols-3 gap-2">
+            <motion.ul className="grid grid-cols-3 gap-2" 
+              variants={bookContainerVariants}
+              initial="hidden"
+              animate="visible"
+              >
 
-                {
-                  popularBooks.map((book, index) => (
-                    <BookCard
-                      cover={book.cover_i ? `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg` : null}
-                      title={book.title}
-                      author={book.author_name?.[0] || 'Unknown Author'}
-                      rating={book.ratings_average}
-                      key={index}
-                      bookKey={book.key}
-                    />
-                  ))
-                }
+              {
+                popularBooks.map((book, index) => (
+                  <BookCard
+                    cover={book.cover_i ? `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg` : null}
+                    title={book.title}
+                    author={book.author_name?.[0] || 'Unknown Author'}
+                    rating={book.ratings_average}
+                    key={index}
+                    bookKey={book.key}
+                  />
+                ))
+              }
 
-              </ul>
+            </motion.ul>
 
-            </div>
+          </div>
 
-          </main>
+        </main>
 
       </div>
 

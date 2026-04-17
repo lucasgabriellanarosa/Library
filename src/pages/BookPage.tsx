@@ -192,7 +192,7 @@ function BookPage() {
           {/* Background Image & Card with book info */}
           <div className="relative w-full flex justify-center">
 
-            <div className="absolute top-0 left-0 w-full h-87.5">
+            <div className="absolute top-0 left-0 w-full h-100">
               <img
                 src={`https://covers.openlibrary.org/b/id/${bookData.cover}.jpg`}
                 className="w-full h-full object-cover opacity-80"
@@ -289,7 +289,7 @@ function BookPage() {
                     <img
                       src={book.cover_i
                         ? `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg`
-                        : 'https://via.placeholder.com/150x225?text=No+Cover'}
+                        : 'https://placehold.co/400x600?text=No+Cover'}
                       alt={book.title}
                       className="w-full h-36 object-cover rounded-sm"
                     />
