@@ -1,6 +1,13 @@
 import { useState } from "react";
 import { supabase } from "../lib/supabaseClient";
 import type { BookDataType } from "../@types/BookData";
+import type { BookType } from "../@types/BookType";
+
+interface SearchResponse {
+  docs: BookType[];
+  totalPages: number;
+  numFound: number;
+}
 
 export function useBooks() {
     const [loading, setLoading] = useState(false);
@@ -14,18 +21,25 @@ export function useBooks() {
         return data;
     }
 
-    async function searchBooks(query: string) {
+    async function searchBooks(query: string, page: number = 1): Promise<SearchResponse | null> {
         setLoading(true);
         try {
             const data = await callProxy('/search.json', {
                 q: `title:${query}`,
                 limit: 10,
                 fields: 'title,author_name,cover_i,key,ratings_average,author_key',
+                page: page,
             });
-            return data.docs;
+
+            const total = Math.ceil(data.numFound / 10);
+            return {
+                docs: data.docs,
+                totalPages: total,
+                numFound: data.numFound
+            };
         } catch (error) {
             console.error("Erro na busca:", error);
-            return [];
+            return null;
         } finally {
             setLoading(false);
         }
