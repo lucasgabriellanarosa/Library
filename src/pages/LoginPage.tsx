@@ -18,7 +18,6 @@ function LoginPage() {
 
   const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    console.log("Login user: " + username + " with password: " + password)
     signIn(username, password)
     navigate("/")
   }

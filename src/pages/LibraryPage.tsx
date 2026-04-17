@@ -4,6 +4,8 @@ import { BiBookOpen } from "react-icons/bi";
 import { GoX } from "react-icons/go";
 import { useUserLists } from "../hooks/useUserLists";
 import LoadingSpinner from "../components/ui/LoadingSpinner";
+import { motion } from "framer-motion";
+import { bookContainerVariants, bookVariants } from "../utils/animations/bookAnimations";
 
 const LibraryPage = () => {
   const {
@@ -27,7 +29,7 @@ const LibraryPage = () => {
     }
   }, [selectedList, fetchBooksFromList]);
 
-  if(loading) return <LoadingSpinner loading={loading} text="Listing books..." />
+  if (loading) return <LoadingSpinner loading={loading} text="Listing books..." />
 
   return (
     <div className="pt-28 text-xs">
@@ -39,8 +41,8 @@ const LibraryPage = () => {
               key={list.id}
               onClick={() => setSelectedList(list)}
               className={`px-4 py-2 rounded-full whitespace-nowrap text-[10px] transition-all ${selectedList?.id === list.id
-                  ? 'bg-amber-500 text-black shadow-lg shadow-amber-500/20'
-                  : 'bg-zinc-900 text-zinc-400 border border-zinc-800'
+                ? 'bg-amber-500 text-black shadow-lg shadow-amber-500/20'
+                : 'bg-zinc-900 text-zinc-400 border border-zinc-800'
                 }`}
             >
               {list.name}
@@ -62,8 +64,8 @@ const LibraryPage = () => {
                 key={list.id}
                 onClick={() => setSelectedList(list)}
                 className={`w-full text-left px-4 py-3 rounded-xl transition-all duration-200 ${selectedList?.id === list.id
-                    ? 'bg-amber-500/10 text-amber-500 font-bold border-l-4 border-amber-500'
-                    : 'text-zinc-400 hover:bg-zinc-900 hover:text-white'
+                  ? 'bg-amber-500/10 text-amber-500 font-bold border-l-4 border-amber-500'
+                  : 'text-zinc-400 hover:bg-zinc-900 hover:text-white'
                   }`}
               >
                 {list.name}
@@ -78,15 +80,21 @@ const LibraryPage = () => {
               {selectedList?.name || "Unknown List"}
             </h1>
             <p className="text-zinc-500 mt-1">
-              {books.length} {books.length === 1 ? 'livro encontrado' : 'livros encontrados'}
+              {books.length} {books.length === 1 ? 'book found' : 'books found'}
             </p>
           </header>
 
           {books.length > 0 ? (
-            <div className="grid grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-8">
+            <motion.ul className="grid grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-8"
+              variants={bookContainerVariants}
+              initial="hidden"
+              animate="visible"
+            >
               {books.map(book => (
-                <div key={book.id} className="group relative flex flex-col">
-                  <Link to={`/book/${encodeURIComponent(book.work_key.replace('/works/', ''))}`}className="relative block">
+                <motion.li key={book.id} className="group relative flex flex-col"
+                  variants={bookVariants}
+                >
+                  <Link to={`/book/${encodeURIComponent(book.work_key.replace('/works/', ''))}`} className="relative block">
                     <div className="aspect-2/3 overflow-hidden rounded-xl bg-zinc-900 border border-zinc-800 transition-all duration-300 group-hover:border-amber-500/50 group-hover:shadow-2xl group-hover:shadow-amber-500/10">
                       <img
                         src={`https://wsrv.nl/?url=https://covers.openlibrary.org/b/id/${book.cover_id}-L.jpg&output=webp`}
@@ -113,9 +121,9 @@ const LibraryPage = () => {
                   >
                     <GoX size={18} />
                   </button>
-                </div>
+                </motion.li>
               ))}
-            </div>
+            </motion.ul>
           ) : (
             <div className="flex flex-col items-center justify-center py-20 border-2 border-dashed border-zinc-900 rounded-3xl">
               <div className="w-16 h-16 bg-zinc-900 rounded-full flex items-center justify-center mb-4">

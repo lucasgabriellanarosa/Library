@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useBooks } from "../hooks/useBooks"
 import { Link, useNavigate, useParams } from "react-router";
 import { FaBookOpen, FaCalendar, FaList } from "react-icons/fa6";
@@ -33,7 +33,10 @@ function BookPage() {
   // States
   const [bookData, setBookData] = useState<BookDataType | null>(null);
   const [isExpanded, setIsExpanded] = useState(false);
+  const [showButton, setShowButton] = useState(false);
   const [similarBooks, setSimilarBooks] = useState<similarBooksType[]>([])
+
+  const descriptionRef = useRef<HTMLParagraphElement>(null);
 
   useEffect(() => {
 
@@ -82,6 +85,12 @@ function BookPage() {
 
   useEffect(() => {
     if (!bookData) return;
+
+    const element = descriptionRef.current;
+    if (element) {
+      setShowButton(element.scrollHeight > element.offsetHeight);
+    }
+
     const loadSimilarBooks = async () => {
       getSimilarBooks(bookData).then(data => {
         if (data.docs) {
@@ -262,16 +271,19 @@ function BookPage() {
           <div className="w-4/5 flex flex-col gap-2">
             <h3 className="text-base font-semibold">Description</h3>
 
-            <p className={`text-justify text-gray-700 transition-all duration-300 ${!isExpanded ? 'line-clamp-6' : ''}`}>
+            <p ref={descriptionRef} className={`text-justify text-gray-700 transition-all duration-300 ${!isExpanded ? 'line-clamp-6' : ''}`}>
               {bookData.description}
             </p>
 
-            <button
-              onClick={() => setIsExpanded(!isExpanded)}
-              className="w-fit px-4 py-2 bg-[#E9DCC0] text-[#8B5C14] font-bold rounded-md border border-[#D9C8A9] shadow-sm active:scale-95 transition-all self-center"
-            >
-              {isExpanded ? '- Show less' : '+ Read more'}
-            </button>
+            {showButton && (
+              <button
+                onClick={() => setIsExpanded(!isExpanded)}
+                className="w-fit px-4 py-2 bg-[#E9DCC0] text-[#8B5C14] font-bold rounded-md border border-[#D9C8A9] shadow-sm active:scale-95 transition-all self-center"
+              >
+                {isExpanded ? '- Show less' : '+ Read more'}
+              </button>
+            )}
+
           </div>
 
           {/* Similar Books */}
