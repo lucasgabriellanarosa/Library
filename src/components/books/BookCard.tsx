@@ -19,19 +19,20 @@ function BookCard({ cover, title, author, rating = 0, bookKey }: BookCardProps) 
 
     return (
         <Link to={`/book/${encodeURIComponent(bookKey.replace('/works/', ''))}`}>
-            <motion.li className="flex flex-col gap-0.5 border rounded-md bg-yellow-100 text-black p-1"
+            <motion.li className="flex flex-col gap-0.5 border rounded-md bg-yellow-100 text-black p-1 md:p-2"
                 variants={bookVariants}
             >
+
                 <img src={cover != null ? cover : imgNotFound} alt={title} className="border aspect-2/3 object-cover w-full rounded-sm" />
 
-                <div className="flex flex-col flex-1 gap-0.5">
-                    <h3 className="font-semibold tracking-tighter leading-tight line-clamp-2 min-h-[2.4em]">{title}</h3>
-                    <h4 className="text-xs font-light italic line-clamp-1">{author}</h4>
+                <div className="flex flex-col flex-1 gap-0.5 sm:gap-1">
 
-
+                    <h3 className="font-semibold tracking-tight leading-tight line-clamp-2 min-h-[2.4em] content-center text-sm xl:text-base">{title}</h3>
+                    <h4 className="text-xs font-light italic line-clamp-1 xl:text-sm">{author}</h4>
                     <StarsList rating={rating} />
 
                 </div>
+
             </motion.li>
         </Link>
     )

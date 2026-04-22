@@ -1,16 +1,15 @@
 import { useNavigate } from "react-router"
-import { FaSearch, FaCamera } from "react-icons/fa"; // Adicionei a FaCamera
+import { FaSearch, FaCamera } from "react-icons/fa";
 import { useState } from "react";
-import { IsbnScanner } from "./IsbnScanner"; // Importe o componente criado acima
+import { IsbnScanner } from "./IsbnScanner"; 
 import { useBooks } from "../../hooks/useBooks";
 
 function SearchBooksForm() {
     const navigate = useNavigate();
-    const { getWorkByISBN } = useBooks(); // Pega a função de busca
+    const { getWorkByISBN } = useBooks(); 
     const [query, setQuery] = useState('');
-    const [isScannerOpen, setIsScannerOpen] = useState(false); // Controla a câmera
+    const [isScannerOpen, setIsScannerOpen] = useState(false);
 
-    // Função de busca normal (texto)
     const handleSearchBooks = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const cleanQuery = query.trim();
@@ -22,30 +21,26 @@ function SearchBooksForm() {
         }
     };
 
-    // FUNÇÃO MÁGICA: Quando o scanner lê o código
     const handleIsbnRead = async (isbn: string) => {
-        setIsScannerOpen(false); // Fecha a câmera
+        setIsScannerOpen(false); 
         
         try {
             const data = await getWorkByISBN(isbn);
-            
-            // A Open Library retorna o Work ID dentro de data.works[0].key
-            // Ex: "/works/OL45883W" -> queremos só "OL45883W"
+
             if (data && data.works && data.works.length > 0) {
                 const workId = data.works[0].key.replace('/works/', '');
-                // Redireciona para /workId/isbn
                 navigate(`/book/${workId}/${isbn}`);
             } else {
-                alert("Livro não encontrado para este ISBN.");
+                alert("Book not found for this ISBN.");
             }
         } catch (error) {
-            alert("Erro ao buscar ISBN. Verifique sua conexão.");
+            alert("Error retrieving ISBN. Check your connection.");
         }
     };
 
     return (
         <>
-            <form className="flex items-center gap-3 bg-white rounded-lg px-4 py-2 w-full max-w-md text-gray-950 text-xs font-inter"
+            <form className="flex items-center gap-3 bg-white rounded-lg px-4 py-2 w-full text-gray-950 text-xs font-inter"
                 onSubmit={handleSearchBooks}
             >
                 <input
@@ -56,7 +51,6 @@ function SearchBooksForm() {
                     onChange={(e) => setQuery(e.target.value)}
                 />
                 
-                {/* Botão da Câmera */}
                 <button 
                     type="button" 
                     onClick={() => setIsScannerOpen(true)}
@@ -65,13 +59,11 @@ function SearchBooksForm() {
                     <FaCamera size={16} />
                 </button>
 
-                {/* Botão de Busca */}
                 <button type="submit" className="text-gray-800 hover:scale-110 transition-transform">
                     <FaSearch size={14} />
                 </button>
             </form>
 
-            {/* Renderiza o Scanner apenas se estiver aberto */}
             {isScannerOpen && (
                 <IsbnScanner 
                     onScanSuccess={handleIsbnRead} 

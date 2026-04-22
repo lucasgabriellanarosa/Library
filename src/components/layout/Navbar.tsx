@@ -28,22 +28,22 @@ function Navbar({ children }: { children?: React.ReactNode }) {
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
-
-
     return (
-        <nav className="flex flex-col px-4 bg-darkPurple text-yellow-50 fixed w-full z-20 font-inter text-xs">
+        <nav className="flex flex-col px-4 bg-darkPurple text-yellow-50 fixed w-full z-20 font-inter text-xs sm:px-8 xl:px-12 2xl:px-16">
             <div className="flex flex-row items-center justify-between w-full">
                 <Link to="/">
-                    <img src={logoImg} alt="Logo" className="w-12 h-12" />
+                    <img src={logoImg} alt="Logo" className="w-12 h-12 xl:w-14 xl:h-14" />
                 </Link>
 
-                <div className=" flex flex-row gap-2 justify-center items-center">
+                <div className=" flex flex-row gap-2 justify-center items-center lg:gap-4 xl:gap-6">
                     {
                         user ? (
                             <>
-                                <Link to="/library">
-                                    <FaListUl />
-                                </Link>
+                                <span className="xl:text-base">
+                                    <Link to="/library">
+                                        <FaListUl />
+                                    </Link>
+                                </span>
 
                                 <div className="relative" ref={menuRef}>
 
@@ -54,7 +54,7 @@ function Navbar({ children }: { children?: React.ReactNode }) {
                                         <img
                                             src={avatarUrl}
                                             alt="User Profile"
-                                            className="w-8 h-8 rounded-full border-2 border-transparent hover:border-amber-500 transition-all"
+                                            className="w-8 h-8 rounded-full border-2 border-transparent hover:border-amber-500 transition-all xl:w-10 xl:h-10"
                                         />
                                     </button>
 

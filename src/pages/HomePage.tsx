@@ -93,12 +93,12 @@ function HomePage() {
   const overlayGradient = 'linear-gradient(to bottom, rgba(30, 27, 75, 0.2) 0%, rgba(30, 27, 75, 0.8) 50%, #1e1b4b 100%)';
 
   return (
-    <div>
+    <>
 
       <Navbar />
 
       <div
-        className="flex-1 w-full relative flex flex-col items-center justify-center px-8 min-h-dvh"
+        className="flex-1 w-full relative flex flex-col items-center justify-center px-8 min-h-dvh md:px-16"
         style={{
           backgroundImage: columnsBg,
           backgroundSize: '33.33% 100%, 33.33% 100%, 33.33% 100%',
@@ -111,25 +111,30 @@ function HomePage() {
           style={{ backgroundImage: overlayGradient }}
         />
 
-        <main className="z-10 w-full flex flex-col items-center justify-center font-playfair gap-20 mt-40 py-8 text-yellow-50 text-sm">
+        <main className="z-10 w-full flex flex-col items-center justify-center font-playfair gap-20 mt-40 py-8 text-yellow-50 md:gap-28 lg:gap-36 xl:gap-44 2xl:gap-50">
 
-          <div className="tracking-wide">
+          <div className="flex flex-col gap-6 w-full max-w-md justify-center items-center sm:gap-12 lg:max-w-lg xl:max-w-xl">
 
-            <p className="uppercase text-yellow-600 font-extralight">Read. Rate. Share.</p>
-            <h1 className="text-lg">Organize your literary life</h1>
+            <div className="tracking-wide">
 
+              <p className="uppercase text-yellow-600 font-extralight sm:text-base">Read. Rate. Share.</p>
+              <h1 className="text-lg sm:text-xl">Organize your literary life</h1>
+
+            </div>
+
+            <SearchBooksForm />
           </div>
 
-          <SearchBooksForm />
 
-          <div className="w-full flex flex-col gap-2">
-            <h2 className="tracking-wide font-semibold">Popular Books</h2>
 
-            <motion.ul className="grid grid-cols-3 gap-2" 
+          <div className="w-full flex flex-col gap-2 max-w-140 md:max-w-220 lg:max-w-300">
+            <h2 className="tracking-wide font-semibold text-sm sm:text-base lg:text-lg">Popular Books</h2>
+
+            <motion.ul className="grid grid-cols-3 gap-2 md:grid-cols-5 md:gap-3 lg:grid-cols-7"
               variants={bookContainerVariants}
               initial="hidden"
               animate="visible"
-              >
+            >
 
               {
                 popularBooks.map((book, index) => (
@@ -152,7 +157,7 @@ function HomePage() {
 
       </div>
 
-    </div>
+    </>
   )
 }
 export default HomePage
