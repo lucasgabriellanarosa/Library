@@ -135,14 +135,15 @@ export function useBooks() {
     async function getPopularBooks() {
         setLoading(true);
         try {
-            const data = await callProxy('/search.json', {
-                q: `stars`,
-                sort: 'rating',
+            const data = await callProxy('/trending/daily.json', {
                 fields: 'title,author_name,ratings_average,cover_i,key',
                 limit: 24
             });
 
-            return data.docs as BookType[];
+            const trendingWorks = data.works ? data.works.slice(0, 24) : [];
+
+            return trendingWorks as BookType[];
+            
         } catch (error) {
             console.error("Couldn't find popular books:", error);
             return [];

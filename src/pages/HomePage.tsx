@@ -17,6 +17,8 @@ function HomePage() {
     getPopularBooks().then(data => setPopularBooks(data));
   }, []);
 
+  console.log(popularBooks)
+
   const columnsBg = [
     'linear-gradient(to right, #2d1633 33.33%, #2d1633 33.33%)',
     'linear-gradient(to right, #1a224a 33.33%, #1a224a 33.33%)',
