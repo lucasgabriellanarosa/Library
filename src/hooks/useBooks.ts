@@ -4,9 +4,9 @@ import type { BookDataType } from "../@types/BookData";
 import type { BookType } from "../@types/BookType";
 
 interface SearchResponse {
-  docs: BookType[];
-  totalPages: number;
-  numFound: number;
+    docs: BookType[];
+    totalPages: number;
+    numFound: number;
 }
 
 export function useBooks() {
@@ -38,7 +38,7 @@ export function useBooks() {
                 numFound: data.numFound
             };
         } catch (error) {
-            console.error("Erro na busca:", error);
+            console.error("Failed to search:", error);
             return null;
         } finally {
             setLoading(false);
@@ -51,7 +51,7 @@ export function useBooks() {
             const data = await callProxy(`/isbn/${isbn}.json`);
             return data;
         } catch (error) {
-            console.error("Erro ao buscar ISBN:", error);
+            console.error("Failed to find ISBN:", error);
             return null;
         } finally {
             setLoading(false);
@@ -110,7 +110,7 @@ export function useBooks() {
             };
 
             // Try to find books from the same author 
-            if (bookData.author && bookData.author !== "Autor Desconhecido") {
+            if (bookData.author && bookData.author !== "Unknown Author") {
                 queryParams.q = bookData.author;
             }
             // Books with the same category 
@@ -125,12 +125,31 @@ export function useBooks() {
             const data = await callProxy('/search.json', queryParams);
             return data;
         } catch (error) {
-            console.error("Erro ao buscar livros similares:", error);
+            console.error("Failed to find similar books:", error);
             return "Failed to load description.";
         } finally {
             setLoading(false)
         }
     }
+
+    async function getPopularBooks() {
+        setLoading(true);
+        try {
+            const data = await callProxy('/search.json', {
+                q: `stars`,
+                sort: 'rating',
+                fields: 'title,author_name,ratings_average,cover_i,key',
+                limit: 24
+            });
+
+            return data.docs as BookType[];
+        } catch (error) {
+            console.error("Couldn't find popular books:", error);
+            return [];
+        } finally {
+            setLoading(false);
+        }
+    };
 
     return {
         searchBooks,
@@ -138,6 +157,7 @@ export function useBooks() {
         getBookWithAuthors,
         getWorkDescription,
         getSimilarBooks,
+        getPopularBooks,
         loading
     }
 }
