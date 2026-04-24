@@ -17,7 +17,6 @@ import AuthPage from './components/auth/AuthPage'
 import { useEffect } from 'react'
 import { useAuth } from './hooks/useAuth'
 import PageLayout from './components/layout/PageLayout'
-import ProfilePage from './pages/ProfilePage'
 
 
 function App() {
@@ -39,7 +38,6 @@ function App() {
 
         <Route element={<AuthGuard />}>
           <Route path='/library' element={<LibraryPage />} />
-          <Route path='/profile' element={<ProfilePage />} />
         </Route>
 
       </Route>

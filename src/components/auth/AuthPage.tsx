@@ -6,7 +6,7 @@ function AuthPage() {
     return (
         <div className="min-h-dvh flex flex-col justify-center items-center font-inter px-6 bg-yellow-50 text-sm">
 
-            <main className="flex flex-col justify-center items-center px-12 py-6 gap-6 rounded-md w-full border border-solid border-amber-900/10 bg-white/50  backdrop-blur-sm shadow-[0_0_20px_rgba(139,69,19,0.05)] text-amber-900/60">
+            <main className="flex flex-col justify-center items-center px-12 py-6 gap-6 rounded-md border border-solid border-amber-900/10 bg-white/50 backdrop-blur-sm shadow-[0_0_20px_rgba(139,69,19,0.05)] text-amber-900/60 w-full max-w-md lg:max-w-lg lg:px-20 lg:gap-8 2xl:max-w-xl">
 
                 <div className="absolute -top-12 left-1/2 -translate-x-1/2 flex items-center justify-center">
                     <img

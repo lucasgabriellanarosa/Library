@@ -32,10 +32,10 @@ const LibraryPage = () => {
   if (loading) return <LoadingSpinner loading={loading} text="Listing books..." />
 
   return (
-    <div className="pt-28 text-xs">
+    <div className="pt-28 text-xs w-full">
 
-      <div className="md:hidden z-10 backdrop-blur-md border-b border-zinc-800">
-        <div className="flex overflow-x-auto scrollbar-hide gap-2 p-4">
+      <div className="md:hidden z-10 backdrop-blur-md border-b border-zinc-800 flex justify-center">
+        <div className="flex overflow-x-auto scrollbar-hide gap-2 p-4 w-120 sm:w-160">
           {lists.map(list => (
             <button
               key={list.id}
@@ -51,19 +51,19 @@ const LibraryPage = () => {
         </div>
       </div>
 
-      <div className="flex max-w-400 mx-auto">
+      <div className="flex justify-center max-w-400 mx-auto">
 
-        <aside className="hidden md:block w-72 border-r border-zinc-800 p-8 h-[calc(100vh-80px)] sticky top-20">
-          <h2 className="text-xl font-bold mb-8 flex items-center gap-3">
-            <BiBookOpen className="text-amber-500" size={24} />
-            Minhas Coleções
+        <aside className="hidden md:block w-72 border-r border-zinc-800 p-8 h-[calc(100vh-80px)] sticky">
+          <h2 className="text-base font-bold mb-8 flex items-center gap-3">
+            <BiBookOpen className="text-amber-500" size={20} />
+            My Lists
           </h2>
           <nav className="space-y-3">
             {lists.map(list => (
               <button
                 key={list.id}
                 onClick={() => setSelectedList(list)}
-                className={`w-full text-left px-4 py-3 rounded-xl transition-all duration-200 ${selectedList?.id === list.id
+                className={`text-[11px] w-full text-left px-4 py-3 rounded-xl transition-all duration-200 ${selectedList?.id === list.id
                   ? 'bg-amber-500/10 text-amber-500 font-bold border-l-4 border-amber-500'
                   : 'text-zinc-400 hover:bg-zinc-900 hover:text-white'
                   }`}
@@ -74,9 +74,9 @@ const LibraryPage = () => {
           </nav>
         </aside>
 
-        <main className="flex-1 p-4 md:p-10">
-          <header className="mb-6 md:mb-12">
-            <h1 className="md:text-4xl font-black tracking-tight text-base">
+        <main className="flex-1 p-4 md:p-8 max-w-120 sm:max-w-160 md:max-w-full">
+          <header className="mb-6">
+            <h1 className="font-black tracking-tight text-base md:text-lg">
               {selectedList?.name || "Unknown List"}
             </h1>
             <p className="text-zinc-500 mt-1">
@@ -85,7 +85,7 @@ const LibraryPage = () => {
           </header>
 
           {books.length > 0 ? (
-            <motion.ul className="grid grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-8"
+            <motion.ul className="grid grid-cols-3 sm:grid-cols-4 md:max-w-160 lg:grid-cols-5 lg:max-w-fit xl:grid-cols-6 2xl:grid-cols-8 gap-4"
               variants={bookContainerVariants}
               initial="hidden"
               animate="visible"
@@ -104,11 +104,11 @@ const LibraryPage = () => {
                       />
                     </div>
 
-                    <div className="mt-1">
-                      <h3 className="text-xs md:text-base font-bold line-clamp-1 group-hover:text-amber-500 transition-colors">
+                    <div className="mt-1 flex flex-col gap-0.5">
+                      <h3 className="text-[11px] md:text-xs font-bold line-clamp-2 min-h-[2.4em] content-center group-hover:text-amber-500 transition-colors">
                         {book.title}
                       </h3>
-                      <p className="text-[11px] italic md:text-sm text-zinc-500">
+                      <p className="text-[10px] md:text-[11px] italic text-zinc-500">
                         {book.author_name}
                       </p>
                     </div>
@@ -125,7 +125,7 @@ const LibraryPage = () => {
               ))}
             </motion.ul>
           ) : (
-            <div className="flex flex-col items-center justify-center py-20 border-2 border-dashed border-zinc-900 rounded-3xl">
+            <div className="flex flex-col items-center justify-center py-20 border-2 border-dashed border-zinc-900 rounded-3xl max-w-200">
               <div className="w-16 h-16 bg-zinc-900 rounded-full flex items-center justify-center mb-4">
                 <BiBookOpen className="text-zinc-700" size={32} />
               </div>

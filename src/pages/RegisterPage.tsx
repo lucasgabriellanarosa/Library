@@ -19,7 +19,6 @@ function RegisterPage() {
 
   const handleRegister = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    console.log("Register email: " + email + " with password: " + password + " and confirm password: " + confirmPassword)
 
     if (password !== confirmPassword) {
       alert("The passwords do not match!")

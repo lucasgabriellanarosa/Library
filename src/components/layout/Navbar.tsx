@@ -65,7 +65,7 @@ function Navbar({ children }: { children?: React.ReactNode }) {
                                                 animate={{ opacity: 1, y: 0, scale: 1 }}
                                                 exit={{ opacity: 0, y: -10, scale: 0.95 }}
                                                 transition={{ duration: 0.2 }}
-                                                className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 text-gray-800 z-50 border border-gray-100 text-[10px]"
+                                                className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 text-gray-800 z-50 border border-gray-100 text-[10px] lg:text-[11px]"
                                             >
                                                 <div className="px-4 py-2 border-b border-gray-50">
                                                     <p className="font-boldtruncate">{user.email}</p>
