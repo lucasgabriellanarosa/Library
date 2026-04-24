@@ -17,8 +17,6 @@ function HomePage() {
     getPopularBooks().then(data => setPopularBooks(data));
   }, []);
 
-  console.log(popularBooks)
-
   const columnsBg = [
     'linear-gradient(to right, #2d1633 33.33%, #2d1633 33.33%)',
     'linear-gradient(to right, #1a224a 33.33%, #1a224a 33.33%)',
@@ -69,7 +67,7 @@ function HomePage() {
               loading ? (
                 <LoadingSpinner loading={loading}/>
               ) : (
-                <motion.ul className="grid grid-cols-3 gap-2 sm:grid-cols-4 sm:gap-3 lg:grid-cols-6 2xl:grid-cols-8"
+                <motion.ul className="grid grid-cols-3 gap-2 sm:grid-cols-4 sm:gap-3 lg:grid-cols-6 2xl:grid-cols-8 lg:gap-4"
                   variants={bookContainerVariants}
                   initial="hidden"
                   animate="visible"
