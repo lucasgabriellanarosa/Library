@@ -26,12 +26,12 @@ export function useBooks() {
         try {
             const data = await callProxy('/search.json', {
                 q: `title:${query}`,
-                limit: 10,
+                limit: 24,
                 fields: 'title,author_name,cover_i,key,ratings_average,author_key',
                 page: page,
             });
 
-            const total = Math.ceil(data.numFound / 10);
+            const total = Math.ceil(data.numFound / 24);
             return {
                 docs: data.docs,
                 totalPages: total,

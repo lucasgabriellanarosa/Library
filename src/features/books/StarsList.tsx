@@ -28,7 +28,7 @@ function StarsList({rating = 0}: {rating: number}) {
                 const starType: StarType = isFull ? "full" : isHalf ? "half" : "empty";
 
                 return (
-                    <li key={s} className="text-xs">
+                    <li key={s} className="text-[10px]">
                         <BookStar type={starType} />
                     </li>
                 );

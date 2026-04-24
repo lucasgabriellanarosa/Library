@@ -40,7 +40,7 @@ function SearchBooksForm() {
 
     return (
         <>
-            <form className="flex items-center gap-3 bg-white rounded-lg px-4 py-2 w-full text-gray-950 text-xs font-inter"
+            <form className="flex items-center gap-3 bg-white rounded-lg px-4 py-2 w-full text-gray-950 text-xs font-inter max-w-lg"
                 onSubmit={handleSearchBooks}
             >
                 <input

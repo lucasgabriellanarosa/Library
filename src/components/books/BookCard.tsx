@@ -25,10 +25,10 @@ function BookCard({ cover, title, author, rating = 0, bookKey }: BookCardProps) 
 
                 <img src={cover != null ? cover : imgNotFound} alt={title} className="border aspect-2/3 object-cover w-full rounded-sm" />
 
-                <div className="flex flex-col flex-1 gap-0.5 sm:gap-1">
+                <div className="flex flex-col flex-1 gap-0.5">
 
-                    <h3 className="font-semibold tracking-tight leading-tight line-clamp-2 min-h-[2.4em] content-center text-sm xl:text-base">{title}</h3>
-                    <h4 className="text-xs font-light italic line-clamp-1 xl:text-sm">{author}</h4>
+                    <h3 className="font-semibold tracking-tight leading-tight line-clamp-2 min-h-[2.4em] content-center text-[11px]">{title}</h3>
+                    <h4 className="text-[10px] font-light italic line-clamp-1">{author}</h4>
                     <StarsList rating={rating} />
 
                 </div>

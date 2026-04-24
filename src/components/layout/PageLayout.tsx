@@ -13,7 +13,7 @@ function PageLayout() {
           </div>
         </Navbar>
 
-      <div className="min-h-dvh pb-8 text-sm bg-yellow-50 font-inter">
+      <div className="min-h-dvh pb-8 text-sm bg-yellow-50 font-inter flex flex-col items-center">
         <Outlet />
       </div>
 

@@ -34,14 +34,11 @@ function SearchPage() {
   }, [query, currentPage]);
 
   const handlePageChange = (newPage: number) => {
-    // Atualiza a URL mantendo a query atual
     setSearchParams({ q: query, page: newPage.toString() });
   };
 
-  console.log(books.length)
-
   return (
-    <main className="px-4 pt-32 flex flex-col gap-4">
+    <main className="px-4 pt-32 flex flex-col gap-4 max-w-lg sm:max-w-xl md:pt-36 md:gap-6 md:max-w-2xl lg:px-16 lg:max-w-5xl xl:max-w-fit xl:px-24 2xl:max-w-400">
       {loading ? (
         <LoadingSpinner loading={loading} text={`Searching for "${query}"...`} />
       ) : (
@@ -49,7 +46,7 @@ function SearchPage() {
           <h1 className="font-light italic text-xs">Results for "{query}" (Page {currentPage})</h1>
 
           <motion.ul
-            className="grid grid-cols-2 gap-3"
+            className="grid grid-cols-3 gap-3 sm:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8"
             variants={bookContainerVariants}
             initial="hidden"
             animate="visible"
