@@ -96,7 +96,7 @@ function BookPage() {
         if (data.docs) {
           const filtered = data.docs
             .filter((b: any) => !b.key.includes(workId || ''))
-            .slice(0, 10);
+            .slice(0, 20);
           setSimilarBooks(filtered);
         }
       })
@@ -196,7 +196,7 @@ function BookPage() {
   return (
     <div className="text-xs flex flex-col w-full gap-2 justify-center items-center">
       {bookData && (
-        <div className="w-full flex flex-col items-center pb-10 gap-6">
+        <div className="w-full flex flex-col items-center pb-10 gap-6 xl:gap-10">
 
           {/* Background Image & Card with book info */}
           <div className="relative w-full flex justify-center">
@@ -209,12 +209,12 @@ function BookPage() {
               <div className="absolute inset-0 backdrop-blur-xs" />
             </div>
 
-            <div className="relative z-10 bg-yellow-50/60 w-4/5 mt-52 flex flex-col items-center gap-2 rounded-md shadow-gray-500 shadow-sm">
+            <div className="relative z-10 bg-yellow-50/60 w-4/5 mt-52 flex flex-col items-center gap-2 rounded-md shadow-gray-500 shadow-sm max-w-md md:max-w-xl">
 
               <div className="flex flex-col justify-center items-center px-4 gap-0.5 pb-2">
                 <img
                   src={`https://covers.openlibrary.org/b/id/${bookData.cover}.jpg`}
-                  alt="Capa do livro"
+                  alt={`${bookData.title} Cover`}
                   className="relative w-28 -mt-12 shadow-lg rounded-sm"
                 />
                 <h1 className="font-semibold text-base text-center mt-2">{bookData.title}</h1>
@@ -248,7 +248,7 @@ function BookPage() {
           </div>
 
           {/* Add to list buttons */}
-          <div className="w-4/5 flex flex-col gap-3">
+          <div className="w-4/5 flex flex-col gap-3 max-w-sm xl:max-w-lg">
 
             <div className="flex flex-row gap-3">
 
@@ -267,30 +267,45 @@ function BookPage() {
 
           </div>
 
-          {/* Description */}
-          <div className="w-4/5 flex flex-col gap-2">
-            <h3 className="text-base font-semibold">Description</h3>
+          <div className="w-4/5 flex flex-col justify-center items-center lg:flex lg:flex-row lg:items-start xl:p-4 xl:gap-6 2xl:gap-10">
 
-            <p ref={descriptionRef} className={`text-justify text-gray-700 transition-all duration-300 ${!isExpanded ? 'line-clamp-6' : ''}`}>
-              {bookData.description}
-            </p>
+            <div className="flex flex-col gap-6 max-w-2xl lg:max-w-3xl xl:w-1/2">
 
-            {showButton && (
-              <button
-                onClick={() => setIsExpanded(!isExpanded)}
-                className="w-fit px-4 py-2 bg-[#E9DCC0] text-[#8B5C14] font-bold rounded-md border border-[#D9C8A9] shadow-sm active:scale-95 transition-all self-center"
-              >
-                {isExpanded ? '- Show less' : '+ Read more'}
-              </button>
-            )}
+              {/* Description */}
+              <div className="flex flex-col gap-2">
+                <h3 className="text-base font-semibold">Description</h3>
+
+                <p ref={descriptionRef} className={`text-justify text-gray-700 transition-all duration-300 ${!isExpanded ? 'line-clamp-6' : ''}`}>
+                  {bookData.description}
+                </p>
+
+                {showButton && (
+                  <button
+                    onClick={() => setIsExpanded(!isExpanded)}
+                    className="w-fit px-4 py-2 bg-[#E9DCC0] text-[#8B5C14] font-bold rounded-md border border-[#D9C8A9] shadow-sm active:scale-95 transition-all self-center xl:self-end"
+                  >
+                    {isExpanded ? '- Show less' : '+ Read more'}
+                  </button>
+                )}
+
+              </div>
+              
+              {/* Future: Comments Section */}
+
+            </div>
+
+            <div className="hidden bg-orange-500 xl:block xl:w-1/2 ">
+              <h1>Hello, world!</h1>
+            </div>
+
 
           </div>
 
           {/* Similar Books */}
-          <div className="w-4/5">
+          <div className="w-4/5 max-w-2xl lg:max-w-3xl xl:max-w-fit xl:p-4">
             <h3 className="text-base font-semibold mb-4">Similar Books</h3>
 
-            <div className="flex overflow-x-auto gap-2">
+            <div className="flex overflow-x-auto gap-2 pb-3 mb-3 sm:gap-4">
               {similarBooks.map((book) => (
                 <Link
                   to={`/book/${book.key.replace('/works/', '')}`}
@@ -306,7 +321,7 @@ function BookPage() {
                       className="w-full h-36 object-cover rounded-sm"
                     />
                   </div>
-                  <p className="mt-2 text-[10px] font-bold line-clamp-2 leading-tight text-gray-800 group-hover:text-blue-600">
+                  <p className="mt-2 text-[10px] font-bold line-clamp-2 min-h-[2.4em] content-center leading-tight text-gray-800 group-hover:text-blue-600">
                     {book.title}
                   </p>
                   <p className="text-[9px] text-gray-500 truncate">

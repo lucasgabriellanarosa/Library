@@ -23,7 +23,7 @@ function BookCard({ cover, title, author, rating = 0, bookKey }: BookCardProps) 
                 variants={bookVariants}
             >
 
-                <img src={cover != null ? cover : imgNotFound} alt={title} className="border aspect-2/3 object-cover w-full rounded-sm" />
+                <img loading="lazy" src={cover != null ? '//wsrv.nl/?url='+cover+'&output=webp' : imgNotFound} alt={title} className="border aspect-2/3 object-cover w-full rounded-sm" />
 
                 <div className="flex flex-col flex-1 gap-0.5 sm:gap-1">
 

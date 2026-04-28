@@ -103,7 +103,7 @@ export function useBooks() {
         setLoading(true)
         try {
             let queryParams: any = {
-                limit: 12,
+                limit: 24,
                 lang: "eng",
                 fields: 'key,cover_i,author_name,title',
                 sort: 'rating'
