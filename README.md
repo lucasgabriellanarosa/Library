@@ -1,11 +1,19 @@
-# 📚 Library
+# 📚 Library - https://library-pearl-delta.vercel.app/
 > A book discovery platform focused on performance, security, and accessibility.
 
-[![](https://img.shields.io/badge/website-2EC866?&logo=About.me&logoColor=white)](https://lucasgabriellanarosa.vercel.app/)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/lucas-rosa-452b59237/)
-[![Medium](https://img.shields.io/badge/-Medium-%23000000?&logo=medium&logoColor=white)](https://medium.com/@seuusuario)
-[![YouTube](https://img.shields.io/badge/YouTube-CC342D?&logo=youtube&logoColor=white)](#)
+**Live Deploy:** https://library-pearl-delta.vercel.app/
 
+**Posts**
+
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/lucas-rosa-452b59237/)
+[![Medium](https://img.shields.io/badge/-Medium-%23000000?&logo=medium&logoColor=white)](#)
+[![YouTube](https://img.shields.io/badge/YouTube-CC342D?&logo=youtube&logoColor=white)](https://youtu.be/8-XRBTv0-LA)
+
+<img width="512" alt="Home Page" src="https://github.com/user-attachments/assets/ac857bb8-d1d2-4b54-9054-4f57b92bbc66" />
+<img width="512" alt="Auth Page" src="https://github.com/user-attachments/assets/8ac25312-6219-4ab1-bf4b-b19797b0c0c3" />
+<img width="512" alt="Search Page" src="https://github.com/user-attachments/assets/fbca9e61-4177-439d-96e8-360936b2a591" />
+<img width="512" alt="Book Page" src="https://github.com/user-attachments/assets/47a24a7b-7a59-444c-bd2a-5086c601f567" />
+<img width="512" alt="List Page" src="https://github.com/user-attachments/assets/775cb4f8-af56-401a-9ad1-9c2b924e4140" />
 
 ---
 
