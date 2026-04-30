@@ -40,8 +40,8 @@ function Navbar({ children }: { children?: React.ReactNode }) {
                         user ? (
                             <>
                                 <span className="xl:text-base">
-                                    <Link to="/library">
-                                        <FaListUl />
+                                    <Link to="/library" aria-label="User Lists">
+                                        <FaListUl aria-hidden="true" />
                                     </Link>
                                 </span>
 
@@ -50,10 +50,12 @@ function Navbar({ children }: { children?: React.ReactNode }) {
                                     <button
                                         onClick={() => setIsMenuOpen(!isMenuOpen)}
                                         className="focus:outline-none"
+                                        aria-label="User Profile"
                                     >
                                         <img
                                             src={avatarUrl}
                                             alt="User Profile"
+                                            aria-hidden="true"
                                             className="w-8 h-8 rounded-full border-2 border-transparent hover:border-amber-500 transition-all xl:w-10 xl:h-10"
                                         />
                                     </button>

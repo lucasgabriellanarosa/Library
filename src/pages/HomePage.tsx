@@ -58,8 +58,6 @@ function HomePage() {
             <SearchBooksForm />
           </div>
 
-
-
           <div className="w-full flex flex-col gap-2 max-w-md sm:max-w-160 lg:max-w-240 2xl:max-w-300">
             <h2 className="tracking-wide font-semibold text-sm sm:text-base lg:text-lg">Popular Books</h2>
 

@@ -10,7 +10,7 @@ function BookStar({ type }: BookStarProps) {
   const color = type === "empty" ? "text-gray-500" : "text-amber-500";
 
   return (
-    <span className={`${color}`}>
+    <span className={`${color}`} aria-hidden="true">
       {type === "full" && <FaStar />}
       {type === "half" && <FaStarHalfStroke />}
       {type === "empty" && <FaRegStar />}

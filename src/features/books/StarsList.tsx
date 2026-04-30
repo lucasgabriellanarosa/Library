@@ -8,7 +8,7 @@ function StarsList({rating = 0}: {rating: number}) {
 
     return (
 
-        <ul className="flex gap-1 mt-auto">
+        <ul className="flex gap-1 mt-auto" aria-label={`Rating: ${rating} out of 5 stars`}>
 
             {stars.map((s) => {
                 /** * Full Star Logic:
@@ -33,6 +33,8 @@ function StarsList({rating = 0}: {rating: number}) {
                     </li>
                 );
             })}
+
+            <span className="sr-only">{rating} stars</span>
 
         </ul>
     )
