@@ -29,34 +29,33 @@ function Navbar({ children }: { children?: React.ReactNode }) {
     }, []);
 
     return (
-        <nav className="flex flex-col px-4 bg-darkPurple text-yellow-50 fixed w-full z-20 font-inter text-xs sm:px-8 xl:px-12 2xl:px-16">
+        <nav className="flex flex-col px-4 bg-darkPurple text-yellow-50 fixed w-full z-20 font-inter text-xs py-1 sm:px-8 xl:px-12 2xl:px-16">
             <div className="flex flex-row items-center justify-between w-full">
-                <Link to="/">
-                    <img src={logoImg} alt="Logo" className="w-12 h-12 xl:w-14 xl:h-14" />
+
+                <Link to="/" aria-label="Home Page">
+                    <img src={logoImg} alt="Library Logo" className="w-12 h-12 xl:w-14 xl:h-14" />
                 </Link>
 
                 <div className=" flex flex-row gap-2 justify-center items-center lg:gap-4 xl:gap-6">
                     {
                         user ? (
                             <>
-                                <span className="xl:text-base">
-                                    <Link to="/library" aria-label="User Lists">
+                                <Link to="/library" aria-label="User Lists">
+                                    <span className="xl:text-base hover:text-amber-200 active:text-amber-500 transition-all duration-200">
                                         <FaListUl aria-hidden="true" />
-                                    </Link>
-                                </span>
+                                    </span>
+                                </Link>
 
-                                <div className="relative" ref={menuRef}>
+                                <div className="relative" aria-hidden="true" ref={menuRef}>
 
                                     <button
                                         onClick={() => setIsMenuOpen(!isMenuOpen)}
-                                        className="focus:outline-none"
                                         aria-label="User Profile"
                                     >
                                         <img
                                             src={avatarUrl}
                                             alt="User Profile"
-                                            aria-hidden="true"
-                                            className="w-8 h-8 rounded-full border-2 border-transparent hover:border-amber-500 transition-all xl:w-10 xl:h-10"
+                                            className="w-8 h-8 rounded-full border-2 border-transparent hover:border-amber-300 hover:cursor-pointer transition-all xl:w-10 xl:h-10"
                                         />
                                     </button>
 
@@ -104,7 +103,6 @@ function Navbar({ children }: { children?: React.ReactNode }) {
                             )
                     }
                 </div>
-
 
             </div>
 
