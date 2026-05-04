@@ -8,7 +8,7 @@ interface AuthInputProps {
 
 function AuthInput({ icon, placeholder, type, stateValue, setStateValue }: AuthInputProps) {
     return (
-        <div className="flex flex-row items-center gap-2 border border-amber-900/30 rounded-sm p-2 text-amber-900/80 text-xs">
+        <div className="flex flex-row items-center gap-2 border border-amber-900/30 rounded-sm p-2 text-amber-900/80 text-xs focus-within:outline-orange-500 focus-within:outline">
             <span>
                 {icon}
             </span>

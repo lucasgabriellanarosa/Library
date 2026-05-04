@@ -45,11 +45,9 @@ export const BookAIWhisper = ({ bookTitle, bookAuthor }: Props) => {
     return (
         <div className="fixed bottom-6 right-6 z-100 flex flex-col items-end font-sans xl:hidden">
 
-            {/* Janela do Chat */}
             {isOpen && (
                 <div className="mb-4 w-72 sm:w-80 h-96 bg-white rounded-2xl shadow-2xl border border-amber-100 flex flex-col overflow-hidden animate-in slide-in-from-bottom-5 duration-300">
 
-                    {/* Header */}
                     <div className="bg-amber-600 p-4 text-white flex justify-between items-center shadow-md">
                         <div className="flex items-center gap-2">
                             <FaRobot className="text-xl" />
@@ -63,25 +61,24 @@ export const BookAIWhisper = ({ bookTitle, bookAuthor }: Props) => {
                         </button>
                     </div>
 
-                    {/* Área de Mensagens */}
-                    <div className="flex-1 p-4 overflow-y-auto bg-amber-50/30 space-y-4">
+                    <ul className="flex-1 p-4 overflow-y-auto bg-amber-50/30 space-y-4">
                         {chatHistory.length === 0 ? (
-                            <div className="text-center mt-10">
+                            <li className="text-center mt-10">
                                 <FaRobot className="mx-auto text-3xl text-amber-200 mb-2" />
                                 <p className="text-[10px] text-gray-500 px-4">
                                    Hello! I'm your literary guide. Ask me something about <b>{bookTitle}</b>!
                                 </p>
-                            </div>
+                            </li>
                         ) : (
                             chatHistory.map((chat, i) => (
-                                <div key={i} className={`flex ${chat.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                                <li key={i} className={`flex ${chat.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                                     <div className={`max-w-[85%] p-3 rounded-2xl text-[11px] leading-relaxed shadow-sm ${chat.role === 'user'
                                         ? 'bg-amber-600 text-white rounded-tr-none'
                                         : 'bg-white border border-amber-100 text-gray-700 rounded-tl-none'
                                         }`}>
                                         {chat.text}
                                     </div>
-                                </div>
+                                </li>
                             ))
                         )}
                         {isTyping && (
@@ -95,9 +92,8 @@ export const BookAIWhisper = ({ bookTitle, bookAuthor }: Props) => {
                                 </div>
                             </div>
                         )}
-                    </div>
+                    </ul>
 
-                    {/* Input */}
                     <div className="p-3 border-t border-amber-100 bg-white flex gap-2">
                         <input
                             type="text"
@@ -119,7 +115,6 @@ export const BookAIWhisper = ({ bookTitle, bookAuthor }: Props) => {
                 </div>
             )}
 
-            {/* Botão FAB */}
             <button
                 onClick={() => setIsOpen(!isOpen)}
                 className={`${isOpen ? 'bg-gray-800' : 'bg-amber-600'

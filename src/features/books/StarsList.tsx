@@ -34,8 +34,6 @@ function StarsList({rating = 0}: {rating: number}) {
                 );
             })}
 
-            <span className="sr-only">{rating} stars</span>
-
         </ul>
     )
 }

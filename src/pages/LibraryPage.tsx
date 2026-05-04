@@ -35,20 +35,22 @@ const LibraryPage = () => {
     <div className="pt-30 text-xs w-full">
 
       <div className="md:hidden z-10 backdrop-blur-md border-b border-zinc-800 flex justify-center">
-        <div className="flex overflow-x-auto scrollbar-hide gap-2 p-4 w-120 sm:w-160">
+        <ul className="flex overflow-x-auto scrollbar-hide gap-2 p-4 w-120 sm:w-160">
           {lists.map(list => (
-            <button
-              key={list.id}
-              onClick={() => setSelectedList(list)}
-              className={`px-4 py-2 rounded-full whitespace-nowrap text-[10px] transition-all ${selectedList?.id === list.id
-                ? 'bg-amber-500 text-black shadow-lg shadow-amber-500/20'
-                : 'bg-zinc-900 text-zinc-400 border border-zinc-800'
-                }`}
-            >
-              {list.name}
-            </button>
+            <li key={list.id}>
+              <button
+                onClick={() => setSelectedList(list)}
+                className={`px-4 py-2 rounded-full whitespace-nowrap text-[10px] transition-all ${selectedList?.id === list.id
+                  ? 'bg-amber-500 text-black shadow-lg shadow-amber-500/20'
+                  : 'bg-zinc-900 text-zinc-400 border border-zinc-800'
+                  }`}
+              >
+                {list.name}
+              </button>
+            </li>
+
           ))}
-        </div>
+        </ul>
       </div>
 
       <div className="flex justify-center max-w-400 mx-auto">
@@ -67,8 +69,8 @@ const LibraryPage = () => {
                 tabIndex={selectedList?.id === list.id ? -1 : 0}
                 className={`text-[11px] w-full text-left px-4 py-3 rounded-xl
                   ${selectedList?.id === list.id
-                  ? 'bg-amber-800/10 text-amber-800 font-bold border-l-4 border-amber-800 tracking-wider pointer-events-none'
-                  : 'text-zinc-800 hover:bg-amber-800 hover:text-zinc-100 hover:cursor-pointer'
+                    ? 'bg-amber-800/10 text-amber-800 font-bold border-l-4 border-amber-800 tracking-wider pointer-events-none'
+                    : 'text-zinc-800 hover:bg-amber-800 hover:text-zinc-100 hover:cursor-pointer'
                   }`}
               >
                 {list.name}
@@ -122,7 +124,7 @@ const LibraryPage = () => {
                     className="absolute -top-2 -right-2 p-2 bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-red-500 rounded-full shadow-2xl md:opacity-0 md:group-hover:opacity-100 group-focus-within:opacity-100 transition-all z-10 hover:cursor-pointer"
                     aria-label="Delete Book"
                   >
-                    <GoX size={18} aria-hidden="true"/>
+                    <GoX size={18} aria-hidden="true" />
                   </button>
                 </motion.li>
               ))}

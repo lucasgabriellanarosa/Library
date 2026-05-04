@@ -11,7 +11,7 @@ function AuthPage() {
                 <div className="absolute -top-12 left-1/2 -translate-x-1/2 flex items-center justify-center">
                     <img
                         src={logoImg}
-                        alt="Logo da Biblioteca"
+                        alt="Logo"
                         className="w-20 h-20 object-contain rounded-md"
                     />
                 </div>

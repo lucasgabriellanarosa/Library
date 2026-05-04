@@ -23,9 +23,9 @@ function SearchPage() {
     if (query.trim().length >= 3) {
       searchBooks(query, currentPage).then(data => {
         if (data) {
-          setBooks(data.docs);           
-          setTotalPages(data.totalPages); 
-          setTotalResults(data.numFound); 
+          setBooks(data.docs);
+          setTotalPages(data.totalPages);
+          setTotalResults(data.numFound);
         }
 
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -51,15 +51,15 @@ function SearchPage() {
             initial="hidden"
             animate="visible"
           >
-            {books.map((book, index) => (
-              <BookCard
-                key={index}
-                cover={book.cover_i ? `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg` : null}
-                title={book.title || 'Unknown Title'}
-                author={book.author_name ? book.author_name.join(', ') : 'Unknown Author'}
-                rating={book.ratings_average || 0}
-                bookKey={book.key}
-              />
+            {books.map((book) => (
+                <BookCard
+                  cover={book.cover_i ? `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg` : null}
+                  title={book.title || 'Unknown Title'}
+                  author={book.author_name ? book.author_name.join(', ') : 'Unknown Author'}
+                  rating={book.ratings_average || 0}
+                  bookKey={book.key}
+                  key={book.key}
+                />
             ))}
           </motion.ul>
 
@@ -68,7 +68,7 @@ function SearchPage() {
               <div className="flex items-center justify-center gap-4 text-xs">
                 <button
                   disabled={currentPage <= 1}
-                  onClick={() => handlePageChange(currentPage-1)}
+                  onClick={() => handlePageChange(currentPage - 1)}
                   aria-label="Previous Books"
                   className="px-3 py-1 min-w-18.75 bg-darkPurple text-white rounded disabled:opacity-30 disabled:hover:cursor-not-allowed enabled:hover:cursor-pointer enabled:hover:bg-darkPurple/80"
                 >
@@ -81,7 +81,7 @@ function SearchPage() {
 
                 <button
                   disabled={currentPage >= totalPages}
-                  onClick={() => handlePageChange(currentPage+1)}
+                  onClick={() => handlePageChange(currentPage + 1)}
                   aria-label="Next Books"
                   className="px-3 py-1 min-w-18.75 bg-darkPurple text-white rounded disabled:opacity-30 disabled:hover:cursor-not-allowed enabled:hover:cursor-pointer enabled:hover:bg-darkPurple/80"
                 >

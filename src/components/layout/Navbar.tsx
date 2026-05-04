@@ -16,7 +16,7 @@ function Navbar({ children }: { children?: React.ReactNode }) {
 
 
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const menuRef = useRef<HTMLDivElement>(null);
+    const menuRef = useRef<HTMLLIElement>(null);
 
     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
@@ -36,17 +36,19 @@ function Navbar({ children }: { children?: React.ReactNode }) {
                     <img src={logoImg} alt="Library Logo" className="w-12 h-12 xl:w-14 xl:h-14" />
                 </Link>
 
-                <div className=" flex flex-row gap-2 justify-center items-center lg:gap-4 xl:gap-6">
+                <ul className=" flex flex-row gap-2 justify-center items-center lg:gap-4 xl:gap-6">
                     {
                         user ? (
                             <>
-                                <Link to="/library" aria-label="User Lists">
-                                    <span className="xl:text-base hover:text-amber-200 active:text-amber-500 transition-all duration-200">
-                                        <FaListUl aria-hidden="true" />
-                                    </span>
-                                </Link>
+                                <li>
+                                    <Link to="/library" aria-label="User Lists">
+                                        <span className="xl:text-base hover:text-amber-200 active:text-amber-500 transition-all duration-200">
+                                            <FaListUl aria-hidden="true" />
+                                        </span>
+                                    </Link>
+                                </li>
 
-                                <div className="relative" aria-hidden="true" ref={menuRef}>
+                                <li className="relative" aria-hidden="true" ref={menuRef}>
 
                                     <button
                                         onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -92,17 +94,22 @@ function Navbar({ children }: { children?: React.ReactNode }) {
                                             </motion.div>
                                         )}
                                     </AnimatePresence>
-                                </div>
+                                </li>
                             </>
                         ) :
                             (
                                 <>
-                                    <button onClick={() => navigate('/register')}>Register</button>
-                                    <button onClick={() => navigate('/login')} className="border rounded-md px-2 py-1">Login</button>
+                                    <li>
+                                        <button onClick={() => navigate('/register')}>Register</button>
+                                    </li>
+                                    
+                                    <li>
+                                        <button onClick={() => navigate('/login')} className="border rounded-md px-2 py-1">Login</button>
+                                    </li>
                                 </>
                             )
                     }
-                </div>
+                </ul>
 
             </div>
 

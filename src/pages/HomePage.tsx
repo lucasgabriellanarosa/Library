@@ -8,6 +8,7 @@ import { useBooks } from "../hooks/useBooks";
 import { useEffect, useState } from "react";
 import LoadingSpinner from "../components/ui/LoadingSpinner";
 import { IsbnScanner } from "../features/ui/IsbnScanner";
+import { useScannerStore } from "../stores/useScannerStore";
 
 function HomePage() {
 
@@ -26,10 +27,12 @@ function HomePage() {
 
   const overlayGradient = 'linear-gradient(to bottom, rgba(30, 27, 75, 0.2) 0%, rgba(30, 27, 75, 0.8) 50%, #1e1b4b 100%)';
 
+  const isScannerOpen = useScannerStore((s) => s.isScannerOpen);
+
   return (
     <>
 
-      <div>
+      <div id="main-app-container" inert={isScannerOpen ? true : undefined}>
         <Navbar />
 
         <div
@@ -74,15 +77,16 @@ function HomePage() {
                   >
 
                     {
-                      popularBooks.map((book, index) => (
+                      popularBooks.map((book) => (
                         <BookCard
                           cover={book.cover_i ? `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg` : null}
                           title={book.title}
                           author={book.author_name?.[0] || 'Unknown Author'}
                           rating={book.ratings_average}
-                          key={index}
                           bookKey={book.key}
+                          key={book.key}
                         />
+
                       ))
                     }
 
