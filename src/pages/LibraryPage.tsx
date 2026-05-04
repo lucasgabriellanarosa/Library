@@ -32,7 +32,7 @@ const LibraryPage = () => {
   if (loading) return <LoadingSpinner loading={loading} text="Listing books..." />
 
   return (
-    <div className="pt-28 text-xs w-full">
+    <div className="pt-30 text-xs w-full">
 
       <div className="md:hidden z-10 backdrop-blur-md border-b border-zinc-800 flex justify-center">
         <div className="flex overflow-x-auto scrollbar-hide gap-2 p-4 w-120 sm:w-160">
@@ -54,8 +54,8 @@ const LibraryPage = () => {
       <div className="flex justify-center max-w-400 mx-auto">
 
         <aside className="hidden md:block w-72 border-r border-zinc-800 p-8 h-[calc(100vh-80px)] sticky">
-          <h2 className="text-base font-bold mb-8 flex items-center gap-3">
-            <BiBookOpen className="text-amber-500" size={20} />
+          <h2 className="text-base font-bold mb-8 flex items-center gap-3" aria-label="My Lists">
+            <BiBookOpen className="text-amber-800" size={20} aria-hidden="true" />
             My Lists
           </h2>
           <nav className="space-y-3">
@@ -63,9 +63,12 @@ const LibraryPage = () => {
               <button
                 key={list.id}
                 onClick={() => setSelectedList(list)}
-                className={`text-[11px] w-full text-left px-4 py-3 rounded-xl transition-all duration-200 ${selectedList?.id === list.id
-                  ? 'bg-amber-500/10 text-amber-500 font-bold border-l-4 border-amber-500'
-                  : 'text-zinc-400 hover:bg-zinc-900 hover:text-white'
+                aria-label={`${list.name} list`}
+                tabIndex={selectedList?.id === list.id ? -1 : 0}
+                className={`text-[11px] w-full text-left px-4 py-3 rounded-xl
+                  ${selectedList?.id === list.id
+                  ? 'bg-amber-800/10 text-amber-800 font-bold border-l-4 border-amber-800 tracking-wider pointer-events-none'
+                  : 'text-zinc-800 hover:bg-amber-800 hover:text-zinc-100 hover:cursor-pointer'
                   }`}
               >
                 {list.name}
@@ -79,7 +82,7 @@ const LibraryPage = () => {
             <h1 className="font-black tracking-tight text-base md:text-lg">
               {selectedList?.name || "Unknown List"}
             </h1>
-            <p className="text-zinc-500 mt-1">
+            <p className="text-zinc-800 mt-1">
               {books.length} {books.length === 1 ? 'book found' : 'books found'}
             </p>
           </header>
@@ -94,8 +97,8 @@ const LibraryPage = () => {
                 <motion.li key={book.id} className="group relative flex flex-col"
                   variants={bookVariants}
                 >
-                  <Link to={`/book/${encodeURIComponent(book.work_key.replace('/works/', ''))}`} className="relative block">
-                    <div className="aspect-2/3 overflow-hidden rounded-xl bg-zinc-900 border border-zinc-800 transition-all duration-300 group-hover:border-amber-500/50 group-hover:shadow-2xl group-hover:shadow-amber-500/10">
+                  <Link to={`/book/${encodeURIComponent(book.work_key.replace('/works/', ''))}`} className="relative block" aria-label={`Book ${book.title} wrote by ${book.author_name}`}>
+                    <div aria-hidden="true" className="aspect-2/3 overflow-hidden rounded-xl bg-zinc-900 border border-zinc-800 transition-all duration-300 group-hover:border-amber-500/50 group-hover:shadow-2xl group-hover:shadow-amber-500/10">
                       <img
                         src={`https://wsrv.nl/?url=https://covers.openlibrary.org/b/id/${book.cover_id}-L.jpg&output=webp`}
                         alt={book.title}
@@ -104,11 +107,11 @@ const LibraryPage = () => {
                       />
                     </div>
 
-                    <div className="mt-1 flex flex-col gap-0.5">
+                    <div aria-hidden="true" className="mt-1 flex flex-col gap-0.5">
                       <h3 className="text-[11px] md:text-xs font-bold line-clamp-2 min-h-[2.4em] content-center group-hover:text-amber-500 transition-colors">
                         {book.title}
                       </h3>
-                      <p className="text-[10px] md:text-[11px] italic text-zinc-500">
+                      <p className="text-[10px] md:text-[11px] italic text-zinc-800">
                         {book.author_name}
                       </p>
                     </div>
@@ -116,10 +119,10 @@ const LibraryPage = () => {
 
                   <button
                     onClick={() => removeBookFromList(book.id)}
-                    className="absolute -top-2 -right-2 p-2 bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-red-500 rounded-full shadow-2xl md:opacity-0 md:group-hover:opacity-100 transition-all z-10"
-                    aria-label="Remover livro"
+                    className="absolute -top-2 -right-2 p-2 bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-red-500 rounded-full shadow-2xl md:opacity-0 md:group-hover:opacity-100 group-focus-within:opacity-100 transition-all z-10 hover:cursor-pointer"
+                    aria-label="Delete Book"
                   >
-                    <GoX size={18} />
+                    <GoX size={18} aria-hidden="true"/>
                   </button>
                 </motion.li>
               ))}

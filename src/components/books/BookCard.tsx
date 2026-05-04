@@ -19,7 +19,7 @@ function BookCard({ cover, title, author, rating = 0, bookKey }: BookCardProps) 
 
     return (
         <Link to={`/book/${encodeURIComponent(bookKey.replace('/works/', ''))}`}>
-            <motion.li className="flex flex-col gap-0.5 border rounded-md bg-yellow-100 text-black p-1 md:p-2"
+            <motion.li className="flex flex-col gap-0.5 border rounded-md bg-yellow-100 text-black p-1 md:p-2 hover:scale-105 hover:bg-yellow-200 transition-all"
                 variants={bookVariants}
             >
 

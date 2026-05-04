@@ -57,6 +57,13 @@ export function IsbnScanner() {
             frequency: 1,
         }, (err) => {
             if (err) return console.error(err);
+
+            const video = scannerRef.current?.querySelector('video');
+            if (video) {
+                video.setAttribute('tabindex', '-1');
+                video.controls = false;
+                video.setAttribute('playsinline', 'true');
+            }
             Quagga.start();
         });
 
@@ -73,8 +80,32 @@ export function IsbnScanner() {
         };
     }, [isScannerOpen]);
 
-    if (!isScannerOpen) return null;
+    const lastActiveElement = useRef<HTMLElement | null>(null);
 
+    useEffect(() => {
+        if (isScannerOpen) {
+            lastActiveElement.current = document.activeElement as HTMLElement;
+
+            const focusTimeout = setTimeout(() => {
+                const closeButton = scannerRef.current?.parentElement?.querySelector('button');
+                closeButton?.focus();
+            }, 100);
+
+            const handleEsc = (e: KeyboardEvent) => {
+                if (e.key === 'Escape') closeScanner();
+            };
+            window.addEventListener('keydown', handleEsc);
+
+            return () => {
+                window.removeEventListener('keydown', handleEsc);
+                clearTimeout(focusTimeout);
+            };
+        } else {
+            lastActiveElement.current?.focus();
+        }
+    }, [isScannerOpen, closeScanner]);
+
+    if (!isScannerOpen) return null;
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4" >
@@ -96,6 +127,7 @@ export function IsbnScanner() {
                 <button
                     onClick={closeScanner}
                     aria-label='Close Scanner'
+                    tabIndex={0}
                     className="absolute top-4 right-4 z-10 bg-red-600 text-white px-4 py-2 rounded-lg font-bold shadow-md hover:cursor-pointer hover:bg-red-400 hover:text-gray-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-white transition-all duration-100"
                 >
                     Close
@@ -104,7 +136,7 @@ export function IsbnScanner() {
                 <div
                     ref={scannerRef}
                     aria-hidden="true"
-                    className="w-full h-75 rounded-xl overflow-hidden [&>video]:w-full [&>video]:h-full [&>video]:object-cover [&>canvas]:hidden"
+                    className="w-full h-75 rounded-xl overflow-hidden pointer-events-none [&>video]:w-full [&>video]:h-full [&>video]:object-cover [&>canvas]:hidden"
                 />
 
                 <div className="p-4 text-center">

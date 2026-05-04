@@ -41,7 +41,7 @@ function SearchBooksForm() {
             <button
                 type="button"
                 onClick={openScanner}
-                className="text-gray-500 hover:text-blue-600"
+                className="text-gray-500 hover:text-blue-600 hover:cursor-pointer"
                 aria-label="Scan ISBN code and search for that book"
             >
                 <FaCamera size={16} aria-hidden="true" />
@@ -49,7 +49,7 @@ function SearchBooksForm() {
 
             <button
                 type="submit"
-                className="text-gray-800 hover:scale-110 transition-transform"
+                className="text-gray-800 hover:scale-110 hover:cursor-pointer transition-transform"
                 aria-label="Submit form and search book by title"
             >
                 <FaSearch size={14} aria-hidden="true" />

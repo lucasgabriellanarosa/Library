@@ -69,7 +69,8 @@ function SearchPage() {
                 <button
                   disabled={currentPage <= 1}
                   onClick={() => handlePageChange(currentPage-1)}
-                  className="px-3 py-1 min-w-18.75 bg-darkPurple text-white rounded disabled:opacity-30"
+                  aria-label="Previous Books"
+                  className="px-3 py-1 min-w-18.75 bg-darkPurple text-white rounded disabled:opacity-30 disabled:hover:cursor-not-allowed enabled:hover:cursor-pointer enabled:hover:bg-darkPurple/80"
                 >
                   Previous
                 </button>
@@ -81,7 +82,8 @@ function SearchPage() {
                 <button
                   disabled={currentPage >= totalPages}
                   onClick={() => handlePageChange(currentPage+1)}
-                  className="px-3 py-1 min-w-18.75 bg-darkPurple text-white rounded disabled:opacity-30"
+                  aria-label="Next Books"
+                  className="px-3 py-1 min-w-18.75 bg-darkPurple text-white rounded disabled:opacity-30 disabled:hover:cursor-not-allowed enabled:hover:cursor-pointer enabled:hover:bg-darkPurple/80"
                 >
                   Next
                 </button>
