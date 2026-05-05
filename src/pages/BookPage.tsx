@@ -296,8 +296,7 @@ function BookPage() {
 
             </div>
 
-            {/* <button className="w-full py-2 bg-[#E9DCC0] text-[#8B5C14] font-bold rounded-md border border-[#D9C8A9] shadow-sm active:scale-95 transition-all flex items-center justify-center gap-2"> */}
-            <button className="w-full py-2 font-bold rounded-md border shadow-sm active:scale-95 transition-all flex items-center justify-center gap-2 disabled:bg-gray-200 disabled:border-gray-300 disabled:text-gray-700" disabled>
+            <button className="w-full py-2 font-bold rounded-md border shadow-sm active:scale-95 transition-all flex items-center justify-center gap-2 disabled:bg-gray-200 disabled:border-gray-300 disabled:text-gray-700 disabled:cursor-not-allowed" disabled>
               <FaList /> Add to List (soon)
             </button>
 
@@ -409,10 +408,10 @@ function BookPage() {
 
             <ul className="flex overflow-x-auto gap-2 pb-3 mb-3 sm:gap-4 2xl:pb-4 2xl:mb-4">
               {similarBooks.map((book) => (
-                <li key={book.key}>
+                <li key={book.key} className="shrink-0 w-24 xl:w-30">
                   <Link
                     to={`/book/${book.key.replace('/works/', '')}`}
-                    className="shrink-0 w-24 group xl:w-30"
+                    className="block group w-full"
                   >
                     <div className="relative shadow-md group-hover:shadow-xl transition-shadow">
                       <img
@@ -423,7 +422,7 @@ function BookPage() {
                         className="w-full h-36 object-cover rounded-sm xl:h-45"
                       />
                     </div>
-                    <p className="mt-2 mb-1 text-[10px] font-bold line-clamp-2 min-h-[2.4em] content-center leading-tight text-gray-800 group-hover:text-blue-600 xl:text-[11px] xl:mt-3">
+                    <p className="mt-2 mb-1 text-[10px] font-bold line-clamp-2 min-h-[2.4em] leading-tight text-gray-800 group-hover:text-blue-600 xl:text-[11px] xl:mt-3">
                       {book.title}
                     </p>
                     <p className="text-[9px] text-gray-500 truncate xl:text-[10px]">

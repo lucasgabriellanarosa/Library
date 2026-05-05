@@ -1,22 +1,21 @@
 import { Route, Routes } from 'react-router'
-
-// Pages 
-import HomePage from './pages/HomePage'
-import SearchPage from './pages/SearchPage'
-import BookPage from './pages/BookPage'
-import LoginPage from './pages/LoginPage'
-import RegisterPage from './pages/RegisterPage'
-import LibraryPage from './pages/LibraryPage'
-import NotFound from './pages/NotFound'
-
-// Auth Component
-import { AuthGuard } from './components/auth/AuthGuard'
-import AuthPage from './components/auth/AuthPage'
-
-// Auth
-import { useEffect } from 'react'
+import { lazy, Suspense, useEffect } from 'react';
 import { useAuth } from './hooks/useAuth'
-import PageLayout from './components/layout/PageLayout'
+
+// Layouts & Auth Guard
+import PageLayout from './components/layout/PageLayout';
+import { AuthGuard } from './components/auth/AuthGuard';
+import AuthPage from './components/auth/AuthPage';
+import LoadingSpinner from './components/ui/LoadingSpinner';
+
+// Lazy Loading Page
+const HomePage = lazy(() => import('./pages/HomePage'));
+const SearchPage = lazy(() => import('./pages/SearchPage'));
+const BookPage = lazy(() => import('./pages/BookPage'));
+const LoginPage = lazy(() => import('./pages/LoginPage'));
+const RegisterPage = lazy(() => import('./pages/RegisterPage'));
+const LibraryPage = lazy(() => import('./pages/LibraryPage'));
+const NotFound = lazy(() => import('./pages/NotFound'));
 
 
 function App() {
@@ -25,21 +24,22 @@ function App() {
 
   useEffect(() => {
     initializeAuth();
-  }, [])
+  }, [initializeAuth])
 
   return (
     <Routes>
-      <Route index path='/' element={<HomePage />} />
+      <Route index path='/' element={
+        <Suspense fallback={<LoadingSpinner loading text='Searching books...' />}>
+          <HomePage />
+        </Suspense>
+      } />
 
       <Route element={<PageLayout />}>
         <Route path='/search' element={<SearchPage />} />
         <Route path='/book/:workId/:isbn?' element={<BookPage />} />
-
-
         <Route element={<AuthGuard />}>
           <Route path='/library' element={<LibraryPage />} />
         </Route>
-
       </Route>
 
       <Route element={<AuthPage />}>
@@ -51,6 +51,7 @@ function App() {
       <Route path='*' element={<NotFound />} />
 
     </Routes>
+
 
   )
 }

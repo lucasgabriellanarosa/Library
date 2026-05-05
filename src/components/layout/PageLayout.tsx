@@ -1,8 +1,12 @@
+import { Suspense, lazy } from 'react';
 import { Outlet } from "react-router"
 import Navbar from "./Navbar"
 import SearchBooksForm from "../../features/ui/SearchBooksForm"
-import { IsbnScanner } from "../../features/ui/IsbnScanner"
 import { useScannerStore } from "../../stores/useScannerStore";
+import ScannerSkeleton from '../skeleton/ScannerSkeleton';
+import LoadingSpinner from '../ui/LoadingSpinner';
+
+const IsbnScanner = lazy(() => import("../../features/ui/IsbnScanner"))
 
 function PageLayout() {
 
@@ -18,11 +22,17 @@ function PageLayout() {
         </Navbar>
 
         <main className="min-h-dvh pb-8 text-sm bg-indigo-50 font-inter flex flex-col items-center">
-          <Outlet />
+          <Suspense fallback={<LoadingSpinner loading />}>
+            <Outlet />
+          </Suspense>
         </main>
       </div>
 
-      <IsbnScanner />
+      {isScannerOpen && (
+        <Suspense fallback={<ScannerSkeleton />}>
+          <IsbnScanner />
+        </Suspense>
+      )}
 
     </>
   )

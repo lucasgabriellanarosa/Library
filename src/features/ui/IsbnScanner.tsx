@@ -4,7 +4,7 @@ import { useScannerStore } from '../../stores/useScannerStore';
 import { useBooks } from '../../hooks/useBooks';
 import { useNavigate } from 'react-router';
 
-export function IsbnScanner() {
+export default function IsbnScanner() {
 
     const { isScannerOpen, closeScanner } = useScannerStore();
 
@@ -128,7 +128,7 @@ export function IsbnScanner() {
                     onClick={closeScanner}
                     aria-label='Close Scanner'
                     tabIndex={0}
-                    className="absolute top-4 right-4 z-10 bg-red-600 text-white px-4 py-2 rounded-lg font-bold shadow-md hover:cursor-pointer hover:bg-red-400 hover:text-gray-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-4 transition-all duration-100"
+                    className="absolute top-4 right-4 z-10 bg-red-600 text-white px-4 py-2 rounded-lg font-bold shadow-md hover:cursor-pointer hover:bg-red-400 hover:text-gray-200 focus:outline-none focus-visible:ring-4 focus-visible:ring-blue-500 transition-all duration-100"
                 >
                     Close
                 </button>

@@ -14,25 +14,25 @@ export const StatusButton = ({ bookStatus, isUpdating, activeAction, onUpdate }:
       type: 'Read' as const,
       label: bookStatus === 'Read' ? 'Read' : 'Mark as Read',
       icon: bookStatus === 'Read' ? <FaCheckCircle /> : <FaRegCheckCircle />,
-      activeClass: 'bg-emerald-600 text-white border-emerald-700',
+      activeClass: 'bg-emerald-600 text-white border-emerald-700 hover:bg-emerald-800',
     },
     {
       type: 'To Read' as const,
       label: bookStatus === 'To Read' ? 'To Read' : 'Read Later',
       icon: bookStatus === 'To Read' ? <FaBookmark /> : <FaRegBookmark />,
-      activeClass: 'bg-orange-700 text-white border-orange-800',
+      activeClass: 'bg-orange-700 text-white border-orange-800 hover:bg-orange-900',
     }
   ];
   return (
     <ul className="flex flex-row gap-3 w-full">
       {buttonConfigs.map((btn) => (
-        <li key={btn.type}>
+        <li key={btn.type} className="w-full">
           <button
             disabled={isUpdating}
             onClick={() => onUpdate(btn.type)}
-            className={`w-full py-2 font-bold rounded-md border shadow-sm active:scale-95 transition-all flex items-center justify-center gap-2 
-            ${isUpdating ? 'opacity-50 cursor-not-allowed' : ''}
-            ${bookStatus === btn.type
+            className={`w-full py-2 font-bold rounded-md border shadow-sm active:scale-95 transition-all flex items-center justify-center gap-2 hover:cursor-pointer
+      ${isUpdating ? 'opacity-50 cursor-not-allowed' : ''}
+      ${bookStatus === btn.type
                 ? btn.activeClass
                 : 'bg-[#E9DCC0] text-[#8B5C14] border-[#D9C8A9] hover:bg-[#dcd0b3]'
               }`}
@@ -45,7 +45,6 @@ export const StatusButton = ({ bookStatus, isUpdating, activeAction, onUpdate }:
             {btn.label}
           </button>
         </li>
-
       ))}
     </ul>
   );

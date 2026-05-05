@@ -5,10 +5,12 @@ import type { BookType } from "../@types/BookType";
 import { motion } from "framer-motion";
 import { bookContainerVariants } from "../utils/animations/bookAnimations";
 import { useBooks } from "../hooks/useBooks";
-import { useEffect, useState } from "react";
-import LoadingSpinner from "../components/ui/LoadingSpinner";
-import { IsbnScanner } from "../features/ui/IsbnScanner";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { useScannerStore } from "../stores/useScannerStore";
+import ScannerSkeleton from "../components/skeleton/ScannerSkeleton";
+import BookCardSkeleton from "../components/skeleton/BookCardSkeleton";
+
+const IsbnScanner = lazy(() => import("../features/ui/IsbnScanner"))
 
 function HomePage() {
 
@@ -68,7 +70,11 @@ function HomePage() {
 
               {
                 loading ? (
-                  <LoadingSpinner loading={loading} />
+                  <ul className="grid grid-cols-3 gap-2 sm:grid-cols-4 sm:gap-3 lg:grid-cols-6 2xl:grid-cols-8 lg:gap-4">
+                    {Array.from({ length: 16 }).map((_, i) => (
+                      <BookCardSkeleton key={i} />
+                    ))}
+                  </ul>
                 ) : (
                   <motion.ul className="grid grid-cols-3 gap-2 sm:grid-cols-4 sm:gap-3 lg:grid-cols-6 2xl:grid-cols-8 lg:gap-4"
                     variants={bookContainerVariants}
@@ -103,7 +109,11 @@ function HomePage() {
         </div>
       </div>
 
-      <IsbnScanner />
+      {isScannerOpen && (
+        <Suspense fallback={<ScannerSkeleton />}>
+          <IsbnScanner />
+        </Suspense>
+      )}
 
     </>
   )

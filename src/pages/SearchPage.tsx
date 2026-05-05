@@ -7,7 +7,7 @@ import { bookContainerVariants } from "../utils/animations/bookAnimations";
 
 // Types
 import type { BookType } from "../@types/BookType";
-import LoadingSpinner from "../components/ui/LoadingSpinner";
+import BookCardSkeleton from "../components/skeleton/BookCardSkeleton";
 
 function SearchPage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -38,9 +38,18 @@ function SearchPage() {
   };
 
   return (
-    <main className="px-4 pt-32 flex flex-col gap-4 max-w-lg sm:max-w-xl md:pt-36 md:gap-6 md:max-w-2xl lg:px-16 lg:max-w-5xl xl:max-w-fit xl:px-24 2xl:max-w-400">
+    <main className="px-4 pt-32 flex flex-col gap-4 w-full mx-auto max-w-lg sm:max-w-xl md:pt-36 md:gap-6  md:max-w-2xl lg:px-16 lg:max-w-5xl xl:px-24 xl:max-w-360">
       {loading ? (
-        <LoadingSpinner loading={loading} text={`Searching for "${query}"...`} />
+        <>
+          <h1 className="font-light italic text-xs">Searching for "{query}"...</h1>
+
+          <ul className="grid grid-cols-3 gap-3 sm:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8">
+            {Array.from({ length: 16 }).map((_, i) => (
+              <BookCardSkeleton key={i} />
+            ))}
+          </ul>
+
+        </>
       ) : (
         <>
           <h1 className="font-light italic text-xs">Results for "{query}" (Page {currentPage})</h1>
@@ -52,18 +61,18 @@ function SearchPage() {
             animate="visible"
           >
             {books.map((book) => (
-                <BookCard
-                  cover={book.cover_i ? `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg` : null}
-                  title={book.title || 'Unknown Title'}
-                  author={book.author_name ? book.author_name.join(', ') : 'Unknown Author'}
-                  rating={book.ratings_average || 0}
-                  bookKey={book.key}
-                  key={book.key}
-                />
+              <BookCard
+                cover={book.cover_i ? `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg` : null}
+                title={book.title || 'Unknown Title'}
+                author={book.author_name ? book.author_name.join(', ') : 'Unknown Author'}
+                rating={book.ratings_average || 0}
+                bookKey={book.key}
+                key={book.key}
+              />
             ))}
           </motion.ul>
 
-          {!loading && books.length > 0 && (
+          {books.length > 0 && (
             <div className="flex flex-col items-center gap-2 py-8">
               <div className="flex items-center justify-center gap-4 text-xs">
                 <button
