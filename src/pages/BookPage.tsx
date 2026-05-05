@@ -260,7 +260,7 @@ function BookPage() {
               </div>
 
               <div className="flex flex-col justify-center items-center gap-4 bg-amber-50 rounded-b-md shadow-[0_-2px_15px_rgba(139,92,20,0.1)] w-full py-4 px-4">
-                <div className="flex flex-row gap-6 text-[10px] font-medium text-gray-700">
+                <div className="flex flex-row gap-6 text-[10px] font-semibold text-gray-700">
                   <span className="flex gap-1 items-center uppercase"><FaBookOpen /> {bookData.pages} pages</span>
                   <span className="flex gap-1 items-center uppercase"><FaCalendar /> {bookData.year}</span>
                 </div>

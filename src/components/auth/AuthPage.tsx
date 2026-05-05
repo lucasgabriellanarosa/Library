@@ -16,7 +16,7 @@ function AuthPage() {
                     />
                 </div>
                 
-                <h1 className="text-xl font-black font-playfair tracking-wider text-center mt-6">Access Your Library</h1>
+                <h1 className="text-xl font-bold font-playfair tracking-wider text-center mt-6">Access Your Library</h1>
 
                 {/* Login/Register Form & Message */}
                 <Outlet />

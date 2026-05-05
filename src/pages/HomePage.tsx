@@ -57,7 +57,7 @@ function HomePage() {
 
               <div className="tracking-wide">
 
-                <p className="uppercase text-yellow-600 font-extralight sm:text-base">Read. Rate. Share.</p>
+                <p className="uppercase text-yellow-600 font-light sm:text-base">Read. Rate. Share.</p>
                 <h1 className="text-lg sm:text-xl">Organize your literary life</h1>
 
               </div>
@@ -83,7 +83,7 @@ function HomePage() {
                   >
 
                     {
-                      popularBooks.map((book) => (
+                      popularBooks.map((book, index) => (
                         <BookCard
                           cover={book.cover_i ? `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg` : null}
                           title={book.title}
@@ -91,6 +91,7 @@ function HomePage() {
                           rating={book.ratings_average}
                           bookKey={book.key}
                           key={book.key}
+                          index={index}
                         />
 
                       ))

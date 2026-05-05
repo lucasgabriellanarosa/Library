@@ -141,7 +141,7 @@ export default function IsbnScanner() {
 
                 <div className="p-4 text-center">
                     <div className="inline-block w-full h-1 bg-blue-500 animate-pulse mb-2"></div>
-                    <p className="text-gray-600 font-medium" aria-live='polite'>Position the barcode on the blue line.</p>
+                    <p className="text-gray-600" aria-live='polite'>Position the barcode on the blue line.</p>
                 </div>
             </div>
         </div>

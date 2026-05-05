@@ -38,10 +38,10 @@ function SearchPage() {
   };
 
   return (
-    <main className="px-4 pt-32 flex flex-col gap-4 w-full mx-auto max-w-lg sm:max-w-xl md:pt-36 md:gap-6  md:max-w-2xl lg:px-16 lg:max-w-5xl xl:px-24 xl:max-w-360">
+    <main className="text-sm font-light px-4 pt-32 flex flex-col gap-4 w-full mx-auto max-w-lg sm:max-w-xl md:pt-36 md:gap-6  md:max-w-2xl lg:px-16 lg:max-w-5xl xl:px-24 xl:max-w-360">
       {loading ? (
         <>
-          <h1 className="font-light italic text-xs">Searching for "{query}"...</h1>
+          <h1 className="italic">Searching for "{query}"...</h1>
 
           <ul className="grid grid-cols-3 gap-3 sm:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8">
             {Array.from({ length: 16 }).map((_, i) => (
@@ -52,7 +52,7 @@ function SearchPage() {
         </>
       ) : (
         <>
-          <h1 className="font-light italic text-xs">Results for "{query}" (Page {currentPage})</h1>
+          <h1 className="italic">Results for "{query}" (Page {currentPage})</h1>
 
           <motion.ul
             className="grid grid-cols-3 gap-3 sm:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8"
@@ -60,7 +60,7 @@ function SearchPage() {
             initial="hidden"
             animate="visible"
           >
-            {books.map((book) => (
+            {books.map((book, index) => (
               <BookCard
                 cover={book.cover_i ? `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg` : null}
                 title={book.title || 'Unknown Title'}
@@ -68,6 +68,7 @@ function SearchPage() {
                 rating={book.ratings_average || 0}
                 bookKey={book.key}
                 key={book.key}
+                index={index}
               />
             ))}
           </motion.ul>

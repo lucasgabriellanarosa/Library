@@ -81,7 +81,7 @@ const LibraryPage = () => {
 
         <main className="flex-1 p-4 md:p-8 max-w-120 sm:max-w-160 md:max-w-full">
           <header className="mb-6">
-            <h1 className="font-black tracking-tight text-base md:text-lg">
+            <h1 className="font-bold tracking-tight text-base md:text-lg">
               {selectedList?.name || "Unknown List"}
             </h1>
             <p className="text-zinc-800 mt-1">
@@ -134,7 +134,7 @@ const LibraryPage = () => {
               <div className="w-16 h-16 bg-zinc-900 rounded-full flex items-center justify-center mb-4">
                 <BiBookOpen className="text-zinc-700" size={32} />
               </div>
-              <p className="text-zinc-500 font-medium">Your bookshelf is empty.</p>
+              <p className="text-zinc-500">Your bookshelf is empty.</p>
               <Link to="/" className="mt-4 px-6 py-2 bg-white text-black font-bold rounded-full hover:bg-amber-500 transition-colors">
                 Explore Library
               </Link>

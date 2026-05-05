@@ -9,11 +9,12 @@ interface BookCardProps {
     author: string;
     rating?: number;
     bookKey: string;
+    index: number;
 }
 
 
 
-function BookCard({ cover, title, author, rating = 0, bookKey }: BookCardProps) {
+function BookCard({ cover, title, author, rating = 0, bookKey, index }: BookCardProps) {
 
     const imgNotFound = 'https://placehold.co/400x600?text=No+Cover';
 
@@ -23,7 +24,9 @@ function BookCard({ cover, title, author, rating = 0, bookKey }: BookCardProps) 
         >
             <Link to={`/book/${encodeURIComponent(bookKey.replace('/works/', ''))}`} className="focus-within:ring-0 focus-within:outline-0">
 
-                <img loading="lazy" decoding="async" src={cover != null ? '//wsrv.nl/?url=' + cover + '&output=webp' : imgNotFound} alt={title} className="border aspect-2/3 object-cover w-full rounded-sm" />
+                <img loading={index === 0 ? "eager" : "lazy"} fetchPriority={index === 0 ? "high" : "auto"} decoding="async" 
+                src={cover != null ? '//wsrv.nl/?url=' + cover + '&output=webp' : imgNotFound} alt={title} 
+                className="border aspect-2/3 object-cover w-full rounded-sm" />
 
                 <div className="flex flex-col flex-1 gap-0.5 sm:gap-1">
 

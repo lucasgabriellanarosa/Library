@@ -29,8 +29,12 @@ function App() {
   return (
     <Routes>
       <Route index path='/' element={
-        <Suspense fallback={<LoadingSpinner loading text='Searching books...' />}>
-          <HomePage />
+        <Suspense fallback={
+           <div className='w-dvw h-screen bg-indigo-100'>
+            <LoadingSpinner loading text='Searching books...' />
+           </div>
+          }>
+            <HomePage />
         </Suspense>
       } />
 
@@ -42,15 +46,15 @@ function App() {
         </Route>
       </Route>
 
-      <Route element={<AuthPage />}>
-        <Route path='/login' element={<LoginPage />} />
-        <Route path='/register' element={<RegisterPage />} />
-      </Route>
+  <Route element={<AuthPage />}>
+    <Route path='/login' element={<LoginPage />} />
+    <Route path='/register' element={<RegisterPage />} />
+  </Route>
 
-      {/* 404 - Not Found */}
-      <Route path='*' element={<NotFound />} />
+{/* 404 - Not Found */ }
+<Route path='*' element={<NotFound />} />
 
-    </Routes>
+    </Routes >
 
 
   )
