@@ -100,11 +100,22 @@ function Navbar({ children }: { children?: React.ReactNode }) {
                             (
                                 <>
                                     <li>
-                                        <button onClick={() => navigate('/register')}>Register</button>
+                                        <button
+                                            className="hover:cursor-pointer hover:text-gray-300 hover:underline md:text-sm transition-all duration-100"
+                                            onClick={() => navigate('/register')}
+                                        >
+                                            Register
+                                        </button>
                                     </li>
-                                    
+
                                     <li>
-                                        <button onClick={() => navigate('/login')} className="border rounded-md px-2 py-1">Login</button>
+                                        <button
+                                            className="border rounded-md px-2 py-1 md:px-4
+                                            hover:cursor-pointer hover:bg-gray-500 hover:border-gray-600 hover:text-indigo-50 md:text-sm transition-all duration-100"
+                                            onClick={() => navigate('/login')}
+                                        >
+                                            Login
+                                        </button>
                                     </li>
                                 </>
                             )

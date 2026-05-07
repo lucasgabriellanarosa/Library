@@ -8,15 +8,15 @@ interface AuthInputProps {
 
 function AuthInput({ icon, placeholder, type, stateValue, setStateValue }: AuthInputProps) {
     return (
-        <div className="flex flex-row items-center gap-2 border border-amber-900/30 rounded-sm p-2 text-amber-900/80 text-xs focus-within:outline-orange-500 focus-within:outline">
+        <div className="flex flex-row items-center gap-2 border border-amber-900/30 rounded-sm p-2 text-amber-900/80 text-xs focus-within:outline-indigo-500 focus-within:outline">
             <span>
                 {icon}
             </span>
             <input 
-                className="outline-0 w-full" 
+                className="outline-0 w-full lg:text-sm" 
                 type={type} 
                 placeholder={placeholder} 
-                value={stateValue}
+                value={stateValue}  
                 onChange={(e) => setStateValue && setStateValue(e.target.value)}
             />
         </div>

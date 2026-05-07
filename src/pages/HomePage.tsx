@@ -1,25 +1,22 @@
-import BookCard from "../components/books/BookCard";
+import { lazy, Suspense } from "react";
+
+// Components & Features
 import Navbar from "../components/layout/Navbar";
 import SearchBooksForm from "../features/ui/SearchBooksForm";
-import type { BookType } from "../@types/BookType";
-import { motion } from "framer-motion";
-import { bookContainerVariants } from "../utils/animations/bookAnimations";
-import { useBooks } from "../hooks/useBooks";
-import { lazy, Suspense, useEffect, useState } from "react";
-import { useScannerStore } from "../stores/useScannerStore";
-import ScannerSkeleton from "../components/skeleton/ScannerSkeleton";
-import BookCardSkeleton from "../components/skeleton/BookCardSkeleton";
 
+// Skeleton
+import ScannerSkeleton from "../components/skeleton/ScannerSkeleton";
+
+// Custom Hooks & Store & Utils
+import { useScannerStore } from "../stores/useScannerStore";
+import { useBooks } from "../hooks/useBooks";
+import LoadingSpinner from "../components/ui/LoadingSpinner";
+
+// Lazy Loading
 const IsbnScanner = lazy(() => import("../features/ui/IsbnScanner"))
+const HomePopularBooks = lazy(() => import("../components/pages/home/HomePopularBooks"))
 
 function HomePage() {
-
-  const { getPopularBooks, loading } = useBooks();
-  const [popularBooks, setPopularBooks] = useState<BookType[]>([]);
-
-  useEffect(() => {
-    getPopularBooks().then(data => setPopularBooks(data));
-  }, []);
 
   const columnsBg = [
     'linear-gradient(to right, #2d1633 33.33%, #2d1633 33.33%)',
@@ -30,6 +27,9 @@ function HomePage() {
   const overlayGradient = 'linear-gradient(to bottom, rgba(30, 27, 75, 0.2) 0%, rgba(30, 27, 75, 0.8) 50%, #1e1b4b 100%)';
 
   const isScannerOpen = useScannerStore((s) => s.isScannerOpen);
+
+  const { loading } = useBooks()
+  console.log("HomePage: Loading -", loading)
 
   return (
     <>
@@ -68,40 +68,11 @@ function HomePage() {
             <div className="w-full flex flex-col gap-2 max-w-md sm:max-w-160 lg:max-w-240 2xl:max-w-300">
               <h2 className="tracking-wide font-semibold text-sm sm:text-base lg:text-lg">Popular Books</h2>
 
-              {
-                loading ? (
-                  <ul className="grid grid-cols-3 gap-2 sm:grid-cols-4 sm:gap-3 lg:grid-cols-6 2xl:grid-cols-8 lg:gap-4">
-                    {Array.from({ length: 16 }).map((_, i) => (
-                      <BookCardSkeleton key={i} />
-                    ))}
-                  </ul>
-                ) : (
-                  <motion.ul className="grid grid-cols-3 gap-2 sm:grid-cols-4 sm:gap-3 lg:grid-cols-6 2xl:grid-cols-8 lg:gap-4"
-                    variants={bookContainerVariants}
-                    initial="hidden"
-                    animate="visible"
-                  >
-
-                    {
-                      popularBooks.map((book, index) => (
-                        <BookCard
-                          cover={book.cover_i ? `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg` : null}
-                          title={book.title}
-                          author={book.author_name?.[0] || 'Unknown Author'}
-                          rating={book.ratings_average}
-                          bookKey={book.key}
-                          key={book.key}
-                          index={index}
-                        />
-
-                      ))
-                    }
-
-                  </motion.ul>
-                )
-              }
-
-
+              <Suspense fallback={
+                <LoadingSpinner loading />
+              }>
+                <HomePopularBooks />
+              </Suspense>
 
             </div>
 

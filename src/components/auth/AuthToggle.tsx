@@ -8,9 +8,9 @@ interface AuthToggleProps {
 
 function AuthToggle({ question, link, action }: AuthToggleProps) {
   return (
-      <span className="text-xs">
+      <span className="text-xs lg:text-sm">
         {question}{" "}
-        <NavLink to={link} className="underline text-indigo-950">
+        <NavLink to={link} className="underline text-indigo-950 hover:text-indigo-600 transition-all duration-100">
           {action}
         </NavLink>
       </span>

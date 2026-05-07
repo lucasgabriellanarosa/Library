@@ -1,11 +1,13 @@
-import { supabase } from '../lib/supabaseClient';
 import { useAuthStore } from '../stores/useAuthStore';
+import { getSupabase } from '../lib/getSupabase';
 
 export function useAuth() {
   const { user, loading, setUser, setLoading } = useAuthStore();
 
   // Login with Google
   const signInWithGoogle = async () => {
+    const supabase = await getSupabase();
+
     await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: { redirectTo: window.location.origin }
@@ -14,24 +16,31 @@ export function useAuth() {
 
   // Login
   const signUp = async (email: string, password: string) => {
+    const supabase = await getSupabase();
     await supabase.auth.signUp({ email, password });
   };
 
   // Login
   const signIn = async (email: string, password: string) => {
+    const supabase = await getSupabase();
     await supabase.auth.signInWithPassword({ email, password });
   };
 
   // Logout
   const signOut = async () => {
+    const supabase = await getSupabase();
     await supabase.auth.signOut();
     setUser(null);
+
   };
 
   // Initialize auth state on app load
   const initializeAuth = async () => {
     // Check if there's an active session and set the user
     setLoading(true);
+
+    const supabase = await getSupabase();
+
     const { data: { session } } = await supabase.auth.getSession();
     setUser(session?.user ?? null);
     setLoading(false);
