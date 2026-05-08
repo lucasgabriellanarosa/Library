@@ -8,8 +8,9 @@ import { AuthGuard } from './components/auth/AuthGuard';
 import AuthPage from './components/auth/AuthPage';
 import LoadingSpinner from './components/ui/LoadingSpinner';
 
+import HomePage from './pages/HomePage';
+
 // Lazy Loading Page
-const HomePage = lazy(() => import('./pages/HomePage'));
 const SearchPage = lazy(() => import('./pages/SearchPage'));
 const BookPage = lazy(() => import('./pages/BookPage'));
 const LoginPage = lazy(() => import('./pages/LoginPage'));
@@ -28,15 +29,8 @@ function App() {
 
   return (
     <Routes>
-      <Route index path='/' element={
-        <Suspense fallback={
-          <div className='w-dvw h-screen bg-indigo-100'>
-            <LoadingSpinner loading text='Searching books...' />
-          </div>
-        }>
-          <HomePage />
-        </Suspense>
-      } />
+
+      <Route index path='/' element={<HomePage />} />
 
       <Route element={<PageLayout />}>
         <Route path='/search' element={<SearchPage />} />
@@ -46,13 +40,23 @@ function App() {
         </Route>
       </Route>
 
-      <Route element={<AuthPage />}>
+      <Route
+        element={
+          <Suspense fallback={<LoadingSpinner loading />}>
+            <AuthPage />
+          </Suspense>
+        }>
+
         <Route path='/login' element={<LoginPage />} />
         <Route path='/register' element={<RegisterPage />} />
+
       </Route>
 
-      {/* 404 - Not Found */}
-      <Route path='*' element={<NotFound />} />
+      <Route path='*' element={
+        <Suspense fallback={<LoadingSpinner loading />}>
+          <NotFound />
+        </Suspense>
+      } />
 
     </Routes >
 

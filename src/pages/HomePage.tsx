@@ -9,12 +9,12 @@ import ScannerSkeleton from "../components/skeleton/ScannerSkeleton";
 
 // Custom Hooks & Store & Utils
 import { useScannerStore } from "../stores/useScannerStore";
-import { useBooks } from "../hooks/useBooks";
 import LoadingSpinner from "../components/ui/LoadingSpinner";
 
 // Lazy Loading
 const IsbnScanner = lazy(() => import("../features/ui/IsbnScanner"))
 const HomePopularBooks = lazy(() => import("../components/pages/home/HomePopularBooks"))
+
 
 function HomePage() {
 
@@ -27,9 +27,6 @@ function HomePage() {
   const overlayGradient = 'linear-gradient(to bottom, rgba(30, 27, 75, 0.2) 0%, rgba(30, 27, 75, 0.8) 50%, #1e1b4b 100%)';
 
   const isScannerOpen = useScannerStore((s) => s.isScannerOpen);
-
-  const { loading } = useBooks()
-  console.log("HomePage: Loading -", loading)
 
   return (
     <>

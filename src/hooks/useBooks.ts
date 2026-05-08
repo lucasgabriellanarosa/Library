@@ -9,6 +9,28 @@ interface SearchResponse {
     numFound: number;
 }
 
+const CACHE_PREFIX = 'delta-pearl-cache-';
+
+const cache = {
+    get: (key: string) => {
+        const cached = localStorage.getItem(CACHE_PREFIX + key);
+        if (!cached) return null;
+        const { data, timestamp, expires } = JSON.parse(cached);
+        if (Date.now() - timestamp > expires) {
+            localStorage.removeItem(CACHE_PREFIX + key);
+            return null;
+        }
+        return data;
+    },
+    set: (key: string, data: any, ttl: number = 1000 * 60 * 60) => {
+        localStorage.setItem(CACHE_PREFIX + key, JSON.stringify({
+            data,
+            timestamp: Date.now(),
+            expires: ttl
+        }));
+    }
+};
+
 export function useBooks() {
     const [loading, setLoading] = useState(false);
 
@@ -133,19 +155,24 @@ export function useBooks() {
     }
 
     async function getPopularBooks() {
+
+        const cached = cache.get(`popular-books`);
+        if (cached) return cached;
+
         setLoading(true);
+
         try {
-            const data = await callProxy('/trending/daily.json', {
+            const data = await callProxy('/search.json', {
+                q: 'subject:fiction language:eng',
                 fields: 'title,author_name,ratings_average,cover_i,key',
+                sort: 'editions',
                 limit: 24
             });
 
-            const trendingWorks = data.works ? data.works.slice(0, 24) : [];
+            cache.set(`popular-books`, data.docs);
+            return data.docs as BookType[];
 
-            return trendingWorks as BookType[];
-            
         } catch (error) {
-            console.error("Couldn't find popular books:", error);
             return [];
         } finally {
             setLoading(false);
