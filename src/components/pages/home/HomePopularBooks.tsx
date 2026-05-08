@@ -9,7 +9,6 @@ import { useBooks } from "../../../hooks/useBooks";
 // Animation
 import { motion } from "framer-motion";
 import { bookContainerVariants } from "../../../utils/animations/bookAnimations";
-console.log("Popular books")
 
 function HomePopularBooks() {
 
@@ -19,6 +18,8 @@ function HomePopularBooks() {
     useEffect(() => {
         getPopularBooks().then(data => setPopularBooks(data));
     }, []);
+
+    console.log(popularBooks)
 
     return (
         <>
