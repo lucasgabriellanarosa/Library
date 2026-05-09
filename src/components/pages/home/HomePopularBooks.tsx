@@ -19,8 +19,6 @@ function HomePopularBooks() {
         getPopularBooks().then(data => setPopularBooks(data));
     }, []);
 
-    console.log(popularBooks)
-
     return (
         <>
             {
