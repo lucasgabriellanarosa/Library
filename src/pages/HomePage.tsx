@@ -9,12 +9,11 @@ import ScannerSkeleton from "../components/skeleton/ScannerSkeleton";
 
 // Custom Hooks & Store & Utils
 import { useScannerStore } from "../stores/useScannerStore";
-import HomePopularBooks from "../components/pages/home/HomePopularBooks";
-// import LoadingSpinner from "../components/ui/LoadingSpinner";
+import LoadingSpinner from "../components/ui/LoadingSpinner";
 
 // Lazy Loading
 const IsbnScanner = lazy(() => import("../features/ui/IsbnScanner"))
-// const HomePopularBooks = lazy(() => import("../components/pages/home/HomePopularBooks"))
+const HomePopularBooks = lazy(() => import("../components/pages/home/HomePopularBooks"))
 
 
 function HomePage() {
@@ -66,12 +65,11 @@ function HomePage() {
             <div className="w-full flex flex-col gap-2 max-w-md sm:max-w-160 lg:max-w-240 2xl:max-w-300">
               <h2 className="tracking-wide font-semibold text-sm sm:text-base lg:text-lg">Popular Books</h2>
 
-              {/* <Suspense fallback={
+              <Suspense fallback={
                 <LoadingSpinner loading />
               }>
                 <HomePopularBooks />
-              </Suspense> */}
-              <HomePopularBooks />
+              </Suspense>
 
             </div>
 
