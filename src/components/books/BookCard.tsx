@@ -24,7 +24,7 @@ function BookCard({ cover, title, author, rating = 0, bookKey, index }: BookCard
         >
             <Link to={`/book/${encodeURIComponent(bookKey.replace('/works/', ''))}`} className="focus-within:ring-0 focus-within:outline-0">
 
-                <img loading={index < 8 ? "eager" : "lazy"} fetchPriority={index < 8 ? "high" : "auto"} decoding="async" 
+                <img loading={index < 4 ? "eager" : "lazy"} fetchPriority={index < 4 ? "high" : "auto"} decoding="async" 
                 src={cover != null ? '//wsrv.nl/?url=' + cover + '&output=webp&q=80' : imgNotFound} alt={title} 
                 className="border aspect-2/3 object-cover w-full rounded-sm" />
 
