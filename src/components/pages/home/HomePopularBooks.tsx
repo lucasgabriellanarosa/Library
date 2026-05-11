@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
-import type { BookType } from "../../../@types/BookType";
 
-// Components & Hooks
+// Components
 import BookCard from "../../books/BookCard";
 import BookCardSkeleton from "../../skeleton/BookCardSkeleton";
-import { useBooks } from "../../../hooks/useBooks";
 
-// Animation
+// Custom (Types, Animation & Hooks)
+import type { BookType } from "../../../@types/BookType";
 import { motion } from "framer-motion";
 import { bookContainerVariants } from "../../../utils/animations/bookAnimations";
+import { useBooks } from "../../../hooks/useBooks";
 
 function HomePopularBooks() {
 

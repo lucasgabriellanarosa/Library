@@ -1,8 +1,9 @@
 import { useEffect, useRef } from 'react';
-import Quagga from '@ericblade/quagga2';
+import { useNavigate } from 'react-router';
+
 import { useScannerStore } from '../../stores/useScannerStore';
 import { useBooks } from '../../hooks/useBooks';
-import { useNavigate } from 'react-router';
+import Quagga from '@ericblade/quagga2';
 
 export default function IsbnScanner() {
 

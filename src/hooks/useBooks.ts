@@ -43,9 +43,63 @@ export function useBooks() {
         return data;
     }
 
+    // Get popular books for home page - HomePage.tsx
+    async function getPopularBooks() {
+
+        const cached = cache.get(`popular-books`);
+        if (cached) return cached;
+
+        setLoading(true);
+
+        const MOCK_BOOKS: BookType[] = [
+            { "author_name": ["Jane Austen"], "cover_i": 14348537, "key": "/works/OL66554W", "title": "Pride and Prejudice", "ratings_average": 4.1994886 },
+            { "author_name": ["Lewis Carroll"], "cover_i": 10527843, "key": "/works/OL138052W", "title": "Alice's Adventures in Wonderland", "ratings_average": 4.059091 },
+            { "author_name": ["Charles Dickens"], "cover_i": 12875748, "key": "/works/OL32466W", "title": "A Christmas Carol", "ratings_average": 3.962617 },
+            { "author_name": ["Oscar Wilde"], "cover_i": 14314858, "key": "/works/OL8193416W", "title": "The Picture of Dorian Gray", "ratings_average": 4.1788616 },
+            { "author_name": ["Emily Brontë"], "cover_i": 12818862, "key": "/works/OL21177W", "title": "Wuthering Heights", "ratings_average": 4.1166077 },
+            { "author_name": ["Mark Twain"], "cover_i": 8157718, "key": "/works/OL53908W", "title": "Adventures of Huckleberry Finn", "ratings_average": 3.9586778 },
+            { "author_name": ["Daniel Defoe", "J. J. Grandville", "Petrus Borel", "Les éditions du Rey", "N. C. Wyeth"], "cover_i": 368541, "key": "/works/OL45089W", "title": "Robinson Crusoe", "ratings_average": 3.92 },
+            { "author_name": ["Nathaniel Hawthorne"], "cover_i": 5654516, "key": "/works/OL455305W", "title": "The Scarlet Letter", "ratings_average": 3.4047618 },
+            { "author_name": ["William Shakespeare"], "cover_i": 8281954, "key": "/works/OL9170454W", "title": "Hamlet", "ratings_average": 4.018072 },
+            { "author_name": ["Jane Austen"], "cover_i": 9278312, "key": "/works/OL66513W", "title": "Emma", "ratings_average": 3.9491525 },
+            { "author_name": ["Charles Dickens"], "cover_i": 13300802, "key": "/works/OL8193478W", "title": "Oliver Twist", "ratings_average": 4.0864196 },
+            { "author_name": ["Mary Shelley"], "cover_i": 12356249, "key": "/works/OL450063W", "title": "Frankenstein or The Modern Prometheus", "ratings_average": 3.967742 },
+            { "author_name": ["Jane Austen"], "cover_i": 9278292, "key": "/works/OL66562W", "title": "Sense and Sensibility", "ratings_average": 3.8913043 },
+            { "author_name": ["Charles Dickens"], "cover_i": 13301713, "key": "/works/OL8193465W", "title": "A Tale of Two Cities", "ratings_average": 3.79 },
+            { "author_name": ["L. Frank Baum"], "cover_i": 552443, "key": "/works/OL18417W", "title": "The Wonderful Wizard of Oz", "ratings_average": 3.935484 },
+            { "author_name": ["Robert Louis Stevenson"], "cover_i": 13859660, "key": "/works/OL24034W", "title": "Treasure Island", "ratings_average": 3.7755103 },
+            { "author_name": ["Louisa May Alcott"], "cover_i": 8775559, "key": "/works/OL29983W", "title": "Little Women", "ratings_average": 4.041322 },
+            { "author_name": ["William Shakespeare"], "cover_i": 872432, "key": "/works/OL258902W", "title": "Macbeth", "ratings_average": 3.979021 },
+            { "author_name": ["Jonathan Swift"], "cover_i": 12717083, "key": "/works/OL20600W", "title": "Gulliver's Travels", "ratings_average": 3.6136363 },
+            { "author_name": ["Jack London"], "cover_i": 12393037, "key": "/works/OL14942956W", "title": "The Call of the Wild", "ratings_average": 3.949367 },
+            { "author_name": ["William Shakespeare"], "cover_i": 7420452, "key": "/works/OL259026W", "title": "King Lear", "ratings_average": 4 },
+            { "author_name": ["Frances Hodgson Burnett"], "cover_i": 12622062, "key": "/works/OL69612W", "title": "The Secret Garden", "ratings_average": 3.9333334 },
+            { "author_name": ["Miguel de Cervantes Saavedra"], "cover_i": 14428305, "key": "/works/OL503666W", "title": "Don Quijote de la Mancha", "ratings_average": 3.8947368 },
+            { "author_name": ["Gustave Flaubert"], "cover_i": 12993424, "key": "/works/OL893707W", "title": "Madame Bovary", "ratings_average": 3.7307692 }
+        ];
+
+        try {
+            const data = await callProxy('/search.json', {
+                q: 'subject:fiction language:eng',
+                fields: 'title,author_name,ratings_average,cover_i,key',
+                sort: 'editions',
+                limit: 24
+            });
+
+            cache.set(`popular-books`, data.docs);
+            return data.docs as BookType[];
+
+        } catch (error) {
+            return MOCK_BOOKS;
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // Get books by query - SearchPage.tsx
     async function searchBooks(query: string, page: number = 1): Promise<SearchResponse | null> {
-        
-        const cached = cache.get(`search-books-${query}`);
+
+        const cached = cache.get(`search-books-${query}-page${page}`);
         if (cached) return cached;
 
         setLoading(true);
@@ -59,7 +113,7 @@ export function useBooks() {
 
             const total = Math.ceil(data.numFound / 24);
 
-            cache.set(`search-books-${query}`, {
+            cache.set(`search-books-${query}-page${page}`, {
                 docs: data.docs,
                 totalPages: total,
                 numFound: data.numFound
@@ -164,58 +218,6 @@ export function useBooks() {
             setLoading(false)
         }
     }
-
-    async function getPopularBooks() {
-
-        const cached = cache.get(`popular-books`);
-        if (cached) return cached;
-
-        setLoading(true);
-
-        const MOCK_BOOKS: BookType[] = [
-            { "author_name": ["Jane Austen"], "cover_i": 14348537, "key": "/works/OL66554W", "title": "Pride and Prejudice", "ratings_average": 4.1994886 },
-            { "author_name": ["Lewis Carroll"], "cover_i": 10527843, "key": "/works/OL138052W", "title": "Alice's Adventures in Wonderland", "ratings_average": 4.059091 },
-            { "author_name": ["Charles Dickens"], "cover_i": 12875748, "key": "/works/OL32466W", "title": "A Christmas Carol", "ratings_average": 3.962617 },
-            { "author_name": ["Oscar Wilde"], "cover_i": 14314858, "key": "/works/OL8193416W", "title": "The Picture of Dorian Gray", "ratings_average": 4.1788616 },
-            { "author_name": ["Emily Brontë"], "cover_i": 12818862, "key": "/works/OL21177W", "title": "Wuthering Heights", "ratings_average": 4.1166077 },
-            { "author_name": ["Mark Twain"], "cover_i": 8157718, "key": "/works/OL53908W", "title": "Adventures of Huckleberry Finn", "ratings_average": 3.9586778 },
-            { "author_name": ["Daniel Defoe", "J. J. Grandville", "Petrus Borel", "Les éditions du Rey", "N. C. Wyeth"], "cover_i": 368541, "key": "/works/OL45089W", "title": "Robinson Crusoe", "ratings_average": 3.92 },
-            { "author_name": ["Nathaniel Hawthorne"], "cover_i": 5654516, "key": "/works/OL455305W", "title": "The Scarlet Letter", "ratings_average": 3.4047618 },
-            { "author_name": ["William Shakespeare"], "cover_i": 8281954, "key": "/works/OL9170454W", "title": "Hamlet", "ratings_average": 4.018072 },
-            { "author_name": ["Jane Austen"], "cover_i": 9278312, "key": "/works/OL66513W", "title": "Emma", "ratings_average": 3.9491525 },
-            { "author_name": ["Charles Dickens"], "cover_i": 13300802, "key": "/works/OL8193478W", "title": "Oliver Twist", "ratings_average": 4.0864196 },
-            { "author_name": ["Mary Shelley"], "cover_i": 12356249, "key": "/works/OL450063W", "title": "Frankenstein or The Modern Prometheus", "ratings_average": 3.967742 },
-            { "author_name": ["Jane Austen"], "cover_i": 9278292, "key": "/works/OL66562W", "title": "Sense and Sensibility", "ratings_average": 3.8913043 },
-            { "author_name": ["Charles Dickens"], "cover_i": 13301713, "key": "/works/OL8193465W", "title": "A Tale of Two Cities", "ratings_average": 3.79 },
-            { "author_name": ["L. Frank Baum"], "cover_i": 552443, "key": "/works/OL18417W", "title": "The Wonderful Wizard of Oz", "ratings_average": 3.935484 },
-            { "author_name": ["Robert Louis Stevenson"], "cover_i": 13859660, "key": "/works/OL24034W", "title": "Treasure Island", "ratings_average": 3.7755103 },
-            { "author_name": ["Louisa May Alcott"], "cover_i": 8775559, "key": "/works/OL29983W", "title": "Little Women", "ratings_average": 4.041322 },
-            { "author_name": ["William Shakespeare"], "cover_i": 872432, "key": "/works/OL258902W", "title": "Macbeth", "ratings_average": 3.979021 },
-            { "author_name": ["Jonathan Swift"], "cover_i": 12717083, "key": "/works/OL20600W", "title": "Gulliver's Travels", "ratings_average": 3.6136363 },
-            { "author_name": ["Jack London"], "cover_i": 12393037, "key": "/works/OL14942956W", "title": "The Call of the Wild", "ratings_average": 3.949367 },
-            { "author_name": ["William Shakespeare"], "cover_i": 7420452, "key": "/works/OL259026W", "title": "King Lear", "ratings_average": 4 },
-            { "author_name": ["Frances Hodgson Burnett"], "cover_i": 12622062, "key": "/works/OL69612W", "title": "The Secret Garden", "ratings_average": 3.9333334 },
-            { "author_name": ["Miguel de Cervantes Saavedra"], "cover_i": 14428305, "key": "/works/OL503666W", "title": "Don Quijote de la Mancha", "ratings_average": 3.8947368 },
-            { "author_name": ["Gustave Flaubert"], "cover_i": 12993424, "key": "/works/OL893707W", "title": "Madame Bovary", "ratings_average": 3.7307692 }
-        ];
-
-        try {
-            const data = await callProxy('/search.json', {
-                q: 'subject:fiction language:eng',
-                fields: 'title,author_name,ratings_average,cover_i,key',
-                sort: 'editions',
-                limit: 24
-            });
-
-            cache.set(`popular-books`, data.docs);
-            return data.docs as BookType[];
-
-        } catch (error) {
-            return MOCK_BOOKS;
-        } finally {
-            setLoading(false);
-        }
-    };
 
     return {
         searchBooks,

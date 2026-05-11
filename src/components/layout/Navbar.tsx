@@ -1,19 +1,23 @@
+import { useState, useRef, useEffect, lazy, Suspense } from "react"
 import { Link, useNavigate } from "react-router"
-import logoImg from "../../assets/logo.png"
-import { useAuth } from "../../hooks/useAuth"
 
-import { useState, useRef, useEffect } from "react"
-import { motion, AnimatePresence } from "framer-motion"
-import { FaSignOutAlt, FaUser, FaListUl } from "react-icons/fa"
+const UserMenu = lazy(() => import("./UserMenu"));
+
+// Assets (React Icons & Images)
+import { FaListUl } from "react-icons/fa"
+import logoImg from "../../assets/logo.png"
+
+// Custom (Animation, Hooks)
+import { AnimatePresence } from "framer-motion"
+import { useAuth } from "../../hooks/useAuth"
 
 function Navbar({ children }: { children?: React.ReactNode }) {
 
     const navigate = useNavigate()
-    const { user, signOut } = useAuth();
+    const { user } = useAuth();
 
     const avatarUrl = user?.identities?.[0]?.identity_data?.avatar_url
         || `https://ui-avatars.com/api/?name=${user?.email}&background=random`;
-
 
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const menuRef = useRef<HTMLLIElement>(null);
@@ -33,7 +37,7 @@ function Navbar({ children }: { children?: React.ReactNode }) {
             <div className="flex flex-row items-center justify-between w-full">
 
                 <Link to="/" aria-label="Home Page">
-                    <img src={logoImg} alt="Library Logo" className="w-12 h-12 xl:w-14 xl:h-14" />
+                    <img src={logoImg} alt="Library Logo" className="w-12 h-12 xl:w-14 xl:h-14" loading="eager" />
                 </Link>
 
                 <ul className=" flex flex-row gap-2 justify-center items-center lg:gap-4 xl:gap-6">
@@ -52,6 +56,7 @@ function Navbar({ children }: { children?: React.ReactNode }) {
 
                                     <button
                                         onClick={() => setIsMenuOpen(!isMenuOpen)}
+                                        onMouseEnter={() => import("./UserMenu")}
                                         aria-label="User Profile"
                                     >
                                         <img
@@ -63,35 +68,9 @@ function Navbar({ children }: { children?: React.ReactNode }) {
 
                                     <AnimatePresence>
                                         {isMenuOpen && (
-                                            <motion.div
-                                                initial={{ opacity: 0, y: -10, scale: 0.95 }}
-                                                animate={{ opacity: 1, y: 0, scale: 1 }}
-                                                exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                                                transition={{ duration: 0.2 }}
-                                                className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 text-gray-800 z-50 border border-gray-100 text-[10px] lg:text-[11px]"
-                                            >
-                                                <div className="px-4 py-2 border-b border-gray-50">
-                                                    <p className="font-boldtruncate">{user.email}</p>
-                                                </div>
-
-                                                <button
-                                                    disabled
-                                                    className="w-full flex items-center gap-1 px-4 py-2 hover:bg-gray-50 text-gray-400 cursor-not-allowed"
-                                                >
-                                                    <FaUser size={10} /> Profile (soon)
-                                                </button>
-
-                                                <button
-                                                    onClick={() => {
-                                                        signOut();
-                                                        setIsMenuOpen(false);
-                                                        navigate("/")
-                                                    }}
-                                                    className="w-full flex items-center gap-1 px-4 py-2 hover:bg-red-50 text-red-600 transition-colors"
-                                                >
-                                                    <FaSignOutAlt size={10} /> Logout
-                                                </button>
-                                            </motion.div>
+                                            <Suspense fallback={null}>
+                                                <UserMenu user={user} setIsMenuOpen={setIsMenuOpen} navigate={navigate} />
+                                            </Suspense>
                                         )}
                                     </AnimatePresence>
                                 </li>

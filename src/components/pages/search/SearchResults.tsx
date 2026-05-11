@@ -1,10 +1,14 @@
-import { bookContainerVariants } from "../../../utils/animations/bookAnimations";
-import BookCard from "../../books/BookCard"
-import { motion } from "framer-motion";
-import BookCardSkeleton from "../../skeleton/BookCardSkeleton";
-import type { BookType } from "../../../@types/BookType";
-import { useSearchParams } from "react-router";
 import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router";
+
+// Components
+import BookCardSkeleton from "../../skeleton/BookCardSkeleton";
+import BookCard from "../../books/BookCard"
+
+// Custom (Types, Animation & Hooks)
+import type { BookType } from "../../../@types/BookType";
+import { motion } from "framer-motion";
+import { bookContainerVariants } from "../../../utils/animations/bookAnimations";
 import { useBooks } from "../../../hooks/useBooks";
 
 function SearchResults() {
