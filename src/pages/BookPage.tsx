@@ -1,5 +1,6 @@
 import { lazy, Suspense, useEffect, useRef, useState } from "react"
-import { Link, useNavigate, useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
+
 import { FaBookOpen, FaCalendar, FaList, FaRobot } from "react-icons/fa6";
 import { supabase } from "../lib/supabaseClient";
 
@@ -7,24 +8,20 @@ import type { BookDataType } from "../@types/BookData";
 import { useAuthStore } from "../stores/useAuthStore";
 
 // Components & Features
-import LoadingSpinner from "../components/ui/LoadingSpinner";
 import { StatusButton } from "../features/books/StatusButton";
 import StarsList from "../features/books/StarsList";
 
+// Skeletons
+import BookHeroSkeleton from "../components/skeleton/BookPage/BookHeroSkeleton";
+
 // Lazy
 const BookAIWhisper = lazy(() => import("../features/books/BookAIWhisper"))
+const SimilarBooks = lazy(() => import("../components/pages/books/SimilarBooks"))
 
 // Hooks
 import { useUserLists } from "../hooks/useUserLists";
 import { useBooks } from "../hooks/useBooks"
 import { useBookAIChat } from "../hooks/useBookAiChat";
-
-interface similarBooksType {
-  key: string,
-  cover_i: number,
-  author_name: string,
-  title: string
-}
 
 function BookPage() {
 
@@ -32,7 +29,7 @@ function BookPage() {
   const navigate = useNavigate()
 
   // Hooks
-  const { getBookWithAuthors, getWorkByISBN, getWorkDescription, getSimilarBooks, loading } = useBooks();
+  const { getBookWithAuthors, getWorkByISBN, getWorkDescription } = useBooks();
   const { user } = useAuthStore()
   const { getSpecificLists, toogleBookStatus, loading: isUpdating } = useUserLists();
 
@@ -42,7 +39,6 @@ function BookPage() {
   const [bookData, setBookData] = useState<BookDataType | null>(null);
   const [isExpanded, setIsExpanded] = useState(false);
   const [showButton, setShowButton] = useState(false);
-  const [similarBooks, setSimilarBooks] = useState<similarBooksType[]>([])
 
   const descriptionRef = useRef<HTMLParagraphElement>(null);
 
@@ -91,26 +87,11 @@ function BookPage() {
   }, [workId, isbn]);
 
   useEffect(() => {
-    if (!bookData) return;
-
     const element = descriptionRef.current;
     if (element) {
       setShowButton(element.scrollHeight > element.offsetHeight);
     }
-
-    const loadSimilarBooks = async () => {
-      getSimilarBooks(bookData).then(data => {
-        if (data) {
-          const filtered = data
-            .filter((b: any) => !b.key.includes(workId || ''))
-            .slice(0, 15);
-          setSimilarBooks(filtered);
-        }
-      })
-    };
-
-    loadSimilarBooks();
-  }, [bookData, workId]);
+  }, [bookData, workId])
 
   // Categories
   const VALID_CATEGORIES = new Set([
@@ -209,13 +190,9 @@ function BookPage() {
   });
   const [isChatAIOpen, setIsChatAIOpen] = useState(false);
 
-  if (loading) return (
-    <LoadingSpinner loading={loading} />
-  );
-
   return (
     <div className="text-xs flex flex-col w-full gap-2 justify-center items-center">
-      {bookData && (
+      {bookData ? (
         <div className="w-full flex flex-col items-center pb-10 gap-6 xl:gap-10">
 
           {/* Background Image & Card with book info */}
@@ -223,7 +200,9 @@ function BookPage() {
 
             <div className="absolute top-0 left-0 w-full h-115 xl:h-120">
               <img
-                src={`https://covers.openlibrary.org/b/id/${bookData.cover}.jpg`}
+                fetchPriority="high"
+                loading="eager"
+                src={`https://covers.openlibrary.org/b/id/${bookData.cover}-M.jpg`}
                 className="w-full h-full object-cover opacity-80"
               />
               <div className="absolute inset-0 backdrop-blur-xs" />
@@ -233,8 +212,10 @@ function BookPage() {
 
               <div className="flex flex-col justify-center items-center px-4 gap-0.5 pb-2">
                 <img
-                  src={`https://covers.openlibrary.org/b/id/${bookData.cover}.jpg`}
+                  src={`https://covers.openlibrary.org/b/id/${bookData.cover}-M.jpg`}
                   alt={`${bookData.title} Cover`}
+                  fetchPriority="high"
+                  loading="eager"
                   className="relative w-28 -mt-12 shadow-lg rounded-sm"
                 />
                 <h1 className="font-semibold text-base text-center mt-2">{bookData.title}</h1>
@@ -338,32 +319,13 @@ function BookPage() {
           <div className="w-4/5 max-w-2xl lg:max-w-3xl xl:max-w-fit xl:p-4">
             <h3 className="text-base font-semibold mb-4">Similar Books</h3>
 
-            <ul className="flex overflow-x-auto gap-2 pb-3 mb-3 sm:gap-4 2xl:pb-4 2xl:mb-4">
-              {similarBooks.map((book) => (
-                <li key={book.key} className="shrink-0 w-24 xl:w-30">
-                  <Link
-                    to={`/book/${book.key.replace('/works/', '')}`}
-                    className="block group w-full"
-                  >
-                    <div className="relative shadow-md group-hover:shadow-xl transition-shadow">
-                      <img
-                        src={book.cover_i
-                          ? `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg`
-                          : 'https://placehold.co/400x600?text=No+Cover'}
-                        alt={book.title}
-                        className="w-full h-36 object-cover rounded-sm xl:h-45"
-                      />
-                    </div>
-                    <p className="mt-2 mb-1 text-[10px] font-bold line-clamp-2 min-h-[2.4em] leading-tight text-gray-800 group-hover:text-blue-600 xl:text-[11px] xl:mt-3">
-                      {book.title}
-                    </p>
-                    <p className="text-[9px] text-gray-500 truncate xl:text-[10px]">
-                      {book.author_name?.[0]}
-                    </p>
-                  </Link>
-                </li>
-              ))}
-            </ul>
+            <Suspense fallback={<div className="w-4/5 h-52" />}>
+              <SimilarBooks
+                bookData={bookData}
+                workId={workId || ""}
+              />
+            </Suspense>
+
           </div>
 
           {/* Ai Chatbot (Mobile) */}
@@ -371,6 +333,7 @@ function BookPage() {
             {
               isChatAIOpen ? (
                 <div className="mb-4 w-72 sm:w-80 h-96 bg-white rounded-2xl shadow-2xl border border-amber-100 flex flex-col overflow-hidden">
+
                   <Suspense>
                     <BookAIWhisper
                       bookTitle={bookData.title || ""}
@@ -402,6 +365,8 @@ function BookPage() {
           </div>
 
         </div>
+      ) : (
+        <BookHeroSkeleton />
       )
       }
     </div >
