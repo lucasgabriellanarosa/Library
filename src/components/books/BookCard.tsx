@@ -12,8 +12,6 @@ interface BookCardProps {
     index: number;
 }
 
-
-
 function BookCard({ cover, title, author, rating = 0, bookKey, index }: BookCardProps) {
 
     const imgNotFound = 'https://placehold.co/400x600?text=No+Cover';

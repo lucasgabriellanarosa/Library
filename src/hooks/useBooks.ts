@@ -44,6 +44,10 @@ export function useBooks() {
     }
 
     async function searchBooks(query: string, page: number = 1): Promise<SearchResponse | null> {
+        
+        const cached = cache.get(`search-books-${query}`);
+        if (cached) return cached;
+
         setLoading(true);
         try {
             const data = await callProxy('/search.json', {
@@ -54,6 +58,13 @@ export function useBooks() {
             });
 
             const total = Math.ceil(data.numFound / 24);
+
+            cache.set(`search-books-${query}`, {
+                docs: data.docs,
+                totalPages: total,
+                numFound: data.numFound
+            });
+
             return {
                 docs: data.docs,
                 totalPages: total,

@@ -9,7 +9,13 @@ function SearchBooksForm() {
 
     const handleSearchBooks = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const cleanQuery = query.trim();
+
+        const cleanQuery = query
+            .trim()
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .toLowerCase();
+            
         if (cleanQuery.length >= 3) {
             navigate(`/search?q=${encodeURIComponent(cleanQuery)}`);
             setQuery("");
