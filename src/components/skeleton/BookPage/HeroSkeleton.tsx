@@ -1,4 +1,4 @@
-export default function BookHeroSkeleton() {
+export default function HeroSkeleton() {
     return (
         <div className="relative w-full flex justify-center animate-pulse">
 
