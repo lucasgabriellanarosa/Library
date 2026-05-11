@@ -1,7 +1,6 @@
 import type { StarType } from "../../components/books/BookStar";
 import BookStar from "../../components/books/BookStar";
 
-
 function StarsList({rating = 0}: {rating: number}) {
 
     const stars = [1, 2, 3, 4, 5];

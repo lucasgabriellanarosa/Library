@@ -132,6 +132,61 @@ export function useBooks() {
         }
     }
 
+    // BookPage.tsx hooks (all four)
+
+    async function getBookWithAuthors(workKey: string) {
+
+        const cached = cache.get(`bookData-with-authors-${workKey}`);
+        if (cached) return cached;
+
+        setLoading(true);
+        try {
+            const cleanKey = workKey.replace('/works/', '');
+            const data = await callProxy('/search.json', {
+                q: `key:/works/${cleanKey}`,
+                fields: 'title,author_name,ratings_average,cover_i,first_publish_year,number_of_pages_median,subject',
+                limit: 1
+            });
+
+            if (data.docs && data.docs.length > 0) {
+                cache.set(`bookData-with-authors-${workKey}`, data.docs[0]);
+                return data.docs[0];
+            }
+            return null;
+        } catch (error) {
+            console.error(error);
+            return null;
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    async function getWorkDescription(workKey: string) {
+
+        const cached = cache.get(`bookData-description-${workKey}`);
+        if (cached) return cached;
+
+        try {
+            const id = workKey.replace('/works/', '').replace(/\//g, '');
+
+            const data = await callProxy(`/works/${id}.json`);
+
+            if (!data) return "Description not available.";
+
+            if (typeof data.description === 'string') {
+                cache.set(`bookData-description-${workKey}`, data.description);
+                return data.description;
+            }
+
+            cache.set(`bookData-description-${workKey}`, data.description?.value || "No description provided for this work");
+            return data.description?.value || "No description provided for this work.";
+
+        } catch (error) {
+            console.error("Failed to load description:", error);
+            return "Failed to load description.";
+        }
+    }
+
     async function getWorkByISBN(isbn: string) {
         setLoading(true);
         try {
@@ -145,48 +200,11 @@ export function useBooks() {
         }
     }
 
-    async function getBookWithAuthors(workKey: string) {
-        setLoading(true);
-        try {
-            const cleanKey = workKey.replace('/works/', '');
-            const data = await callProxy('/search.json', {
-                q: `key:/works/${cleanKey}`,
-                fields: 'title,author_name,ratings_average,cover_i,first_publish_year,number_of_pages_median,subject',
-                limit: 1
-            });
-
-            if (data.docs && data.docs.length > 0) {
-                return data.docs[0];
-            }
-            return null;
-        } catch (error) {
-            console.error(error);
-            return null;
-        } finally {
-            setLoading(false);
-        }
-    }
-
-    async function getWorkDescription(workKey: string) {
-        try {
-            const id = workKey.replace('/works/', '').replace(/\//g, '');
-
-            const data = await callProxy(`/works/${id}.json`);
-
-            if (!data) return "Description not available.";
-
-            if (typeof data.description === 'string') {
-                return data.description;
-            }
-            return data.description?.value || "No description provided for this work.";
-
-        } catch (error) {
-            console.error("Erro ao buscar descrição:", error);
-            return "Failed to load description.";
-        }
-    }
-
     async function getSimilarBooks(bookData: BookDataType) {
+
+        const cached = cache.get(`similarBooks-${bookData.title}`);
+        if (cached) return cached;
+
         setLoading(true)
         try {
             let queryParams: any = {
@@ -210,7 +228,8 @@ export function useBooks() {
                 queryParams.q = firstTitleWord;
             }
             const data = await callProxy('/search.json', queryParams);
-            return data;
+            cache.set(`similarBooks-${bookData.title}`, data.docs);
+            return data.docs;
         } catch (error) {
             console.error("Failed to find similar books:", error);
             return "Failed to load description.";
