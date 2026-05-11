@@ -18,6 +18,8 @@ const RegisterPage = lazy(() => import('./pages/RegisterPage'));
 const LibraryPage = lazy(() => import('./pages/LibraryPage'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 
+// Vercel Speed Insights
+import { SpeedInsights } from "@vercel/speed-insights/react"
 
 function App() {
 
@@ -28,37 +30,43 @@ function App() {
   }, [initializeAuth])
 
   return (
-    <Routes>
+    <>
+      <Routes>
 
-      <Route index path='/' element={<HomePage />} />
+        <Route index path='/' element={<HomePage />} />
 
-      <Route element={<PageLayout />}>
-        <Route path='/search' element={<SearchPage />} />
-        <Route path='/book/:workId/:isbn?' element={<BookPage />} />
-        <Route element={<AuthGuard />}>
-          <Route path='/library' element={<LibraryPage />} />
+        <Route element={<PageLayout />}>
+          <Route path='/search' element={<SearchPage />} />
+          <Route path='/book/:workId/:isbn?' element={<BookPage />} />
+          <Route element={<AuthGuard />}>
+            <Route path='/library' element={<LibraryPage />} />
+          </Route>
         </Route>
-      </Route>
 
-      <Route
-        element={
+        <Route
+          element={
+            <Suspense fallback={<LoadingSpinner loading />}>
+              <AuthPage />
+            </Suspense>
+          }>
+
+          <Route path='/login' element={<LoginPage />} />
+          <Route path='/register' element={<RegisterPage />} />
+
+        </Route>
+
+        <Route path='*' element={
           <Suspense fallback={<LoadingSpinner loading />}>
-            <AuthPage />
+            <NotFound />
           </Suspense>
-        }>
+        } />
 
-        <Route path='/login' element={<LoginPage />} />
-        <Route path='/register' element={<RegisterPage />} />
+      </Routes>
 
-      </Route>
+      <SpeedInsights />
 
-      <Route path='*' element={
-        <Suspense fallback={<LoadingSpinner loading />}>
-          <NotFound />
-        </Suspense>
-      } />
+    </>
 
-    </Routes >
 
 
   )
