@@ -18,8 +18,9 @@ const RegisterPage = lazy(() => import('./pages/RegisterPage'));
 const LibraryPage = lazy(() => import('./pages/LibraryPage'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 
-// Vercel Speed Insights
+// Vercel Insights
 import { SpeedInsights } from "@vercel/speed-insights/react"
+import { Analytics } from "@vercel/analytics/next"
 
 function App() {
 
@@ -64,6 +65,7 @@ function App() {
       </Routes>
 
       <SpeedInsights />
+      <Analytics />
 
     </>
 
