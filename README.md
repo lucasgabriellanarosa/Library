@@ -1,31 +1,26 @@
-# 📚 Library - https://library-pearl-delta.vercel.app/
+# 📚 Delta Pearl Library
 > A book discovery platform focused on performance, security, and accessibility.
 
 **Live Deploy:** https://library-pearl-delta.vercel.app/
 
-**Posts**
+Article: [What Building a “Simple” Library App Taught Me About Frontend Engineering](https://medium.com/@lucasgabriellr.dev/what-building-a-simple-library-app-taught-me-about-frontend-engineering-8ad6065efa43)
 
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/lucas-rosa-452b59237/)
-[![Medium](https://img.shields.io/badge/-Medium-%23000000?&logo=medium&logoColor=white)](#)
-[![YouTube](https://img.shields.io/badge/YouTube-CC342D?&logo=youtube&logoColor=white)](https://youtu.be/8-XRBTv0-LA)
+Demo: https://youtu.be/8-XRBTv0-LA
 
-<img width="512" alt="Home Page" src="https://github.com/user-attachments/assets/ac857bb8-d1d2-4b54-9054-4f57b92bbc66" />
-<img width="512" alt="Auth Page" src="https://github.com/user-attachments/assets/8ac25312-6219-4ab1-bf4b-b19797b0c0c3" />
-<img width="512" alt="Search Page" src="https://github.com/user-attachments/assets/fbca9e61-4177-439d-96e8-360936b2a591" />
-<img width="512" alt="Book Page" src="https://github.com/user-attachments/assets/47a24a7b-7a59-444c-bd2a-5086c601f567" />
-<img width="512" alt="List Page" src="https://github.com/user-attachments/assets/775cb4f8-af56-401a-9ad1-9c2b924e4140" />
+![Delta Pearl Library](<Your Title Here.png>)
 
 ---
 
 ## 📝 About
 This project was developed to provide a seamless book discovery experience using the **Open Library API**. Its key feature lies in the backend architecture, where I used **Supabase Edge Functions** as a proxy to optimize requests and ensure secure communications.
 
-### 🎯 Key Features
-- **🔒 Network Resilience:** Custom proxy designed to handle external API instability
-- **♿ Accessibility:** Full keyboard navigation tested with Firefox Dev Edition
-- **🎨 Responsive & Animated:** Stunning UI/UX with Framer Motion animations
-- **⚡ Performance Optimized:** React Compiler integration for lightning-fast rendering
-- **📱 Barcode Scanner:** Quagga integration for quick book lookup
+### ⚡ Highlights
+- 🧱 **Edge-first architecture** with Supabase Functions acting as a proxy layer for external APIs
+- ♿ **Accessibility-focused development** (keyboard navigation + ARIA + manual testing)
+-⚡ **Performance optimization** using React Compiler, lazy loading, and code splitting
+-📷 **Barcode scanning (ISBN)** via Quagga2 for real-world usability
+-🧠 **AI integration** with Gemini for contextual book interactions
+-📱 **Fully responsive** mobile-first UI
 
 ---
 
@@ -70,7 +65,7 @@ src/
 - **React** - Foundation with React Compiler for performance optimization
 - **TypeScript** - Type-safe JavaScript for better developer experience
 - **Tailwind CSS** - Utility-first CSS for rapid, maintainable styling
-- **React Router 7** - Client-side routing and navigation
+- **React Router** - Client-side routing and navigation
 - **Framer Motion** - Smooth animations and interactions
 
 **Backend & Services:**
@@ -113,27 +108,3 @@ VITE_SUPABASE_ANON_KEY=your_supabase_key
 VITE_GEMINI_API_KEY=your_gemini_api_key
 VITE_API_PROXY=your_edge_function_url
 ```
-
----
-
-## 🎨 Features in Detail
-
-### Smart Book Discovery
-- Search across millions of books from Open Library
-- AI-powered book informations using Gemini API
-- Barcode scanning for instant book lookup
-
-### Performance Optimized
-- React Compiler for automatic optimization
-- Edge Functions for reduced latency
-- Lazy loading and code splitting
-
-### Security First
-- Supabase Edge Functions proxy layer
-- Secure API key management
-- Protected user authentication
-
-### Accessible Experience
-- WCAG compliant keyboard navigation
-- Screen reader optimized
-- High contrast support
