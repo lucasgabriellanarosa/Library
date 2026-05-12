@@ -7,7 +7,7 @@ Article: [What Building a “Simple” Library App Taught Me About Frontend Engi
 
 Demo: https://youtu.be/8-XRBTv0-LA
 
-![Delta Pearl Library](<Your Title Here.png>)
+![Delta Pearl Library](<public/hero.png>)
 
 ---
 
