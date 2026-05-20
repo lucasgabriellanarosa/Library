@@ -7,7 +7,7 @@ interface Props {
   onUpdate: (type: 'Read' | 'To Read') => void;
 }
 
-export const StatusButton = ({ bookStatus, isUpdating, activeAction, onUpdate }: Props) => {
+export const StatusButtons = ({ bookStatus, isUpdating, activeAction, onUpdate }: Props) => {
 
   const buttonConfigs = [
     {

@@ -3,6 +3,7 @@ import { Link } from "react-router";
 
 import { useBooks } from "../../../hooks/useBooks";
 import type { BookDataType } from "../../../@types/BookData";
+import SimilarBooksSkeleton from "../../skeleton/BookPage/SimilarBooksSkeleton";
 
 interface SimilarBooksProps {
     bookData: BookDataType;
@@ -19,7 +20,7 @@ interface similarBooksType {
 function SimilarBooks({bookData, workId}: SimilarBooksProps) {
 
   const [similarBooks, setSimilarBooks] = useState<similarBooksType[]>([])
-  const { getSimilarBooks } = useBooks();
+  const { getSimilarBooks, loading } = useBooks();
 
     useEffect(() => {
         if (!bookData) return;
@@ -37,6 +38,10 @@ function SimilarBooks({bookData, workId}: SimilarBooksProps) {
 
         loadSimilarBooks();
     }, [bookData, workId]);
+
+    if(loading){
+        return <SimilarBooksSkeleton />
+    }
 
     return (
         <ul className="flex overflow-x-auto gap-2 pb-3 mb-3 sm:gap-4 2xl:pb-4 2xl:mb-4">
