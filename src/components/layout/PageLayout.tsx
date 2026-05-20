@@ -21,7 +21,7 @@ function PageLayout() {
           </div>
         </Navbar>
 
-        <main className="min-h-dvh pb-8 text-sm bg-indigo-50 font-inter flex flex-col items-center">
+        <main className="min-h-dvh pb-8 pt-30 text-sm bg-indigo-50 font-inter flex flex-col items-center">
           <Suspense fallback={<LoadingSpinner loading />}>
             <Outlet />
           </Suspense>

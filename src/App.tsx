@@ -5,18 +5,19 @@ import { useAuth } from './hooks/useAuth'
 // Layouts & Auth Guard
 import PageLayout from './components/layout/PageLayout';
 import { AuthGuard } from './components/auth/AuthGuard';
-import AuthPage from './components/auth/AuthPage';
 import LoadingSpinner from './components/ui/LoadingSpinner';
 
 import HomePage from './pages/HomePage';
+import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
 
 // Lazy Loading Page
 const SearchPage = lazy(() => import('./pages/SearchPage'));
 const BookPage = lazy(() => import('./pages/BookPage'));
-const LoginPage = lazy(() => import('./pages/LoginPage'));
-const RegisterPage = lazy(() => import('./pages/RegisterPage'));
 const LibraryPage = lazy(() => import('./pages/LibraryPage'));
+const AuthPage = lazy(() => import('./components/auth/AuthPage'));
 const NotFound = lazy(() => import('./pages/NotFound'));
+
 
 // Vercel Insights
 import { SpeedInsights } from "@vercel/speed-insights/react"
@@ -50,10 +51,8 @@ function App() {
               <AuthPage />
             </Suspense>
           }>
-
           <Route path='/login' element={<LoginPage />} />
           <Route path='/register' element={<RegisterPage />} />
-
         </Route>
 
         <Route path='*' element={

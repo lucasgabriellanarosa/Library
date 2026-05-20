@@ -32,7 +32,7 @@ const LibraryPage = () => {
   if (loading) return <LoadingSpinner loading={loading} text="Listing books..." />
 
   return (
-    <div className="pt-30 text-xs w-full">
+    <div className="text-xs w-full">
 
       <div className="md:hidden z-10 backdrop-blur-md border-b border-zinc-800 flex justify-center">
         <ul className="flex overflow-x-auto scrollbar-hide gap-2 p-4 w-120 sm:w-160">

@@ -13,6 +13,7 @@ import StarsList from "../features/books/StarsList";
 
 // Skeletons
 import HeroSkeleton from "../components/skeleton/BookPage/HeroSkeleton";
+import ListButtonsSkeleton from "../components/skeleton/BookPage/ListButtonsSkeleton";
 
 // Lazy
 const BookAIWhisper = lazy(() => import("../features/books/BookAIWhisper"))
@@ -22,7 +23,6 @@ const SimilarBooks = lazy(() => import("../components/pages/books/SimilarBooks")
 import { useUserLists } from "../hooks/useUserLists";
 import { useBooks } from "../hooks/useBooks"
 import { useBookAIChat } from "../hooks/useBookAiChat";
-import ListButtonsSkeleton from "../components/skeleton/BookPage/ListButtonsSkeleton";
 
 function BookPage() {
 
@@ -180,7 +180,6 @@ function BookPage() {
     setBookStatus(newStatus ?? null);
   };
 
-  // CHATBOT AI - TRUE THIS ONE
   const {
     message,
     setMessage,
@@ -194,18 +193,16 @@ function BookPage() {
   const [isChatAIOpen, setIsChatAIOpen] = useState(false);
 
   return (
-    <div className="text-xs flex flex-col w-full gap-2 justify-center items-center">
-      <div className="w-full flex flex-col items-center pb-10 gap-6 xl:gap-10">
+    <section className="text-xs flex flex-col w-full justify-center items-center gap-6 xl:gap-10">
 
         {
           bookData ? (
-            
             <>
 
               {/* Background Image & Card with book info */}
               < div className="relative w-full flex justify-center">
 
-                <div className="absolute top-0 left-0 w-full h-115 xl:h-120 overflow-hidden">
+                <div className="absolute top-0 left-0 w-full h-72 xl:h-120 overflow-hidden">
                   <img
                     fetchPriority="high"
                     loading="eager"
@@ -216,7 +213,7 @@ function BookPage() {
                   <div className="absolute inset-0 backdrop-blur-xs" />
                 </div>
 
-                <div className="relative z-10 bg-yellow-50/60 w-4/5 mt-52 flex flex-col items-center gap-2 rounded-md shadow-gray-500 shadow-sm max-w-md md:max-w-xl">
+                <div className="relative z-10 bg-indigo-50/60 w-4/5 mt-32 flex flex-col items-center gap-2 rounded-md shadow-gray-500 shadow-sm max-w-md md:max-w-xl xl:mt-40">
 
                   <div className="flex flex-col justify-center items-center px-4 gap-0.5 pb-2">
 
@@ -241,7 +238,7 @@ function BookPage() {
                     <StarsList rating={bookData.rating} />
                   </div>
 
-                  <div className="flex flex-col justify-center items-center gap-4 bg-amber-50 rounded-b-md shadow-[0_-2px_15px_rgba(139,92,20,0.1)] w-full py-4 px-4">
+                  <div className="flex flex-col justify-center items-center gap-4 bg-purple-50 rounded-b-md shadow-[0_-2px_15px_rgba(139,92,20,0.1)] w-full py-4 px-4">
 
                     <div className="flex flex-row gap-6 text-[10px] font-semibold text-gray-700">
                       <span className="flex gap-1 items-center uppercase">
@@ -398,10 +395,7 @@ function BookPage() {
             </>
           )
         }
-
-      </div >
-
-    </div >
+    </section >
   );
 }
 
