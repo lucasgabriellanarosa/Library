@@ -24,9 +24,6 @@ import {
 import { useAuthStore } from "../stores/useAuthStore";
 import type { BookDataType } from "../@types/BookData";
 
-// NEED TO BE REMOVED
-import { supabase } from "../lib/supabaseClient";
-
 function BookPage() {
 
   // Navigate & Params
@@ -35,7 +32,7 @@ function BookPage() {
 
   // Hooks
   const { getBookWithAuthors, getWorkByISBN, getWorkDescription } = useBooks();
-  const { getSpecificLists, toogleBookStatus, loading: isUpdating } = useUserLists();
+  const { getBookStatus, toogleBookStatus, loading: isUpdating } = useUserLists();
   const { user } = useAuthStore()
 
   // Load Book Data
@@ -103,34 +100,19 @@ function BookPage() {
   const [bookStatus, setBookStatus] = useState<'Read' | 'To Read' | null>(null);
   const [activeAction, setActiveAction] = useState<'Read' | 'To Read' | null>(null);
 
-  // Check if the book is set to Read or To Read (or null) and set it to the bookStatus state
   useEffect(() => {
-    const checkBookStatus = async () => {
-      if (!user || !workId) return;
 
-      const userLists = await getSpecificLists(['Read', 'To Read']);
-      if (!userLists || userLists.length === 0) return;
+    if (!user || !workId) return;
 
-      const listIds = userLists.map(l => l.id);
+    const loadStatus = async () => {
+      const status = await getBookStatus(workId)
+      setBookStatus(status)
+    }
 
-      const { data } = await supabase
-        .from('list_books')
-        .select('list_id')
-        .eq('work_key', `/works/${workId}`)
-        .in('list_id', listIds);
+    loadStatus()
 
-      if (data && data.length > 0) {
-        const matchedList = userLists.find(l => l.id === data[0].list_id);
-        if (matchedList) {
-          setBookStatus(matchedList.name as 'Read' | 'To Read');
-        }
-      } else {
-        setBookStatus(null);
-      }
-    };
-
-    checkBookStatus();
   }, [workId, user]);
+
 
   // Toggle read and to read status
   const handleUpdateList = async (targetListName: 'Read' | 'To Read') => {
