@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 // Components
 import BookCard from "../../books/BookCard";
-import BookCardSkeleton from "../../skeleton/BookCardSkeleton";
+import BookCardSkeleton from "../../skeleton/components/BookCardSkeleton";
 
 // Custom (Types, Animation & Hooks)
 import type { BookType } from "../../../@types/BookType";

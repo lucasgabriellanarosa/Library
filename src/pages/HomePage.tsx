@@ -5,7 +5,7 @@ import Navbar from "../components/layout/Navbar";
 import SearchBooksForm from "../features/ui/SearchBooksForm";
 
 // Skeleton
-import ScannerSkeleton from "../components/skeleton/ScannerSkeleton";
+import ScannerSkeleton from "../components/skeleton/components/ScannerSkeleton";
 
 // Custom Hooks & Store & Utils
 import { useScannerStore } from "../stores/useScannerStore";

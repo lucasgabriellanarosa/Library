@@ -5,9 +5,9 @@ import { useParams } from "react-router";
 import HeroSection from "../components/pages/book/sections/HeroSection";
 import StatusButtonsSection from "../components/pages/book/sections/StatusButtonsSection";
 import BookDetailsSection from "../components/pages/book/sections/BookDetailsSection";
-import BookPageSkeleton from "../components/skeleton/BookPage/BookPageSkeleton";
 import SimilarBooksSection from "../components/pages/book/sections/SimilarBooksSection";
 import AIChatBotSection from "../components/pages/book/sections/AIChatBotSection";
+import BookPageSkeleton from "../components/skeleton/BookPage/BookPageSkeleton";
 
 // Hooks
 import { useBooks } from "../hooks/useBooks"

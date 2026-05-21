@@ -9,8 +9,8 @@ export default function HeroSection({bookData}: {bookData:BookDataType}) {
 
             <div className="absolute top-0 left-0 w-full h-72 xl:h-120 overflow-hidden">
                 <img
-                    fetchPriority="auto"
-                    loading="lazy"
+                    fetchPriority="high"
+                    loading="eager"
                     src={`https://covers.openlibrary.org/b/id/${bookData.cover}-M.jpg`}
                     className="w-full h-full object-cover opacity-80"
                 />

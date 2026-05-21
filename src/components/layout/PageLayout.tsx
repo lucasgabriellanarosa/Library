@@ -3,7 +3,7 @@ import { Outlet } from "react-router"
 import Navbar from "./Navbar"
 import SearchBooksForm from "../../features/ui/SearchBooksForm"
 import { useScannerStore } from "../../stores/useScannerStore";
-import ScannerSkeleton from '../skeleton/ScannerSkeleton';
+import ScannerSkeleton from '../skeleton/components/ScannerSkeleton';
 import LoadingSpinner from '../ui/LoadingSpinner';
 
 const IsbnScanner = lazy(() => import("../../features/ui/IsbnScanner"))
