@@ -58,6 +58,8 @@ function SimilarBooks({bookData, workId}: SimilarBooksProps) {
                                     : 'https://placehold.co/400x600?text=No+Cover'}
                                 alt={book.title}
                                 className="w-full h-36 object-cover rounded-sm xl:h-45"
+                                loading="lazy"
+                                decoding="async"
                             />
                         </div>
                         <p className="mt-2 mb-1 text-[10px] font-bold line-clamp-2 min-h-[2.4em] leading-tight text-gray-800 group-hover:text-blue-600 xl:text-[11px] xl:mt-3">

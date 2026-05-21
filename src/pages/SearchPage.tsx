@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router";
 
 // Components
-import BookCardSkeleton from "../components/skeleton/BookCardSkeleton";
+import BookCardSkeleton from "../components/skeleton/components/BookCardSkeleton";
 import BookCard from "../components/books/BookCard";
 
 // Custom (Types, Animation & Hooks)

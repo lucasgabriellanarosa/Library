@@ -71,7 +71,34 @@ export const useUserLists = () => {
     }
   };
 
-  // 4. Search specific lists (useful for BookPage)
+  // 4. Check if the book is set to Read or To Read (or null) 
+  const getBookStatus = async (workId: string) => {
+
+    const userLists = await getSpecificLists(['Read', 'To Read']);
+    if (!userLists || userLists.length === 0) return null;
+
+    const listIds = userLists.map(l => l.id);
+
+    const { data } = await supabase
+      .from('list_books')
+      .select('list_id')
+      .eq('work_key', `/works/${workId}`)
+      .in('list_id', listIds);
+
+    if (data && data.length > 0) {
+      const matchedList = userLists.find(l => l.id === data[0].list_id);
+      
+      if (matchedList) {
+        return matchedList.name as 'Read' | 'To Read';
+      } else {
+        return null
+      }
+      
+    } else {
+      return null;
+    }
+  };
+  // 5. Search specific lists (useful for BookPage)
   const getSpecificLists = useCallback(async (names: string[]) => {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return null;
@@ -85,21 +112,21 @@ export const useUserLists = () => {
     return data;
   }, []);
 
-  // 5. Toggle Between Read and To Read & Delete status
+  // 6. Toggle Between Read and To Read & Delete status
   const toogleBookStatus = async (params: {
     targetListName: 'Read' | 'To Read',
     workId: string,
     bookData: any,
     currentStatus: string | null
   }) => {
-    setLoading(true); 
+    setLoading(true);
     try {
       const userLists = await getSpecificLists(['Read', 'To Read']);
       const targetList = userLists?.find(l => l.name === params.targetListName);
       const otherList = userLists?.find(l => l.name !== params.targetListName);
 
       if (!targetList) return;
-      
+
       // If a book is set as "read" and you click the "read" button again, it will be without a status (it is not read, but also it is not in to read later)
       if (params.currentStatus === params.targetListName) {
         await supabase
@@ -123,9 +150,9 @@ export const useUserLists = () => {
         cover_id: String(params.bookData?.cover),
       });
 
-      return params.targetListName; 
+      return params.targetListName;
     } finally {
-      setLoading(false); 
+      setLoading(false);
     }
   };
 
@@ -139,6 +166,7 @@ export const useUserLists = () => {
     fetchBooksFromList,
     removeBookFromList,
     getSpecificLists,
+    getBookStatus,
     toogleBookStatus
   };
 };
