@@ -44,6 +44,7 @@ function HomePopularBooks() {
                                     bookKey={book.key}
                                     key={book.key}
                                     index={index}
+                                    variant="grid"
                                 />
 
                             ))

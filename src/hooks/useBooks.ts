@@ -189,7 +189,7 @@ export function useBooks() {
             let queryParams: any = {
                 limit: 18,
                 lang: "eng",
-                fields: 'key,cover_i,author_name,title',
+                fields: 'key,cover_i,author_name,title,ratings_average',
                 sort: 'rating'
             };
 

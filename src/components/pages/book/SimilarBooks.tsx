@@ -1,9 +1,16 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router";
 
+// Data
 import { useBooks } from "../../../hooks/useBooks";
 import type { BookDataType } from "../../../@types/BookData";
+
+// Components
 import SimilarBooksSkeleton from "../../skeleton/BookPage/SimilarBooksSkeleton";
+import BookCard from "../../books/BookCard";
+
+// Animation
+import { motion } from "framer-motion";
+import { bookContainerVariants } from "../../../utils/animations/bookAnimations";
 
 interface SimilarBooksProps {
     bookData: BookDataType;
@@ -11,16 +18,17 @@ interface SimilarBooksProps {
 }
 
 interface similarBooksType {
-  key: string,
-  cover_i: number,
-  author_name: string,
-  title: string
+    key: string,
+    cover_i: number,
+    author_name: string,
+    ratings_average: number,
+    title: string
 }
 
-function SimilarBooks({bookData, workId}: SimilarBooksProps) {
+function SimilarBooks({ bookData, workId }: SimilarBooksProps) {
 
-  const [similarBooks, setSimilarBooks] = useState<similarBooksType[]>([])
-  const { getSimilarBooks, loading } = useBooks();
+    const [similarBooks, setSimilarBooks] = useState<similarBooksType[]>([])
+    const { getSimilarBooks, loading } = useBooks();
 
     useEffect(() => {
         if (!bookData) return;
@@ -39,39 +47,30 @@ function SimilarBooks({bookData, workId}: SimilarBooksProps) {
         loadSimilarBooks();
     }, [bookData, workId]);
 
-    if(loading){
+    if (loading) {
         return <SimilarBooksSkeleton />
     }
 
     return (
-        <ul className="flex overflow-x-auto gap-2 pb-3 mb-3 sm:gap-4 2xl:pb-4 2xl:mb-4">
-            {similarBooks.map((book) => (
-                <li key={book.key} className="shrink-0 w-24 xl:w-30">
-                    <Link
-                        to={`/book/${book.key.replace('/works/', '')}`}
-                        className="block group w-full"
-                    >
-                        <div className="relative shadow-md group-hover:shadow-xl transition-shadow">
-                            <img
-                                src={book.cover_i
-                                    ? `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg`
-                                    : 'https://placehold.co/400x600?text=No+Cover'}
-                                alt={book.title}
-                                className="w-full h-36 object-cover rounded-sm xl:h-45"
-                                loading="lazy"
-                                decoding="async"
-                            />
-                        </div>
-                        <p className="mt-2 mb-1 text-[10px] font-bold line-clamp-2 min-h-[2.4em] leading-tight text-gray-800 group-hover:text-blue-600 xl:text-[11px] xl:mt-3">
-                            {book.title}
-                        </p>
-                        <p className="text-[9px] text-gray-500 truncate xl:text-[10px]">
-                            {book.author_name?.[0]}
-                        </p>
-                    </Link>
-                </li>
+        <motion.ul className="flex overflow-x-auto gap-3 pt-3 pb-4 mb-3"
+            variants={bookContainerVariants}
+            initial="hidden"
+            animate="visible"
+        >
+            {similarBooks.map((book, index) => (
+                <BookCard
+                    author={book.author_name}
+                    bookKey={book.key}
+                    index={index}
+                    title={book.title}
+                    key={book.key}
+                    rating={book.ratings_average}
+                    cover={book.cover_i ? `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg` : null}
+                    variant="carousel"
+                />
+
             ))}
-        </ul>
+        </motion.ul>
     )
 }
 

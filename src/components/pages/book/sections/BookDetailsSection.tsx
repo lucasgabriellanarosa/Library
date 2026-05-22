@@ -26,7 +26,7 @@ export default function BookDetailsSection({bookData}: {bookData: BookDataType})
                 <div className="flex flex-col gap-2">
                     <h3 className="text-base font-semibold">Description</h3>
 
-                    <p ref={descriptionRef} className={`text-justify text-gray-700 transition-all duration-300 ${!isExpanded ? 'line-clamp-6' : ''}`}>
+                    <p ref={descriptionRef} className={`text-justify text-gray-700 transition-all duration-300 lg:text-sm ${!isExpanded ? 'line-clamp-6' : ''}`}>
                         {bookData.description}
                     </p>
 

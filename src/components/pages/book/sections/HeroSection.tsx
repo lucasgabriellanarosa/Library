@@ -64,20 +64,32 @@ export default function HeroSection({ bookData }: { bookData: BookDataType }) {
                         </div>
 
                         <div className="flex flex-col items-center gap-2">
-                            <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">
+                            <span className="text-[9px] font-bold text-gray-500 uppercase tracking-widest lg:text-[10px]">
                                 Categories
                             </span>
 
-                            <ul className="flex flex-wrap gap-1.5 justify-center">
-                                {bookData.categories.map((cat) => (
-                                    <span
-                                        key={cat}
-                                        className={`px-3 py-1 rounded-full text-[10px] font-bold border ${CATEGORY_STYLES[cat]}`}
-                                    >
-                                        {cat}
-                                    </span>
-                                ))}
-                            </ul>
+                            {
+                                bookData.categories > [] ? (
+                                    <ul className="flex flex-wrap gap-1.5 justify-center">
+                                        {
+
+                                            bookData.categories.map((cat) => (
+                                                <li
+                                                    key={cat}
+                                                    className={`px-3 py-1 rounded-full text-[10px] font-bold border ${CATEGORY_STYLES[cat]}`}
+                                                >
+                                                    {cat}
+                                                </li>
+                                            ))
+                                        }
+                                    </ul>
+                                ) : (
+                                    <p className="text-[11px] text-gray-600 italic text-center">
+                                        No categories available for this book.
+                                    </p>
+                                )
+                            }
+
                         </div>
                     </div>
                 </div>
