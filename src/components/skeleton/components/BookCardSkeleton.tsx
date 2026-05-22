@@ -1,6 +1,6 @@
-export default function BookCardSkeleton() {
+export default function BookCardSkeleton({variant}: {variant:string}) {
     return (
-        <li className="flex flex-col gap-0.5 border rounded-md bg-yellow-100 p-1 md:p-2 animate-pulse w-full">
+        <li className={`flex flex-col gap-0.5 border rounded-md bg-yellow-100 p-1 md:p-2 animate-pulse w-full ${variant == 'carousel' ? 'shrink-0 w-24 md:w-28 xl:w-32': ''}`}>
             <div className="border aspect-2/3 w-full rounded-sm bg-gray-300/50" />
 
             <div className="flex flex-col flex-1 gap-1 mt-2">

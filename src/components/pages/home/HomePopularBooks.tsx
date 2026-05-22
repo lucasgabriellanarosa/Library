@@ -25,7 +25,7 @@ function HomePopularBooks() {
                 loading ? (
                     <ul className="grid grid-cols-3 gap-2 sm:grid-cols-4 sm:gap-3 lg:grid-cols-6 2xl:grid-cols-8 lg:gap-4">
                         {Array.from({ length: 24 }).map((_, i) => (
-                            <BookCardSkeleton key={i} />
+                            <BookCardSkeleton key={i} variant="grid"/>
                         ))}
                     </ul>
                 ) : (

@@ -7,7 +7,7 @@ interface BookStarProps {
 }
 
 function BookStar({ type }: BookStarProps) {
-  const color = type === "empty" ? "text-gray-500" : "text-amber-500";
+  const color = type === "empty" ? "text-gray-600" : "text-amber-600";
 
   return (
     <span className={`${color}`} aria-hidden="true">

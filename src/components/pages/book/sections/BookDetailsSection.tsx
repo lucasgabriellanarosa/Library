@@ -33,7 +33,7 @@ export default function BookDetailsSection({bookData}: {bookData: BookDataType})
                     {showButton && (
                         <button
                             onClick={() => setIsExpanded(!isExpanded)}
-                            className="w-fit px-4 py-2 bg-[#E9DCC0] text-[#8B5C14] font-bold rounded-md border border-[#D9C8A9] shadow-sm active:scale-95 transition-all self-center xl:self-end"
+                            className="w-fit px-4 py-2 bg-[#E9DCC0] text-[#8B5C14] font-bold rounded-md border border-[#D9C8A9] shadow-sm active:scale-95 transition-all self-center xl:self-end hover:bg-[#dcd0b3] hover:cursor-pointer"
                         >
                             {isExpanded ? '- Show less' : '+ Read more'}
                         </button>

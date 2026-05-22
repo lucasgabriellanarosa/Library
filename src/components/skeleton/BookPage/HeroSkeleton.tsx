@@ -3,12 +3,12 @@ export default function HeroSkeleton() {
         <div className="relative w-full flex justify-center animate-pulse">
 
             {/* Background */}
-            <div className="absolute top-0 left-0 w-full h-72 xl:h-120 bg-amber-100">
+            <div className="absolute top-0 left-0 w-full h-100 xl:h-120 bg-amber-100">
                 <div className="absolute inset-0 backdrop-blur-xs bg-white/20" />
             </div>
 
             {/* Card */}
-            <div className="relative z-10 bg-yellow-50/60 w-4/5 mt-32 flex flex-col items-center gap-2 rounded-md shadow-gray-500 shadow-sm max-w-md md:max-w-xl">
+            <div className="relative z-10 bg-yellow-50/60 w-4/5 mt-32 flex flex-col items-center gap-2 rounded-md shadow-gray-500 shadow-sm max-w-md md:max-w-xl xl:mt-36">
 
                 {/* Top Content */}
                 <div className="flex flex-col justify-center items-center px-4 gap-2 pb-4">

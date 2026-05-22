@@ -52,7 +52,7 @@ function SimilarBooks({ bookData, workId }: SimilarBooksProps) {
     }
 
     return (
-        <motion.ul className="flex overflow-x-auto gap-3 pt-3 pb-4 mb-3"
+        <motion.ul className="flex overflow-x-auto gap-3 pt-3 pb-4 px-1 mb-3"
             variants={bookContainerVariants}
             initial="hidden"
             animate="visible"
