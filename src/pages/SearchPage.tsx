@@ -40,7 +40,6 @@ function SearchPage() {
     setSearchParams({ q: query, page: newPage.toString() });
   };
 
-
   return (
     <section className="text-sm font-light p-4 flex flex-col gap-4 w-full mx-auto max-w-lg sm:max-w-xl md:pt-8 md:gap-6 md:max-w-2xl lg:px-16 lg:max-w-5xl xl:px-24 xl:max-w-360">
 

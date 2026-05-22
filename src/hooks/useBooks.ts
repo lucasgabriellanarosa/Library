@@ -2,34 +2,13 @@ import { useState } from "react";
 import { supabase } from "../lib/supabaseClient";
 import type { BookDataType } from "../@types/BookData";
 import type { BookType } from "../@types/BookType";
+import { cache } from "../utils/cache";
 
 interface SearchResponse {
     docs: BookType[];
     totalPages: number;
     numFound: number;
 }
-
-const CACHE_PREFIX = 'delta-pearl-cache-';
-
-const cache = {
-    get: (key: string) => {
-        const cached = localStorage.getItem(CACHE_PREFIX + key);
-        if (!cached) return null;
-        const { data, timestamp, expires } = JSON.parse(cached);
-        if (Date.now() - timestamp > expires) {
-            localStorage.removeItem(CACHE_PREFIX + key);
-            return null;
-        }
-        return data;
-    },
-    set: (key: string, data: any, ttl: number = 1000 * 60 * 60) => {
-        localStorage.setItem(CACHE_PREFIX + key, JSON.stringify({
-            data,
-            timestamp: Date.now(),
-            expires: ttl
-        }));
-    }
-};
 
 export function useBooks() {
     const [loading, setLoading] = useState(false);
@@ -79,15 +58,15 @@ export function useBooks() {
         ];
 
         try {
-            const data = await callProxy('/search.json', {
+            const data = await callProxy('/trending/daily.json', {
                 q: 'subject:fiction language:eng',
                 fields: 'title,author_name,ratings_average,cover_i,key',
                 sort: 'editions',
                 limit: 24
             });
 
-            cache.set(`popular-books`, data.docs);
-            return data.docs as BookType[];
+            cache.set(`popular-books`, data.works);
+            return data.works as BookType[];
 
         } catch (error) {
             return MOCK_BOOKS;

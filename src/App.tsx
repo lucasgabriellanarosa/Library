@@ -43,6 +43,7 @@ function App() {
           <Route element={<AuthGuard />}>
             <Route path='/library' element={<LibraryPage />} />
           </Route>
+          <Route path='*' element={<NotFound />} />
         </Route>
 
         <Route
@@ -55,11 +56,7 @@ function App() {
           <Route path='/register' element={<RegisterPage />} />
         </Route>
 
-        <Route path='*' element={
-          <Suspense fallback={<LoadingSpinner loading />}>
-            <NotFound />
-          </Suspense>
-        } />
+
 
       </Routes>
 
