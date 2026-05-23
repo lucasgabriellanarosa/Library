@@ -113,9 +113,9 @@ export function useBooks() {
 
     // BookPage.tsx hooks (all four)
 
-    async function getBookWithAuthors(workKey: string) {
+    async function getBookData(workKey: string) {
 
-        const cached = cache.get(`bookData-with-authors-${workKey}`);
+        const cached = cache.get(`bookData-${workKey}`);
         if (cached) return cached;
 
         setLoading(true);
@@ -123,12 +123,12 @@ export function useBooks() {
             const cleanKey = workKey.replace('/works/', '');
             const data = await callProxy('/search.json', {
                 q: `key:/works/${cleanKey}`,
-                fields: 'title,author_name,ratings_average,cover_i,first_publish_year,number_of_pages_median,subject',
+                fields: 'title,author_name,author_key,ratings_average,cover_i,first_publish_year,number_of_pages_median,subject',
                 limit: 1
             });
 
             if (data.docs && data.docs.length > 0) {
-                cache.set(`bookData-with-authors-${workKey}`, data.docs[0]);
+                // cache.set(`bookData-${workKey}`, data.docs[0]);
                 return data.docs[0];
             }
             return null;
@@ -153,7 +153,7 @@ export function useBooks() {
             if (!data) return "Description not available.";
 
             if (typeof data.description === 'string') {
-                cache.set(`bookData-description-${workKey}`, data.description);
+                // cache.set(`bookData-description-${workKey}`, data.description);
                 return data.description;
             }
 
@@ -163,6 +163,17 @@ export function useBooks() {
         } catch (error) {
             console.error("Failed to load description:", error);
             return "Failed to load description.";
+        }
+    }
+
+    async function getAuthorInfo(authorKey: string) {
+        try {
+            console.log("HIIII")
+            const authorData = await callProxy(`/authors/${authorKey}.json`)
+            return authorData
+        } catch (error) {
+            console.error(error);
+            return [];
         }
     }
 
@@ -218,12 +229,13 @@ export function useBooks() {
     }
 
     return {
-        searchBooks,
-        getWorkByISBN,
-        getBookWithAuthors,
-        getWorkDescription,
-        getSimilarBooks,
         getPopularBooks,
+        searchBooks,
+        getBookData,
+        getWorkDescription,
+        getAuthorInfo,
+        getWorkByISBN,
+        getSimilarBooks,
         loading
     }
 }

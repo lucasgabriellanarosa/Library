@@ -1,26 +1,26 @@
 import { useEffect, useRef, useState } from "react";
 import type { BookDataType } from "../../../../@types/BookData";
 
-export default function BookDetailsSection({bookData}: {bookData: BookDataType}) {
+export default function BookDetailsSection({ bookData, authorData }: { bookData: BookDataType, authorData: any }) {
+    console.log(authorData)
+    // "Read More" button from description
+    const [isExpanded, setIsExpanded] = useState(false);
+    const [showButton, setShowButton] = useState(false);
+    const descriptionRef = useRef<HTMLParagraphElement>(null);
 
-      // "Read More" button from description
-      const [isExpanded, setIsExpanded] = useState(false);
-      const [showButton, setShowButton] = useState(false);
-      const descriptionRef = useRef<HTMLParagraphElement>(null);
-    
-      // Check if the description needs a "Read More" button
-      useEffect(() => {
+    // Check if the description needs a "Read More" button
+    useEffect(() => {
         const element = descriptionRef.current;
         if (element) {
-          setShowButton(element.scrollHeight > element.offsetHeight);
+            setShowButton(element.scrollHeight > element.offsetHeight);
         }
-      }, [bookData])
-    
+    }, [bookData])
+
     return (
-        <div className="w-4/5 flex flex-col justify-center items-center lg:flex lg:flex-row lg:items-start xl:p-4 xl:gap-10 2xl:gap-16">
+        <div className="w-4/5 flex flex-col justify-center items-center gap-6 lg:flex lg:flex-row lg:items-start lg:gap-10 xl:p-4 2xl:gap-16">
 
             {/* Description and Comments */}
-            <div className="flex flex-col gap-6 max-w-2xl lg:max-w-3xl xl:max-w-fit xl:flex-1">
+            <div className="flex flex-col gap-6 max-w-2xl lg:w-3/5 xl:max-w-fit xl:flex-1">
 
                 {/* Description */}
                 <div className="flex flex-col gap-2">
@@ -45,12 +45,50 @@ export default function BookDetailsSection({bookData}: {bookData: BookDataType})
 
             </div>
 
-            {/* It was the AI ChatBot in desktop before
-            But I've decided to change it to a author info card
-            */}
-            <div className="hidden mb-4 w-2/5 max-w-lg h-96 bg-white rounded-2xl shadow-2xl border border-amber-100 flex-col overflow-hidden xl:flex">
+            {/* Author Section */}
+            {
+                authorData > [] ? (
+                    <div className="flex bg-yellow-50 max-w-xs flex-col shadow-md rounded-md md:max-w-sm lg:max-w-xs">
+                        <div className="w-full h-80 md:h-90 lg:h-80">
+                            <img src={`https://covers.openlibrary.org/a/id/${authorData.photos[0]}-L.jpg`} className="w-full h-full object-cover" />
+                        </div>
 
-            </div>
+                        <div className="flex flex-col gap-3 p-4 md:px-6 lg:py-2 lg:px-4 2xl:gap-4">
+                            <p className="font-semibold text-xs w-full text-center md:text-sm 2xl:text-[15px]">
+                                {authorData.name}
+                                <br />
+                                {
+                                    authorData.fuller_name &&
+                                    <span className="text-[10px] text-gray-600 font-normal italic md:text-[11px] 2xl:text-xs">{authorData.fuller_name}</span>
+                                }
+                            </p>
+
+                            {
+                                authorData.bio ? (
+                                    <p className="text-[11px]/4 text-justify 2xl:text-xs/5">{authorData.bio.value  ? authorData.bio.value : authorData.bio}</p>
+                                ) : (
+                                    <p className="text-[11px]/4 text-justify 2xl:text-xs/5">There is not description available about this author.</p>
+                                )
+
+                            }
+
+                            {
+                                authorData.birth_date &&
+                                <p className="font-semibold text-[11px] md:text-xs 2xl:text-sm">
+                                    Born
+                                    <span className="text-[10px] text-gray-600 ml-1 font-normal italic md:text-[11px] 2xl:text-xs">{authorData.birth_date}</span>
+                                </p>
+                            }
+
+                        </div>
+                    </div>
+
+                ) : (
+                    <div className="flex bg-white w-full min-h-20">
+                    </div>
+                )
+            }
+
 
         </div>
     )

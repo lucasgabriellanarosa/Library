@@ -25,10 +25,11 @@ function BookPage() {
 
   // Variables
   const { workId, isbn } = useParams();
-  const { getBookWithAuthors, getWorkDescription, getWorkByISBN, loading } = useBooks();
+  const { getBookData, getWorkDescription, getAuthorInfo, getWorkByISBN, loading } = useBooks();
   const { user } = useAuthStore()
 
   const [bookData, setBookData] = useState<BookDataType | null>(null);
+  const [authorData, setAuthorData] = useState([]);
 
   // Get & Load bookData
   const loadBookData = async () => {
@@ -36,7 +37,7 @@ function BookPage() {
     if (!workId) return;
 
     const [workDetails, descriptionText] = await Promise.all([
-      getBookWithAuthors(workId),
+      getBookData(workId),
       getWorkDescription(workId)
     ]);
 
@@ -72,6 +73,11 @@ function BookPage() {
         categories: cleanCategories
       })
     }
+
+    console.log("author key:", workDetails.author_key)
+
+    const authorInfo = await getAuthorInfo(workDetails.author_key[0])
+    setAuthorData(authorInfo)
   }
 
   useEffect(() => {
@@ -103,6 +109,7 @@ function BookPage() {
               {/* Description & Chatbot (Desktop) */}
               <BookDetailsSection
                 bookData={bookData}
+                authorData={authorData}
               />
 
               {/* Similar Books */}
