@@ -2,34 +2,13 @@ import { useState } from "react";
 import { supabase } from "../lib/supabaseClient";
 import type { BookDataType } from "../@types/BookData";
 import type { BookType } from "../@types/BookType";
+import { cache } from "../utils/cache";
 
 interface SearchResponse {
     docs: BookType[];
     totalPages: number;
     numFound: number;
 }
-
-const CACHE_PREFIX = 'delta-pearl-cache-';
-
-const cache = {
-    get: (key: string) => {
-        const cached = localStorage.getItem(CACHE_PREFIX + key);
-        if (!cached) return null;
-        const { data, timestamp, expires } = JSON.parse(cached);
-        if (Date.now() - timestamp > expires) {
-            localStorage.removeItem(CACHE_PREFIX + key);
-            return null;
-        }
-        return data;
-    },
-    set: (key: string, data: any, ttl: number = 1000 * 60 * 60) => {
-        localStorage.setItem(CACHE_PREFIX + key, JSON.stringify({
-            data,
-            timestamp: Date.now(),
-            expires: ttl
-        }));
-    }
-};
 
 export function useBooks() {
     const [loading, setLoading] = useState(false);
@@ -79,15 +58,15 @@ export function useBooks() {
         ];
 
         try {
-            const data = await callProxy('/search.json', {
+            const data = await callProxy('/trending/daily.json', {
                 q: 'subject:fiction language:eng',
                 fields: 'title,author_name,ratings_average,cover_i,key',
                 sort: 'editions',
                 limit: 24
             });
 
-            cache.set(`popular-books`, data.docs);
-            return data.docs as BookType[];
+            cache.set(`popular-books`, data.works);
+            return data.works as BookType[];
 
         } catch (error) {
             return MOCK_BOOKS;
@@ -134,9 +113,9 @@ export function useBooks() {
 
     // BookPage.tsx hooks (all four)
 
-    async function getBookWithAuthors(workKey: string) {
+    async function getBookData(workKey: string) {
 
-        const cached = cache.get(`bookData-with-authors-${workKey}`);
+        const cached = cache.get(`bookData-${workKey}`);
         if (cached) return cached;
 
         setLoading(true);
@@ -144,12 +123,12 @@ export function useBooks() {
             const cleanKey = workKey.replace('/works/', '');
             const data = await callProxy('/search.json', {
                 q: `key:/works/${cleanKey}`,
-                fields: 'title,author_name,ratings_average,cover_i,first_publish_year,number_of_pages_median,subject',
+                fields: 'title,author_name,author_key,ratings_average,cover_i,first_publish_year,number_of_pages_median,subject',
                 limit: 1
             });
 
             if (data.docs && data.docs.length > 0) {
-                cache.set(`bookData-with-authors-${workKey}`, data.docs[0]);
+                cache.set(`bookData-${workKey}`, data.docs[0]);
                 return data.docs[0];
             }
             return null;
@@ -187,6 +166,23 @@ export function useBooks() {
         }
     }
 
+    async function getAuthorInfo(authorKey: string) {
+
+        const cached = cache.get(`authorData-${authorKey}`);
+        if (cached) return cached;
+
+        try {
+            const authorData = await callProxy(`/authors/${authorKey}.json`)
+
+                cache.set(`authorData-${authorKey}`, authorData);
+
+            return authorData
+        } catch (error) {
+            console.error(error);
+            return [];
+        }
+    }
+
     async function getWorkByISBN(isbn: string) {
         setLoading(true);
         try {
@@ -210,7 +206,7 @@ export function useBooks() {
             let queryParams: any = {
                 limit: 18,
                 lang: "eng",
-                fields: 'key,cover_i,author_name,title',
+                fields: 'key,cover_i,author_name,title,ratings_average',
                 sort: 'rating'
             };
 
@@ -239,12 +235,13 @@ export function useBooks() {
     }
 
     return {
-        searchBooks,
-        getWorkByISBN,
-        getBookWithAuthors,
-        getWorkDescription,
-        getSimilarBooks,
         getPopularBooks,
+        searchBooks,
+        getBookData,
+        getWorkDescription,
+        getAuthorInfo,
+        getWorkByISBN,
+        getSimilarBooks,
         loading
     }
 }

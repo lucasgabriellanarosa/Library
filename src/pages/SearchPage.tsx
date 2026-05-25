@@ -40,7 +40,6 @@ function SearchPage() {
     setSearchParams({ q: query, page: newPage.toString() });
   };
 
-
   return (
     <section className="text-sm font-light p-4 flex flex-col gap-4 w-full mx-auto max-w-lg sm:max-w-xl md:pt-8 md:gap-6 md:max-w-2xl lg:px-16 lg:max-w-5xl xl:px-24 xl:max-w-360">
 
@@ -51,7 +50,7 @@ function SearchPage() {
 
             <ul className="grid grid-cols-3 gap-3 sm:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8">
               {Array.from({ length: 24 }).map((_, i) => (
-                <BookCardSkeleton key={i} />
+                <BookCardSkeleton key={i} variant="grid"  />
               ))}
             </ul>
 
@@ -75,6 +74,7 @@ function SearchPage() {
                   bookKey={book.key}
                   key={book.key}
                   index={index}
+                  variant="grid"
                 />
               ))}
             </motion.ul>

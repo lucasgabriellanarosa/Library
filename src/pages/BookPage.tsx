@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { useParams } from "react-router";
 
 // Components
+import Dog404 from '../assets/404dog.svg'
 import HeroSection from "../components/pages/book/sections/HeroSection";
 import StatusButtonsSection from "../components/pages/book/sections/StatusButtonsSection";
 import BookDetailsSection from "../components/pages/book/sections/BookDetailsSection";
@@ -24,10 +25,11 @@ function BookPage() {
 
   // Variables
   const { workId, isbn } = useParams();
-  const { getBookWithAuthors, getWorkDescription, getWorkByISBN } = useBooks();
+  const { getBookData, getWorkDescription, getAuthorInfo, getWorkByISBN, loading } = useBooks();
   const { user } = useAuthStore()
 
   const [bookData, setBookData] = useState<BookDataType | null>(null);
+  const [authorData, setAuthorData] = useState(null);
 
   // Get & Load bookData
   const loadBookData = async () => {
@@ -35,9 +37,14 @@ function BookPage() {
     if (!workId) return;
 
     const [workDetails, descriptionText] = await Promise.all([
-      getBookWithAuthors(workId),
+      getBookData(workId),
       getWorkDescription(workId)
     ]);
+
+    if (workDetails == null) {
+      setBookData(null)
+      return
+    }
 
     const rawSubjects = workDetails?.subject || [];
     const cleanCategories = processCategories(rawSubjects);
@@ -66,11 +73,15 @@ function BookPage() {
         categories: cleanCategories
       })
     }
+
+    const authorInfo = await getAuthorInfo(workDetails.author_key[0])
+    setAuthorData(authorInfo)
   }
 
   useEffect(() => {
-    // Clean BookData
+    // Clean Book & Author Data
     setBookData(null)
+    setAuthorData(null)
     // Load new BookData
     loadBookData()
   }, [workId, isbn, user]);
@@ -79,39 +90,52 @@ function BookPage() {
     <section className="text-xs flex flex-col w-full justify-center items-center gap-6 xl:gap-10">
 
       {
-        bookData ? (
-          <>
-            {/* Background Image & Card with book info */}
-            <HeroSection
-              bookData={bookData}
-            />
+        !loading ? (
+          bookData ? (
+            <>
+              {/* Background Image & Card with book info */}
+              <HeroSection
+                bookData={bookData}
+              />
 
-            {/* Add to list buttons */}
-            <StatusButtonsSection
-              user={user}
-              workId={workId}
-              bookData={bookData}
-            />
+              {/* Add to list buttons */}
+              <StatusButtonsSection
+                user={user}
+                workId={workId}
+                bookData={bookData}
+              />
 
-            {/* Description & Chatbot (Desktop) */}
-            <BookDetailsSection
-              bookData={bookData}
-            />
+              {/* Description & Chatbot (Desktop) */}
+              <BookDetailsSection
+                bookData={bookData}
+                authorData={authorData}
+              />
 
-            {/* Similar Books */}
-            <SimilarBooksSection
-              bookData={bookData}
-              workId={workId}
-            />
+              {/* Similar Books */}
+              <SimilarBooksSection
+                bookData={bookData}
+                workId={workId}
+              />
 
-            {/* Ai Chatbot */}
-            <AIChatBotSection
-              bookData={bookData}
-            />
-          </>
+              {/* Ai Chatbot */}
+              <AIChatBotSection
+                bookData={bookData}
+              />
+            </>
+          ) : (
+            <div className="flex flex-col items-center justify-center gap-8 min-h-[60dvh] w-4/5">
+              <img src={Dog404} className="h-50"/>
+              <p className="text-sm">
+                It looks like someone ate this book data as it was <span className="text-red-600 font-semibold">not found...</span>
+                <br />
+                <span className="inline-block mt-4 w-full text-end italic">Wonder if it was a good boy.</span>
+              </p>
+            </div>
+          )
         ) : (
           <BookPageSkeleton />
         )
+
       }
 
     </section >
