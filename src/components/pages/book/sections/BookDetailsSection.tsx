@@ -2,7 +2,7 @@ import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import type { BookDataType } from "../../../../@types/BookData";
 import AuthorCardSkeleton from "../../../skeleton/BookPage/AuthorCardSkeleton";
 
-const AuthorCard = lazy(() => import("../AuthorCard"));
+const TAuthorCard = lazy(() => import("../AuthorCard"));
 
 interface SectionTypes {
     bookData: BookDataType,

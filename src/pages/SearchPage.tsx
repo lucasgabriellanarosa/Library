@@ -50,7 +50,7 @@ function SearchPage() {
 
             <ul className="grid grid-cols-3 gap-3 sm:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8">
               {Array.from({ length: 24 }).map((_, i) => (
-                <BookCardSkeleton key={i} />
+                <BookCardSkeleton key={i} variant="grid"  />
               ))}
             </ul>
 
@@ -74,6 +74,7 @@ function SearchPage() {
                   bookKey={book.key}
                   key={book.key}
                   index={index}
+                  variant="grid"
                 />
               ))}
             </motion.ul>
