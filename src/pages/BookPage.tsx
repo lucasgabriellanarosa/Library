@@ -29,7 +29,7 @@ function BookPage() {
   const { user } = useAuthStore()
 
   const [bookData, setBookData] = useState<BookDataType | null>(null);
-  const [authorData, setAuthorData] = useState([]);
+  const [authorData, setAuthorData] = useState(null);
 
   // Get & Load bookData
   const loadBookData = async () => {
@@ -74,15 +74,14 @@ function BookPage() {
       })
     }
 
-    console.log("author key:", workDetails.author_key)
-
     const authorInfo = await getAuthorInfo(workDetails.author_key[0])
     setAuthorData(authorInfo)
   }
 
   useEffect(() => {
-    // Clean BookData
+    // Clean Book & Author Data
     setBookData(null)
+    setAuthorData(null)
     // Load new BookData
     loadBookData()
   }, [workId, isbn, user]);

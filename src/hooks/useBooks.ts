@@ -128,7 +128,7 @@ export function useBooks() {
             });
 
             if (data.docs && data.docs.length > 0) {
-                // cache.set(`bookData-${workKey}`, data.docs[0]);
+                cache.set(`bookData-${workKey}`, data.docs[0]);
                 return data.docs[0];
             }
             return null;
@@ -153,7 +153,7 @@ export function useBooks() {
             if (!data) return "Description not available.";
 
             if (typeof data.description === 'string') {
-                // cache.set(`bookData-description-${workKey}`, data.description);
+                cache.set(`bookData-description-${workKey}`, data.description);
                 return data.description;
             }
 
@@ -167,9 +167,15 @@ export function useBooks() {
     }
 
     async function getAuthorInfo(authorKey: string) {
+
+        const cached = cache.get(`authorData-${authorKey}`);
+        if (cached) return cached;
+
         try {
-            console.log("HIIII")
             const authorData = await callProxy(`/authors/${authorKey}.json`)
+
+                cache.set(`authorData-${authorKey}`, authorData);
+
             return authorData
         } catch (error) {
             console.error(error);
