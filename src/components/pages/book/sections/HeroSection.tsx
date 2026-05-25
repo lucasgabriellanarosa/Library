@@ -9,7 +9,6 @@ export default function HeroSection({ bookData }: { bookData: BookDataType }) {
 
     const [isImgLoaded, setIsImgLoaded] = useState(false)
 
-
     return (
         <>
             <div className={`relative w-full flex justify-center ${isImgLoaded ? 'block' : 'hidden'}`}>

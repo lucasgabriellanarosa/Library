@@ -1,26 +1,33 @@
-import { useEffect, useRef, useState } from "react";
+import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import type { BookDataType } from "../../../../@types/BookData";
+import AuthorCardSkeleton from "../../../skeleton/BookPage/AuthorCardSkeleton";
 
-export default function BookDetailsSection({bookData}: {bookData: BookDataType}) {
+const AuthorCard = lazy(() => import("../AuthorCard"));
 
-      // "Read More" button from description
-      const [isExpanded, setIsExpanded] = useState(false);
-      const [showButton, setShowButton] = useState(false);
-      const descriptionRef = useRef<HTMLParagraphElement>(null);
-    
-      // Check if the description needs a "Read More" button
-      useEffect(() => {
+interface SectionTypes {
+    bookData: BookDataType,
+    authorData: any
+}
+
+export default function BookDetailsSection({ bookData, authorData }: SectionTypes) {
+    // "Read More" button from description
+    const [isExpanded, setIsExpanded] = useState(false);
+    const [showButton, setShowButton] = useState(false);
+    const descriptionRef = useRef<HTMLParagraphElement>(null);
+
+    // Check if the description needs a "Read More" button
+    useEffect(() => {
         const element = descriptionRef.current;
         if (element) {
-          setShowButton(element.scrollHeight > element.offsetHeight);
+            setShowButton(element.scrollHeight > element.offsetHeight);
         }
-      }, [bookData])
-    
+    }, [bookData])
+
     return (
-        <div className="w-4/5 flex flex-col justify-center items-center lg:flex lg:flex-row lg:items-start xl:p-4 xl:gap-10 2xl:gap-16">
+        <div className="w-4/5 flex flex-col justify-center items-center gap-6 lg:flex lg:flex-row lg:items-start lg:gap-10 xl:p-4 2xl:gap-16">
 
             {/* Description and Comments */}
-            <div className="flex flex-col gap-6 max-w-2xl lg:max-w-3xl xl:max-w-fit xl:flex-1">
+            <div className="flex flex-col gap-6 max-w-2xl lg:w-3/5 xl:max-w-fit xl:flex-1">
 
                 {/* Description */}
                 <div className="flex flex-col gap-2">
@@ -45,12 +52,12 @@ export default function BookDetailsSection({bookData}: {bookData: BookDataType})
 
             </div>
 
-            {/* It was the AI ChatBot in desktop before
-            But I've decided to change it to a author info card
-            */}
-            <div className="hidden mb-4 w-2/5 max-w-lg h-96 bg-white rounded-2xl shadow-2xl border border-amber-100 flex-col overflow-hidden xl:flex">
-
-            </div>
+            {/* Author Section */}
+            <Suspense fallback={
+                <AuthorCardSkeleton />
+            }>
+                <AuthorCard authorData={authorData} />
+            </Suspense>
 
         </div>
     )
