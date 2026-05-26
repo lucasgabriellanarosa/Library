@@ -44,7 +44,6 @@ export function useBooks() {
             if (!data) return "Description not available.";
 
             if (typeof data.description === 'string') {
-                cache.set(`bookData-description-${workKey}`, data.description);
                 return data.description;
             }
 

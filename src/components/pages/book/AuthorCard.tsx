@@ -10,11 +10,13 @@ export default function AuthorCard({ author_key }: { author_key: string }) {
     const [authorData, setAuthorData] = useState<AuthorDataType | null>(null)
     const [isImgLoaded, setIsImgLoaded] = useState(false)
 
+    const loadAuthorData = async () => {
+        const authorInfo = await getAuthorInfo(author_key)
+        setAuthorData(authorInfo)
+    }
+
     useEffect(() => {
-        const loadAuthorData = async () => {
-            const authorInfo = await getAuthorInfo(author_key)
-            setAuthorData(authorInfo)
-        }
+        setAuthorData(null)
         loadAuthorData()
     }, [])
 
