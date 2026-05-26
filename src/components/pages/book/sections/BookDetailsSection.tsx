@@ -6,10 +6,9 @@ const AuthorCard = lazy(() => import("../AuthorCard"));
 
 interface SectionTypes {
     bookData: BookDataType,
-    authorData: any
 }
 
-export default function BookDetailsSection({ bookData, authorData }: SectionTypes) {
+export default function BookDetailsSection({ bookData }: SectionTypes) {
     // "Read More" button from description
     const [isExpanded, setIsExpanded] = useState(false);
     const [showButton, setShowButton] = useState(false);
@@ -56,7 +55,7 @@ export default function BookDetailsSection({ bookData, authorData }: SectionType
             <Suspense fallback={
                 <AuthorCardSkeleton />
             }>
-                <AuthorCard authorData={authorData} />
+                <AuthorCard author_key={bookData.author_key}/>
             </Suspense>
 
         </div>

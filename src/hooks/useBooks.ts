@@ -13,6 +13,49 @@ interface SearchResponse {
 export function useBooks() {
     const [loading, setLoading] = useState(false);
 
+    // Utility Functions
+
+    // getFullBookData utility functions
+    async function getWorkDetails(workKey: string) {
+
+        try {
+            const data = await callProxy('/search.json', {
+                q: `key:/works/${workKey}`,
+                fields: 'title,author_name,author_key,ratings_average,cover_i,first_publish_year,number_of_pages_median,subject',
+                limit: 1
+            });
+
+            if (data.docs && data.docs.length > 0) {
+                return data.docs[0];
+            }
+            return null;
+        } catch (error) {
+            console.error(error);
+            return null;
+        }
+    }
+    async function getWorkDescription(workKey: string) {
+
+        try {
+            const id = workKey.replace('/works/', '').replace(/\//g, '');
+
+            const data = await callProxy(`/works/${id}.json`);
+
+            if (!data) return "Description not available.";
+
+            if (typeof data.description === 'string') {
+                cache.set(`bookData-description-${workKey}`, data.description);
+                return data.description;
+            }
+
+            return data.description?.value || "No description provided for this work.";
+
+        } catch (error) {
+            console.error("Failed to load description:", error);
+            return "Failed to load description.";
+        }
+    }
+
     // Proxy with Supabase Functions to avoid CORS issues and send User-Agent
     async function callProxy(endpoint: string, params?: any) {
         const { data, error } = await supabase.functions.invoke('api-proxy', {
@@ -113,56 +156,34 @@ export function useBooks() {
 
     // BookPage.tsx hooks (all four)
 
-    async function getBookData(workKey: string) {
+    async function getFullBookData(workKey: string) {
 
-        const cached = cache.get(`bookData-${workKey}`);
+        const cleanKey = workKey.replace('/works/', '');
+
+        const cached = cache.get(`bookData-${cleanKey}`);
         if (cached) return cached;
 
         setLoading(true);
-        try {
-            const cleanKey = workKey.replace('/works/', '');
-            const data = await callProxy('/search.json', {
-                q: `key:/works/${cleanKey}`,
-                fields: 'title,author_name,author_key,ratings_average,cover_i,first_publish_year,number_of_pages_median,subject',
-                limit: 1
-            });
 
-            if (data.docs && data.docs.length > 0) {
-                cache.set(`bookData-${workKey}`, data.docs[0]);
-                return data.docs[0];
+        try {
+
+            const [workDetails, description] = await Promise.all([
+                getWorkDetails(cleanKey),
+                getWorkDescription(cleanKey)
+            ])
+
+            const bookData = {
+                ...workDetails,
+                description
             }
-            return null;
+
+            cache.set(`bookData-${cleanKey}`, bookData);
+            return bookData
         } catch (error) {
-            console.error(error);
-            return null;
+            console.log(error)
+            return "Failed to get book data"
         } finally {
-            setLoading(false);
-        }
-    }
-
-    async function getWorkDescription(workKey: string) {
-
-        const cached = cache.get(`bookData-description-${workKey}`);
-        if (cached) return cached;
-
-        try {
-            const id = workKey.replace('/works/', '').replace(/\//g, '');
-
-            const data = await callProxy(`/works/${id}.json`);
-
-            if (!data) return "Description not available.";
-
-            if (typeof data.description === 'string') {
-                cache.set(`bookData-description-${workKey}`, data.description);
-                return data.description;
-            }
-
-            cache.set(`bookData-description-${workKey}`, data.description?.value || "No description provided for this work");
-            return data.description?.value || "No description provided for this work.";
-
-        } catch (error) {
-            console.error("Failed to load description:", error);
-            return "Failed to load description.";
+            setLoading(false)
         }
     }
 
@@ -174,7 +195,7 @@ export function useBooks() {
         try {
             const authorData = await callProxy(`/authors/${authorKey}.json`)
 
-                cache.set(`authorData-${authorKey}`, authorData);
+            cache.set(`authorData-${authorKey}`, authorData);
 
             return authorData
         } catch (error) {
@@ -237,8 +258,7 @@ export function useBooks() {
     return {
         getPopularBooks,
         searchBooks,
-        getBookData,
-        getWorkDescription,
+        getFullBookData,
         getAuthorInfo,
         getWorkByISBN,
         getSimilarBooks,
