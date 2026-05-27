@@ -38,7 +38,7 @@ function SimilarBooks({ bookData, workId }: SimilarBooksProps) {
                 if (data) {
                     const filtered = data
                         .filter((b: any) => !b.key.includes(workId || ''))
-                        .slice(0, 15);
+                        .slice(0, 16);
                     setSimilarBooks(filtered);
                 }
             })
@@ -52,7 +52,7 @@ function SimilarBooks({ bookData, workId }: SimilarBooksProps) {
     }
 
     return (
-        <motion.ul className="flex overflow-x-auto gap-3 pt-3 pb-4 px-1 mb-3"
+        <motion.ul className="flex overflow-x-auto gap-1 pt-3 pb-4 px-1 mb-3 sm:gap-2 2xl:grid 2xl:grid-flow-col 2xl:grid-rows-2"
             variants={bookContainerVariants}
             initial="hidden"
             animate="visible"
@@ -68,7 +68,6 @@ function SimilarBooks({ bookData, workId }: SimilarBooksProps) {
                     cover={book.cover_i ? `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg` : null}
                     variant="carousel"
                 />
-
             ))}
         </motion.ul>
     )

@@ -6,7 +6,6 @@ import Dog404 from '../assets/404dog.svg'
 import HeroSection from "../components/pages/book/sections/HeroSection";
 import StatusButtonsSection from "../components/pages/book/sections/StatusButtonsSection";
 import BookDetailsSection from "../components/pages/book/sections/BookDetailsSection";
-import SimilarBooksSection from "../components/pages/book/sections/SimilarBooksSection";
 import AIChatBotSection from "../components/pages/book/sections/AIChatBotSection";
 import BookPageSkeleton from "../components/skeleton/BookPage/BookPageSkeleton";
 
@@ -17,6 +16,7 @@ import { useBooks } from "../hooks/useBooks"
 import { processCategories } from "../utils/categories/bookCategories";
 import { useAuthStore } from "../stores/useAuthStore";
 import type { BookDataType } from "../@types/BookData";
+import CommentsSection from "@/components/pages/book/sections/CommentsSection";
 
 function BookPage() {
 
@@ -106,13 +106,11 @@ function BookPage() {
               {/* Description & Chatbot (Desktop) */}
               <BookDetailsSection
                 bookData={bookData}
-              />
-
-              {/* Similar Books */}
-              <SimilarBooksSection
-                bookData={bookData}
                 workId={workId}
               />
+
+              {/* Comments Section */}
+              <CommentsSection />
 
               {/* Ai Chatbot */}
               <AIChatBotSection

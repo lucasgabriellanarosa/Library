@@ -54,7 +54,8 @@ const comments = [
 
 export default function CommentsSection() {
     return (
-        <section className="flex w-full flex-col gap-4">
+        // <section className="flex w-full flex-col gap-4">
+        <section className="flex w-4/5 flex-col gap-4">
             {/* Comment Input */}
             <Card className="rounded-2xl gap-3 border-none p-4 shadow-sm bg-amber-50/60">
 
