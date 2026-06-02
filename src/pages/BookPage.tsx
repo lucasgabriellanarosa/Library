@@ -110,7 +110,9 @@ function BookPage() {
               />
 
               {/* Comments Section */}
-              <CommentsSection />
+              <CommentsSection 
+                bookId={workId}
+              />
 
               {/* Ai Chatbot */}
               <AIChatBotSection
