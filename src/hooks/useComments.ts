@@ -7,7 +7,8 @@ import { useState } from "react";
 export default function useComments() {
     const { user } = useAuthStore();
 
-    const [isLoading, setIsLoading] = useState(false)
+    const [loadingCommentId, setLoadingCommentId] = useState<string | null>(null);
+    const [isCommentsLoading, setIsCommentsLoading] = useState(false);
 
     // Add Comment
     async function addComment({ bookId, content, parentCommentId = null }: AddCommentParams) {
@@ -40,6 +41,7 @@ export default function useComments() {
 
     // Get all comments from a book 
     async function getBookComments(bookId: string) {
+        setIsCommentsLoading(true)
         const { data, error } = await supabase
             .from('comments')
             .select(`
@@ -65,8 +67,11 @@ export default function useComments() {
 
         if (error) {
             console.error("Failed to search comments:", error.message);
+            setIsCommentsLoading(false)
             return [];
         }
+
+        setIsCommentsLoading(false)
 
         return data.map(item => ({
             id: item.comment_id,
@@ -94,7 +99,7 @@ export default function useComments() {
             return { data: null, error: "Usuário não autenticado" };
         }
 
-        setIsLoading(true)
+        setLoadingCommentId(params.commentId);
 
         // Delete reaction
         await supabase
@@ -104,7 +109,6 @@ export default function useComments() {
 
         // No reaction anymore
         if (params.currentStatus === params.targetReaction) {
-            setIsLoading(false)
             return null
         };
 
@@ -115,8 +119,6 @@ export default function useComments() {
             type: params.targetReaction
         });
 
-        setIsLoading(false)
-
         return params.targetReaction
 
     }
@@ -125,6 +127,10 @@ export default function useComments() {
         addComment,
         getBookComments,
         toggleCommentReaction,
-        isLoading
+        
+        // Loading
+        loadingCommentId,
+        setLoadingCommentId,
+        isCommentsLoading
     };
 }
