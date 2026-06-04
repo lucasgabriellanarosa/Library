@@ -82,6 +82,7 @@ export default function useComments() {
             likes: item.likes?.[0]?.count || 0,
             dislikes: item.dislikes?.[0]?.count || 0,
             replies: item.replies?.[0]?.count || 0,
+            created_at: item.created_at,
             isAuthor: user ? item.user_id === user.id : false,
             currentUserReaction: user ? (item.user_reaction?.[0]?.type || null) : null
         }));

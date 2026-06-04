@@ -11,6 +11,7 @@ export interface BookComment {
   username: string;
   avatar: string;
   time: string;
+  created_at: string;
   comment: string;
   likes: number;
   dislikes: number;

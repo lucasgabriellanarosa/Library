@@ -1,4 +1,4 @@
-import type { BookComment, CommentReactions } from "@/@types/Comments"
+import type { BookComment } from "@/@types/Comments"
 import CommentsListSkeleton from "@/components/skeleton/BookPage/CommentsListSkeleton"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
@@ -10,6 +10,16 @@ import {
 } from "lucide-react"
 import { useEffect, useState } from "react"
 import CommentsList from "../CommentsList"
+
+import {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectLabel,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select"
 
 export default function CommentsSection({ bookId }: { bookId: string | undefined }) {
 
@@ -46,11 +56,12 @@ export default function CommentsSection({ bookId }: { bookId: string | undefined
         setBookComments(bookData)
     }
 
-    const [currentUserReaction, setCurrentUserReaction] = useState<CommentReactions | null>(null);
+
+    const [listFilterBy, setListFilterBy] = useState("popular");
 
     useEffect(() => {
         loadBookComments()
-    }, [bookId, currentUserReaction])
+    }, [bookId, listFilterBy])
 
     return (
         <section className="flex w-4/5 flex-col gap-4">
@@ -87,13 +98,25 @@ export default function CommentsSection({ bookId }: { bookId: string | undefined
                     </span>
                 </div>
 
-                <Button
-                    variant="ghost"
-                    className="text-neutral-600 hover:text-black text-xs hover:cursor-pointer hover:bg-amber-800/50"
-                >
-                    <ArrowUpDown />
-                    Most recent
-                </Button>
+                <Select defaultValue="popular" onValueChange={(value) => setListFilterBy(value)}>
+                    <SelectTrigger className="text-neutral-800 text-xs border-none hover:text-black hover:cursor-pointer hover:bg-amber-800/50">
+                        <SelectValue>
+                            <ArrowUpDown />
+                            {listFilterBy == 'popular' ? (
+                                "Popular"
+                            ) : (
+                                "Most Recent"
+                            )}
+                        </SelectValue>
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectGroup>
+                            <SelectLabel>Filter by</SelectLabel>
+                            <SelectItem value="popular">Popular</SelectItem>
+                            <SelectItem value="recent">Most Recent</SelectItem>
+                        </SelectGroup>
+                    </SelectContent>
+                </Select>
             </div>
 
             {/* Comments */}
@@ -103,7 +126,7 @@ export default function CommentsSection({ bookId }: { bookId: string | undefined
                 ) : (
                     <CommentsList
                         bookComments={bookComments}
-                        setCurrentUserReaction={setCurrentUserReaction}
+                        listFilterBy={listFilterBy}
                     />
                 )
             }
