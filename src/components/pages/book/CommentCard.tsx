@@ -1,17 +1,28 @@
 import type { BookComment, CommentReactions } from "@/@types/Comments";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card } from "@/components/ui/card";
-import { ChevronDown, EllipsisVertical } from "lucide-react";
+import { ChevronDown, EllipsisVertical, Pencil, Trash2 } from "lucide-react";
 import CommentReactionButton from "@/features/books/CommentReactionButton";
 import { useState, useEffect } from "react";
 import useComments from "@/hooks/useComments";
 import { Button } from "@/components/ui/button";
 
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import EditCommentModal from "@/features/books/EditCommentModal";
+import DeleteCommentModal from "@/features/books/DeleteCommentModal";
+
 interface CommentCardProps {
     comment: BookComment;
+    onCommentChange: (updatedComment: BookComment) => void;
+    onCommentDeleted: (commentId: string) => void;
 }
 
-export default function CommentCard({ comment: initialComment }: CommentCardProps) {
+export default function CommentCard({ comment: initialComment, onCommentChange, onCommentDeleted }: CommentCardProps) {
     const [comment, setComment] = useState<BookComment>(initialComment);
 
     useEffect(() => {
@@ -24,29 +35,33 @@ export default function CommentCard({ comment: initialComment }: CommentCardProp
             let likesChange = 0;
             let dislikesChange = 0;
 
-            // Desfaz a reação antiga no contador
             if (oldReaction === "LIKE") likesChange--;
             if (oldReaction === "DISLIKE") dislikesChange--;
 
             if (newReaction === "LIKE") likesChange++;
             if (newReaction === "DISLIKE") dislikesChange++;
 
-            return {
+            const updatedObj = {
                 ...prev,
                 currentUserReaction: newReaction,
                 likes: Math.max(0, prev.likes + likesChange),
                 dislikes: Math.max(0, prev.dislikes + dislikesChange),
             };
+
+            onCommentChange(updatedObj);
+
+            return updatedObj;
         });
     };
 
     const { loadingCommentId } = useComments();
-
     const isThisCommentReactionLoading = loadingCommentId === comment.id;
+
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
     return (
         <Card
-            key={comment.id}
             className="rounded-2xl border bg-amber-50 p-4 shadow-sm flex flex-row gap-3 text-xs"
         >
             <Avatar className="h-10 w-10 hover:cursor-pointer hover:scale-105">
@@ -64,17 +79,35 @@ export default function CommentCard({ comment: initialComment }: CommentCardProp
                         <span className="text-neutral-400">{comment.time}</span>
                     </div>
 
-                    {
-                        comment.isAuthor &&
-                        <Button
-                            variant="ghost"
-                            size="sm"
-                            className="hover:cursor-pointer"
-                        >
-                            <EllipsisVertical />
-                        </Button>
-                    }
-
+                    {comment.isAuthor && (
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    className="hover:cursor-pointer shrink-0 h-8 w-8 p-0"
+                                >
+                                    <EllipsisVertical className="h-4 w-4 text-neutral-500" />
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end" className="text-xs">
+                                <DropdownMenuItem
+                                    className="gap-2 cursor-pointer"
+                                    onClick={() => setIsEditModalOpen(true)}
+                                >
+                                    <Pencil className="h-3.5 w-3.5" />
+                                    Edit
+                                </DropdownMenuItem>
+                                <DropdownMenuItem
+                                    className="gap-2 cursor-pointer text-red-600 focus:text-red-600"
+                                    onClick={() => setIsDeleteModalOpen(true)}
+                                >
+                                    <Trash2 className="h-3.5 w-3.5" />
+                                    Delete
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    )}
                 </div>
 
                 {/* Content */}
@@ -114,6 +147,23 @@ export default function CommentCard({ comment: initialComment }: CommentCardProp
                     )}
                 </div>
             </div>
+
+            <EditCommentModal
+                isOpen={isEditModalOpen}
+                onClose={() => setIsEditModalOpen(false)}
+                comment={comment}
+                onCommentUpdated={(updatedComment) => {
+                    setComment(updatedComment);
+                    onCommentChange(updatedComment);
+                }}
+            />
+
+            <DeleteCommentModal
+                isOpen={isDeleteModalOpen}
+                onClose={() => setIsDeleteModalOpen(false)}
+                comment={comment}
+                onCommentDeleted={onCommentDeleted}
+            />
         </Card>
     );
 }

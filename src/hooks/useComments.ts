@@ -42,7 +42,8 @@ export default function useComments() {
     // Get all comments from a book 
     async function getBookComments(bookId: string) {
         setIsCommentsLoading(true)
-        const { data, error } = await supabase
+
+        let query = supabase
             .from('comments')
             .select(`
             comment_id,
@@ -61,10 +62,13 @@ export default function useComments() {
             .eq('book_id', bookId)
             .is('parent_comment_id', null)
             .eq('likes.type', 'LIKE')
-            .eq('dislikes.type', 'DISLIKE')
-            .eq('user_reaction.user_id', user?.id)
-            .order('created_at', { ascending: false });
+            .eq('dislikes.type', 'DISLIKE');
 
+        if (user?.id) {
+            query = query.eq('user_reaction.user_id', user.id);
+        }
+
+        const { data, error } = await query.order('created_at', { ascending: false });
         if (error) {
             console.error("Failed to search comments:", error.message);
             setIsCommentsLoading(false)
@@ -86,6 +90,50 @@ export default function useComments() {
             isAuthor: user ? item.user_id === user.id : false,
             currentUserReaction: user ? (item.user_reaction?.[0]?.type || null) : null
         }));
+    }
+
+    // Update an existing comment
+    async function updateComment({ commentId, content }: { commentId: string; content: string }) {
+        if (!user) {
+            console.error("Usuário precisa estar logado para editar.");
+            throw new Error("Usuário não autenticado");
+        }
+
+        const { data, error } = await supabase
+            .from('comments')
+            .update({ content: content })
+            .eq('comment_id', commentId)
+            .eq('user_id', user.id)
+            .select()
+            .single();
+
+        if (error) {
+            console.error("Erro ao editar comentário:", error.message);
+            throw error;
+        }
+
+        return data;
+    }
+
+    // Delete a comment
+    async function deleteComment(commentId: string) {
+        if (!user) {
+            console.error("Usuário precisa estar logado para deletar.");
+            throw new Error("Usuário não autenticado");
+        }
+
+        const { error } = await supabase
+            .from('comments')
+            .delete()
+            .eq('comment_id', commentId)
+            .eq('user_id', user.id);
+
+        if (error) {
+            console.error("Erro ao deletar comentário:", error.message);
+            throw error;
+        }
+
+        return true;
     }
 
     // Handle like & dislike logic
@@ -121,14 +169,15 @@ export default function useComments() {
         });
 
         return params.targetReaction
-
     }
 
     return {
         addComment,
         getBookComments,
+        updateComment,
+        deleteComment,
         toggleCommentReaction,
-        
+
         // Loading
         loadingCommentId,
         setLoadingCommentId,
