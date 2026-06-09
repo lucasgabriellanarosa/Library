@@ -6,7 +6,6 @@ import Dog404 from '../assets/404dog.svg'
 import HeroSection from "../components/pages/book/sections/HeroSection";
 import StatusButtonsSection from "../components/pages/book/sections/StatusButtonsSection";
 import BookDetailsSection from "../components/pages/book/sections/BookDetailsSection";
-import SimilarBooksSection from "../components/pages/book/sections/SimilarBooksSection";
 import AIChatBotSection from "../components/pages/book/sections/AIChatBotSection";
 import BookPageSkeleton from "../components/skeleton/BookPage/BookPageSkeleton";
 
@@ -14,74 +13,74 @@ import BookPageSkeleton from "../components/skeleton/BookPage/BookPageSkeleton";
 import { useBooks } from "../hooks/useBooks"
 
 // Others imports
-import {
-  processCategories
-} from "../utils/categories/bookCategories";
-
+import { processCategories } from "../utils/categories/bookCategories";
 import { useAuthStore } from "../stores/useAuthStore";
 import type { BookDataType } from "../@types/BookData";
+import CommentsSection from "@/components/pages/book/sections/CommentsSection";
 
 function BookPage() {
 
   // Variables
   const { workId, isbn } = useParams();
-  const { getBookData, getWorkDescription, getAuthorInfo, getWorkByISBN, loading } = useBooks();
+
+  const { getFullBookData, getWorkByISBN, loading } = useBooks();
   const { user } = useAuthStore()
 
   const [bookData, setBookData] = useState<BookDataType | null>(null);
-  const [authorData, setAuthorData] = useState(null);
 
   // Get & Load bookData
+  async function getBookData() {
+    if (!workId) return;
+    const bookDetails = await getFullBookData(workId)
+    return bookDetails
+  }
+
   const loadBookData = async () => {
 
     if (!workId) return;
 
-    const [workDetails, descriptionText] = await Promise.all([
-      getBookData(workId),
-      getWorkDescription(workId)
-    ]);
+    const bookDetails = await getBookData()
 
-    if (workDetails == null) {
+    if (bookDetails == null) {
       setBookData(null)
       return
     }
 
-    const rawSubjects = workDetails?.subject || [];
+    const rawSubjects = bookDetails?.subject || [];
     const cleanCategories = processCategories(rawSubjects);
 
+    const baseBookData = {
+      title: bookDetails.title || "Title Unavailable",
+      author: bookDetails.author_name?.[0] || "Author Unknown",
+      author_key: bookDetails.author_key?.[0] || '',
+      cover: bookDetails.cover_i,
+      pages: bookDetails.number_of_pages_median || 0,
+      year: bookDetails.first_publish_year,
+      description: bookDetails.description,
+      rating: bookDetails.ratings_average || 0,
+      categories: cleanCategories
+    }
+
+    setBookData(baseBookData)
+
     if (isbn) {
-      const isbnDetails = await getWorkByISBN(isbn);
+      const isbnDetails = await getWorkByISBN(isbn)
+
       setBookData({
-        title: isbnDetails.title || workDetails?.title || "Title Unavailable",
-        author: workDetails?.author_name?.[0] || "Author Unknown",
-        cover: isbnDetails.covers?.[0] || workDetails?.cover_i,
-        pages: isbnDetails.number_of_pages || workDetails?.number_of_pages_median || 0,
-        year: isbnDetails.publish_date || workDetails?.first_publish_year,
-        description: isbnDetails.description || descriptionText,
-        rating: workDetails?.ratings_average || 0,
-        categories: cleanCategories
-      });
-    } else {
-      setBookData({
-        title: workDetails?.title || "Title Unavailable",
-        author: workDetails?.author_name?.[0] || "Author Unknown",
-        cover: workDetails?.cover_i,
-        pages: workDetails?.number_of_pages_median || 0,
-        year: workDetails?.first_publish_year,
-        description: descriptionText,
-        rating: workDetails?.ratings_average || 0,
-        categories: cleanCategories
+        ...baseBookData,
+        title: isbnDetails.title || baseBookData.title,
+        cover: isbnDetails.covers?.[0] || baseBookData.cover,
+        pages: isbnDetails.number_of_pages || baseBookData.pages,
+        year: isbnDetails.publish_date || baseBookData.year,
+        description: isbnDetails.description || baseBookData.description,
       })
     }
 
-    const authorInfo = await getAuthorInfo(workDetails.author_key[0])
-    setAuthorData(authorInfo)
   }
 
   useEffect(() => {
-    // Clean Book & Author Data
+    // Clean Book
     setBookData(null)
-    setAuthorData(null)
     // Load new BookData
     loadBookData()
   }, [workId, isbn, user]);
@@ -108,13 +107,12 @@ function BookPage() {
               {/* Description & Chatbot (Desktop) */}
               <BookDetailsSection
                 bookData={bookData}
-                authorData={authorData}
+                workId={workId}
               />
 
-              {/* Similar Books */}
-              <SimilarBooksSection
-                bookData={bookData}
-                workId={workId}
+              {/* Comments Section */}
+              <CommentsSection 
+                bookId={workId}
               />
 
               {/* Ai Chatbot */}
@@ -124,7 +122,7 @@ function BookPage() {
             </>
           ) : (
             <div className="flex flex-col items-center justify-center gap-8 min-h-[60dvh] w-4/5">
-              <img src={Dog404} className="h-50"/>
+              <img src={Dog404} className="h-50" />
               <p className="text-sm">
                 It looks like someone ate this book data as it was <span className="text-red-600 font-semibold">not found...</span>
                 <br />
