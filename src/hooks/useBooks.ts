@@ -203,23 +203,6 @@ export function useBooks() {
         }
     }
 
-    async function getAuthorInfo(authorKey: string) {
-
-        const cached = cache.get(`authorData-${authorKey}`);
-        if (cached) return cached;
-
-        try {
-            const authorData = await callProxy(`/authors/${authorKey}.json`)
-
-                cache.set(`authorData-${authorKey}`, authorData);
-
-            return authorData
-        } catch (error) {
-            console.error(error);
-            return [];
-        }
-    }
-
     async function getWorkByISBN(isbn: string) {
         setLoading(true);
         try {

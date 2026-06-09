@@ -28,7 +28,6 @@ export default function BookDetailsSection({ bookData, workId }: SectionTypes) {
         <div className="w-4/5 flex flex-col justify-center items-center gap-6 lg:flex lg:flex-row lg:items-start lg:gap-10 xl:p-4 2xl:gap-16">
 
             {/* Description and Comments */}
-            {/* <div className="flex flex-col gap-6 max-w-2xl lg:w-3/5 lg:gap-10 xl:max-w-fit xl:flex-1"> */}
             <div className="flex flex-col gap-6 w-full lg:w-3/5 lg:gap-10 xl:max-w-fit xl:flex-1">
 
                 {/* Description */}
