@@ -31,11 +31,16 @@ function BookCard({ cover, title, author, rating = 0, bookKey, index, variant }:
         clearTimeout(hoverTimeout)
     }
 
+
     const imgNotFound = 'https://placehold.co/400x600?text=No+Cover';
 
     return (
-        <motion.li className={`flex flex-col gap-0.5 border rounded-md bg-yellow-100 text-black p-1 md:p-2 hover:bg-yellow-200 transition-all focus-within:outline-2  ${variant == 'carousel' ? 'shrink-0 w-24 md:w-28 2xl:w-32 focus-within:-outline-offset-1 focus-within:outline-indigo-600' : 'hover:scale-105 focus-within:outline-offset-4 focus-within:outline-orange-500'}`}
-            variants={bookVariants}
+        <motion.li 
+          className={`flex flex-col gap-0.5 border rounded-md bg-yellow-100 text-black p-1 md:p-2 hover:bg-yellow-200 transition-all focus-within:outline-2 
+          ${variant == 'carousel' ? 
+          'shrink-0 w-24 md:w-28 2xl:w-32 focus-within:-outline-offset-1 focus-within:outline-indigo-600' 
+          : 'hover:scale-105 focus-within:outline-offset-4 focus-within:outline-orange-500'}`}
+          variants={bookVariants}
         >
             <Link
                 to={`/book/${encodeURIComponent(bookKey.replace('/works/', ''))}`}

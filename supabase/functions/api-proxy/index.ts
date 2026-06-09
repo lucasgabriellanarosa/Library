@@ -11,34 +11,55 @@ serve(async (req: Request) => {
   }
 
   try {
-    const { endpoint, params } = await req.json()
+    const body = await req.json()
+
+    console.log('BODY:', body)
+
+    const { endpoint, params } = body
 
     const url = new URL(`https://openlibrary.org${endpoint}`)
+
     if (params) {
-      Object.keys(params).forEach(key =>
+      Object.keys(params).forEach(key => {
         url.searchParams.append(key, params[key])
-      )
+      })
     }
+
+    console.log('FETCH URL:', url.toString())
 
     const response = await fetch(url.toString(), {
       headers: {
-        'User-Agent': 'Delta Pearl Library/1.0 (https://library-pearl-delta.vercel.app/ | lucasgabrielr.dev@outlook.com)',
+        'User-Agent': 'Delta Pearl Library/1.0',
       },
     })
 
-    const data = await response.json()
+    console.log('STATUS:', response.status)
 
-    return new Response(JSON.stringify(data), {
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      status: 200,
+    const text = await response.text()
+
+    console.log('RAW RESPONSE:', text.slice(0, 500))
+
+    return new Response(text, {
+      headers: {
+        ...corsHeaders,
+        'Content-Type': 'application/json',
+      },
+      status: response.status,
     })
 
   } catch (error) {
-    const message = error instanceof Error ? error.message : String(error)
+    console.error('FUNCTION ERROR:', error)
+
+    const message = error instanceof Error
+      ? error.stack || error.message
+      : String(error)
 
     return new Response(JSON.stringify({ error: message }), {
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      status: 400,
+      headers: {
+        ...corsHeaders,
+        'Content-Type': 'application/json',
+      },
+      status: 500,
     })
   }
 })
