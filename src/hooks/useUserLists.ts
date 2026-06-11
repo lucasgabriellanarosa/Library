@@ -10,147 +10,165 @@ export const useUserLists = () => {
 
   const { user } = useAuthStore();
 
-  // 1. Search all lists and set the first one as the default.
+  // 1. Busca os STATUS oficiais da tabela 'reading_status' para fingir que são as listas primárias
   const fetchAllLists = useCallback(async () => {
     setLoading(true);
-
     if (!user) {
       setLoading(false);
       return;
     }
 
     try {
-      const { data } = await supabase
-        .from('lists')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('type', { ascending: false });
+      const { data, error } = await supabase
+        .from('reading_status')
+        .select('*');
+
+      if (error) throw error;
 
       if (data && data.length > 0) {
-        setLists(data);
-        setSelectedList((prev: any) => prev || data[0]);
+        // Mapeia status_id para 'id' para a LibraryPage continuar funcionando sem alterações
+        const formattedLists = data.map(item => ({
+          id: item.status_id, // 'read', 'reading', 'to_read'
+          name: item.name     // 'Read', 'Reading', 'To Read'
+        }));
+
+        // Ordena amigavelmente: Reading primeiro, depois To Read, depois Read
+        const customOrder = ['reading', 'to_read', 'read'];
+        formattedLists.sort((a, b) => customOrder.indexOf(a.id) - customOrder.indexOf(b.id));
+
+        setLists(formattedLists);
+        setSelectedList((prev: any) => prev || formattedLists[0]);
       }
     } catch (error) {
-      console.log(error)
+      console.log("Error fetching reading statuses:", error);
     } finally {
       setLoading(false);
     }
+  }, [user])
 
-  }, []);
-
-  // 2. Search for books from a specific list.
-  const fetchBooksFromList = useCallback(async (listId: string) => {
-    setLoading(true)
+  // 2. Busca os livros de um status específico na tabela user_books
+  
+  const fetchBooksFromList = useCallback(async (statusId: string) => {
+    if (!user) return;
+    setLoading(true);
 
     try {
-      const { data } = await supabase
-        .from('list_books')
+      const { data, error } = await supabase
+        .from('user_books')
         .select('*')
-        .eq('list_id', listId)
+        .eq('user_id', user.id)
+        .eq('status_id', statusId)
         .order('added_at', { ascending: false });
 
-      if (data) setBooks(data);
+      if (error) throw error;
+
+      if (data) {
+        // Traduz as propriedades do banco para o padrão que o JSX da LibraryPage consome
+        const formattedBooks = data.map(b => ({
+          id: b.book_id,
+          work_key: `/works/${b.book_id}`,
+          title: b.title || "Untitled Book",
+          author_name: b.author_name || "Unknown Author",
+          cover_id: b.cover_id || ""
+        }));
+        setBooks(formattedBooks);
+      }
     } catch (error) {
-      console.log(error)
+      console.log("Error fetching books from status:", error);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
+  }, [user]);
 
-  }, []);
-
-  // 3. Auxiliary function to delete book
+  // 3. Remove um livro do status atual (deleta a linha em user_books)
   const removeBookFromList = async (bookId: string) => {
-    setLoading(true)
+    if (!user) return;
+    setLoading(true);
+
     try {
-      const { error } = await supabase.from('list_books').delete().eq('id', bookId);
-      if (!error) setBooks(prev => prev.filter(b => b.id !== bookId));
+      const { error } = await supabase
+        .from('user_books')
+        .delete()
+        .eq('user_id', user.id)
+        .eq('book_id', bookId);
+
+      if (error) throw error;
+
+      // Remove do estado local para sumir da tela na hora
+      setBooks(prev => prev.filter(b => b.id !== bookId));
     } catch (error) {
-      console.log(error)
+      console.log("Error removing book status:", error);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   };
 
-  // 4. Check if the book is set to Read or To Read (or null) 
-  const getBookStatus = async (workId: string) => {
+  // 4. Pega o status atual de um livro específico (usado na página interna do livro)
+  const getBookStatus = async (bookId: string) => {
+    if (!user) return null;
 
-    const userLists = await getSpecificLists(['Read', 'To Read']);
-    if (!userLists || userLists.length === 0) return null;
+    try {
+      const { data, error } = await supabase
+        .from('user_books')
+        .select('status_id')
+        .eq('user_id', user.id)
+        .eq('book_id', bookId)
+        .maybeSingle();
 
-    const listIds = userLists.map(l => l.id);
-
-    const { data } = await supabase
-      .from('list_books')
-      .select('list_id')
-      .eq('work_key', `/works/${workId}`)
-      .in('list_id', listIds);
-
-    if (data && data.length > 0) {
-      const matchedList = userLists.find(l => l.id === data[0].list_id);
+      if (error) throw error;
       
-      if (matchedList) {
-        return matchedList.name as 'Read' | 'To Read';
-      } else {
-        return null
-      }
+      if (data?.status_id === 'read') return 'Read';
+      if (data?.status_id === 'to_read') return 'To Read';
+      if (data?.status_id === 'reading') return 'Reading';
       
-    } else {
+      return null;
+    } catch (error) {
+      console.log("Error getting book status: ", error);
       return null;
     }
   };
-  // 5. Search specific lists (useful for BookPage)
-  const getSpecificLists = useCallback(async (names: string[]) => {
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return null;
 
-    const { data } = await supabase
-      .from('lists')
-      .select('id, name')
-      .eq('user_id', user.id)
-      .in('name', names);
-
-    return data;
-  }, []);
-
-  // 6. Toggle Between Read and To Read & Delete status
+  // 5. Altera/Adiciona o status salvando também os metadados do livro
   const toogleBookStatus = async (params: {
     targetListName: 'Read' | 'To Read',
-    workId: string,
-    bookData: any,
+    bookId: string,
+    bookData?: any, // Adicionado de volta para colher título, autor e capa
     currentStatus: string | null
   }) => {
+    if (!user) return null;
     setLoading(true);
+
+    const dbStatusId = params.targetListName === 'Read' ? 'read' : 'to_read';
+
     try {
-      const userLists = await getSpecificLists(['Read', 'To Read']);
-      const targetList = userLists?.find(l => l.name === params.targetListName);
-      const otherList = userLists?.find(l => l.name !== params.targetListName);
-
-      if (!targetList) return;
-
-      // If a book is set as "read" and you click the "read" button again, it will be without a status (it is not read, but also it is not in to read later)
       if (params.currentStatus === params.targetListName) {
         await supabase
-          .from('list_books')
+          .from('user_books')
           .delete()
-          .match({ list_id: targetList.id, work_key: `/works/${params.workId}` });
+          .eq('user_id', user.id)
+          .eq('book_id', params.bookId);
+          
         return null;
       }
 
-      // Delete the book from the other list
-      if (otherList) {
-        await supabase.from('list_books').delete()
-          .match({ list_id: otherList.id, work_key: `/works/${params.workId}` });
-      }
+      const { error } = await supabase
+        .from('user_books')
+        .upsert({
+          user_id: user.id,
+          book_id: params.bookId,
+          status_id: dbStatusId, 
+          title: params.bookData?.title,
+          author_name: params.bookData?.author,
+          cover_id: String(params.bookData?.cover),
+          finished_reading_at: dbStatusId === 'read' ? new Date().toISOString() : null
+        });
 
-      await supabase.from('list_books').upsert({
-        list_id: targetList.id,
-        work_key: `/works/${params.workId}`,
-        title: params.bookData?.title,
-        author_name: params.bookData?.author,
-        cover_id: String(params.bookData?.cover),
-      });
+      if (error) throw error;
 
       return params.targetListName;
+    } catch (error) {
+      console.log("Error toggling book status: ", error);
+      return params.currentStatus as 'Read' | 'To Read' | null;
     } finally {
       setLoading(false);
     }
@@ -165,7 +183,6 @@ export const useUserLists = () => {
     fetchAllLists,
     fetchBooksFromList,
     removeBookFromList,
-    getSpecificLists,
     getBookStatus,
     toogleBookStatus
   };

@@ -86,7 +86,7 @@ function BookPage() {
   }, [workId, isbn, user]);
 
   return (
-    <section className="text-xs flex flex-col w-full justify-center items-center gap-6 xl:gap-10">
+    <section className="text-xs flex flex-col w-full justify-center items-center gap-6 pb-8 xl:gap-10">
 
       {
         !loading ? (

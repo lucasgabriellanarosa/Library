@@ -4,15 +4,15 @@ import { useEffect, useState } from "react";
 import { useUserLists } from "../../../../hooks/useUserLists";
 import { useNavigate } from "react-router";
 import type { User } from "@supabase/supabase-js";
-import type { BookDataType } from "../../../../@types/BookData";
+import type { BookDataType } from "@/@types/BookData";
 
 interface SectionProps {
-    user:  User | null,
+    user: User | null,
     workId: string | undefined,
     bookData: BookDataType
 }
 
-export default function StatusButtonsSection({user, workId, bookData}: SectionProps) {
+export default function StatusButtonsSection({ user, workId, bookData}: SectionProps) {
 
     const navigate = useNavigate()
     const { getBookStatus, toogleBookStatus, loading: isUpdating } = useUserLists();
@@ -34,7 +34,6 @@ export default function StatusButtonsSection({user, workId, bookData}: SectionPr
 
     }, [workId, user]);
 
-
     // Toggle read and to read status
     const handleUpdateList = async (targetListName: 'Read' | 'To Read') => {
 
@@ -47,11 +46,10 @@ export default function StatusButtonsSection({user, workId, bookData}: SectionPr
 
         const newStatus = await toogleBookStatus({
             targetListName,
-            workId: workId!,
-            bookData,
+            bookId: workId!,
+            bookData, // Certifique-se de repassar o objeto do livro aqui para persistir no banco!
             currentStatus: bookStatus
         });
-
         setBookStatus(newStatus ?? null);
     };
     return (

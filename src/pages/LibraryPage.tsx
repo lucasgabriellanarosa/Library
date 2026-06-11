@@ -41,8 +41,8 @@ const LibraryPage = () => {
               <button
                 onClick={() => setSelectedList(list)}
                 className={`px-4 py-2 rounded-full whitespace-nowrap text-[10px] transition-all ${selectedList?.id === list.id
-                  ? 'bg-amber-500 text-black shadow-lg shadow-amber-500/20'
-                  : 'bg-zinc-900 text-zinc-400 border border-zinc-800'
+                  ? 'bg-amber-800/50 text-amber-950 font-bold tracking-wider'
+                  : 'bg-amber-800/20 text-black border border-amber-800/20'
                   }`}
               >
                 {list.name}
@@ -67,10 +67,10 @@ const LibraryPage = () => {
                 onClick={() => setSelectedList(list)}
                 aria-label={`${list.name} list`}
                 tabIndex={selectedList?.id === list.id ? -1 : 0}
-                className={`text-[11px] w-full text-left px-4 py-3 rounded-xl
+                className={`text-[11px] w-full text-left px-4 py-3 border-l-4 border-amber-800/30 rounded-xl
                   ${selectedList?.id === list.id
-                    ? 'bg-amber-800/10 text-amber-800 font-bold border-l-4 border-amber-800 tracking-wider pointer-events-none'
-                    : 'text-zinc-800 hover:bg-amber-800 hover:text-zinc-100 hover:cursor-pointer'
+                    ? 'bg-amber-800/10 text-amber-800 font-bold tracking-wider pointer-events-none'
+                    : 'text-zinc-800 hover:bg-amber-800/20 hover:cursor-pointer'
                   }`}
               >
                 {list.name}

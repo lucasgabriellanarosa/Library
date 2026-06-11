@@ -1,0 +1,1 @@
+export type BookStatusType = 'READ' | 'TO READ' | 'READING' | null;
